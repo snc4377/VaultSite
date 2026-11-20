@@ -516,6 +516,168 @@
     font-family: var(--font-mono);
     color: var(--color-accent);
   }
+
+  /* ---------- rendered markdown (blog posts) ---------- */
+
+  .prose-doc {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+    color: color-mix(in oklab, var(--color-ink) 88%, transparent);
+  }
+
+  .prose-doc > * + * {
+    margin-top: 1.05rem;
+  }
+
+  .prose-doc h2,
+  .prose-doc h3 {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  }
+
+  .prose-doc h2 {
+    margin-top: 2.4rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--color-line-soft);
+    font-size: 1.125rem;
+  }
+
+  .prose-doc h2::before {
+    content: "## ";
+    color: var(--color-dim);
+  }
+
+  .prose-doc h3 {
+    margin-top: 1.9rem;
+    font-size: 1rem;
+  }
+
+  .prose-doc h3::before {
+    content: "### ";
+    color: var(--color-dim);
+  }
+
+  .prose-doc strong {
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .prose-doc a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent-dim);
+    text-underline-offset: 0.2em;
+  }
+
+  .prose-doc a:hover {
+    text-decoration-color: var(--color-accent);
+  }
+
+  .prose-doc ul,
+  .prose-doc ol {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .prose-doc li {
+    position: relative;
+    padding-left: 1.15rem;
+  }
+
+  .prose-doc li + li {
+    margin-top: 0.35rem;
+  }
+
+  .prose-doc ul > li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    top: 0.3em;
+    font-size: 0.75em;
+    color: var(--color-accent);
+  }
+
+  .prose-doc ol {
+    counter-reset: item;
+  }
+
+  .prose-doc ol > li {
+    counter-increment: item;
+  }
+
+  .prose-doc ol > li::before {
+    content: counter(item) ".";
+    position: absolute;
+    left: 0;
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    color: var(--color-dim);
+  }
+
+  .prose-doc code {
+    padding: 0.1rem 0.3rem;
+    border: 1px solid var(--color-line-soft);
+    border-radius: 2px;
+    background: var(--color-panel);
+    font-size: 0.85em;
+    color: var(--color-ink);
+  }
+
+  .prose-doc pre {
+    padding: 0.95rem 1rem;
+    border: 1px solid var(--color-line);
+    border-radius: 4px;
+    background: #0c0c0c;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.8;
+  }
+
+  .prose-doc pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .prose-doc blockquote {
+    padding-left: 0.95rem;
+    border-left: 2px solid var(--color-accent-dim);
+    color: var(--color-muted);
+  }
+
+  .prose-doc hr {
+    border: 0;
+    border-top: 1px solid var(--color-line-soft);
+  }
+
+  .prose-doc img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--color-line);
+    border-radius: 4px;
+  }
+
+  .prose-doc table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .prose-doc th,
+  .prose-doc td {
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--color-line-soft);
+    text-align: left;
+  }
+
+  .prose-doc th {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
 }
 
 @layer utilities {

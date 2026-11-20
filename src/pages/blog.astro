@@ -1,32 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { withBase } from "../utils/url";
 
-const posts = [
-  {
-    date: "2026-11-18",
-    time: "21:04",
-    tag: "writeup",
-    title: "HTB: Starting Point — the short path",
-    excerpt:
-      "What the guided boxes actually teach you, and where they stop being useful.",
-  },
-  {
-    date: "2026-11-02",
-    time: "09:12",
-    tag: "lab",
-    title: "A home lab on a used mini PC",
-    excerpt:
-      "Proxmox, two VLANs and a switch I bought for the price of lunch.",
-  },
-  {
-    date: "2026-10-21",
-    time: "18:40",
-    tag: "note",
-    title: "Why I keep a wiki instead of bookmarks",
-    excerpt:
-      "Links rot. Notes I rewrote myself are the only things I still trust.",
-  },
-];
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const iso = (date: Date) => date.toISOString().slice(0, 10);
+
+// n8n emits no description, so derive a one-line excerpt from the body.
+const excerpt = (body = "") => {
+  const text = body
+    .replace(/^#{1,6}\s+.*$/gm, "")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`~>]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return text.length > 150 ? `${text.slice(0, 150).trimEnd()}…` : text;
+};
 ---
 
 <Layout
@@ -53,28 +46,34 @@ const posts = [
       <h2 class="font-mono text-[0.8125rem] text-ink">
         <span class="text-accent" aria-hidden="true">$</span> tail -f ./log/updates.log
       </h2>
-      <span class="font-mono text-[11px] text-dim">3 lines</span>
+      <span class="font-mono text-[11px] text-dim">{posts.length} lines</span>
     </div>
 
     {
+      posts.length === 0 && (
+        <p class="py-6 font-mono text-xs text-dim">
+          no entries yet — waiting on the first post
+        </p>
+      )
+    }
+
+    {
       posts.map((post) => (
-        <article class="log-row group">
+        <a href={withBase(`/blog/${post.id}`)} class="log-row group">
           <div class="font-mono text-[11px] text-dim">
-            <time datetime={`${post.date}T${post.time}`}>
-              {post.date} <span class="text-[#3a3a3a]">·</span> {post.time}
-            </time>
+            <time datetime={iso(post.data.date)}>{iso(post.data.date)}</time>
           </div>
 
           <div>
             <div class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-              <span class="tag">{post.tag}</span>
-              <h3 class="log-title">{post.title}</h3>
+              <span class="tag">{post.data.tags[0] ?? "note"}</span>
+              <h3 class="log-title">{post.data.title}</h3>
             </div>
             <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-              {post.excerpt}
+              {post.data.description ?? excerpt(post.body)}
             </p>
           </div>
-        </article>
+        </a>
       ))
     }
 
