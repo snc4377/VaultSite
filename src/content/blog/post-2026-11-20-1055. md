@@ -1,6 +1,8 @@
 ---
 title: "Escaping the Sandbox: How CVE-2026-99312 Exposes Host Memory on AMD-Powered KVM"
-date: "2026-11-20" tags: ["cybersecurity", "infosec", "news"] ---
+date: "2026-11-20"
+tags: ["cybersecurity", "infosec", "news"]
+---
 
 Virtualization is the invisible glue holding modern cloud infrastructure together. But when the hypervisor breaks, the multi-tenant dream turns into a security nightmare. Enter **CVE-2026-99312**, a critical vulnerability in the Linux Kernel-based Virtual Machine (KVM) that punches a massive hole straight through guest-host isolation.
 
