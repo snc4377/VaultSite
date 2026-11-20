@@ -1,0 +1,96 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const projects = [
+  {
+    id: "01",
+    year: "2026",
+    name: "htb-writeups/",
+    description: "Retired Hack The Box machines, from first scan to root flag.",
+    tags: ["htb", "linux"],
+  },
+  {
+    id: "02",
+    year: "2026",
+    name: "ctf-toolkit/",
+    description: "Small Python helpers for decoding, parsing and automating CTF chores.",
+    tags: ["python", "cli"],
+  },
+  {
+    id: "03",
+    year: "2025",
+    name: "netlab/",
+    description: "A containerised lab for practising pivoting and AD attacks.",
+    tags: ["docker", "active-directory"],
+  },
+];
+---
+
+<Layout
+  title="portfolio"
+  description="Projects, write-ups and tooling — HTB, CTFs and lab environments."
+>
+  <header class="max-w-3xl">
+    <p class="font-mono text-[11px] text-dim">// 02 — portfolio</p>
+    <h1
+      class="mt-3 font-mono text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-tight tracking-tight text-ink"
+    >
+      projects <span class="text-dim">&amp;</span> write-ups
+    </h1>
+    <p class="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-muted">
+      Things I built, broke or documented. Three entries for now — all placeholder
+      copy.
+    </p>
+  </header>
+
+  <section class="mt-9 sm:mt-12" aria-label="Projects">
+    <div class="flex items-baseline justify-between gap-4">
+      <h2 class="font-mono text-[0.8125rem] text-ink">
+        <span class="text-accent" aria-hidden="true">$</span> ls ./projects
+      </h2>
+      <span class="font-mono text-[11px] text-dim">3 dirs</span>
+    </div>
+
+    <div class="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        projects.map((project) => (
+          <a href="#" class="card group">
+            <div class="flex items-center justify-between border-b border-line-soft px-4 py-2 font-mono text-[10.5px] text-dim">
+              <span>drwxr-xr-x</span>
+              <span>{project.id} · {project.year}</span>
+            </div>
+
+            <div class="flex flex-1 flex-col p-4">
+              <h3 class="card-title">{project.name}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{project.description}</p>
+
+              <div class="mt-auto flex items-end justify-between gap-3 pt-7">
+                <ul class="flex flex-wrap gap-1.5">
+                  {project.tags.map((tag) => (
+                    <li class="tag">{tag}</li>
+                  ))}
+                </ul>
+                <span class="font-mono text-[11px] text-dim transition-colors group-hover:text-accent">
+                  open →
+                </span>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+
+    <p class="mt-6 font-mono text-[11px] text-dim">
+      // placeholder entries — cards link to # until case studies exist
+    </p>
+  </section>
+
+  <section class="mt-14">
+    <p class="section-label">readme</p>
+    <p class="mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-muted">
+      Each card is a directory: a short description, a couple of tags and a
+      pointer to the write-up. When real projects land, this grid becomes content
+      collections — no layout change required.
+    </p>
+  </section>
+</Layout>

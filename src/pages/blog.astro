@@ -1,0 +1,86 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const posts = [
+  {
+    date: "2026-11-18",
+    time: "21:04",
+    tag: "writeup",
+    title: "HTB: Starting Point — the short path",
+    excerpt:
+      "What the guided boxes actually teach you, and where they stop being useful.",
+  },
+  {
+    date: "2026-11-02",
+    time: "09:12",
+    tag: "lab",
+    title: "A home lab on a used mini PC",
+    excerpt:
+      "Proxmox, two VLANs and a switch I bought for the price of lunch.",
+  },
+  {
+    date: "2026-10-21",
+    time: "18:40",
+    tag: "note",
+    title: "Why I keep a wiki instead of bookmarks",
+    excerpt:
+      "Links rot. Notes I rewrote myself are the only things I still trust.",
+  },
+];
+---
+
+<Layout
+  title="blog"
+  description="A running log of write-ups, lab notes and security news."
+>
+  <header class="max-w-3xl">
+    <p class="font-mono text-[11px] text-dim">// 04 — blog</p>
+    <h1
+      class="mt-3 font-mono text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-tight tracking-tight text-ink"
+    >
+      log stream
+    </h1>
+    <p class="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-muted">
+      Short entries, newest first. Write-ups, lab notes and the occasional rant
+      about tooling.
+    </p>
+  </header>
+
+  <section class="mt-9 sm:mt-12" aria-label="Posts">
+    <div
+      class="flex items-baseline justify-between gap-4 border-b border-line-soft pb-2"
+    >
+      <h2 class="font-mono text-[0.8125rem] text-ink">
+        <span class="text-accent" aria-hidden="true">$</span> tail -f ./log/updates.log
+      </h2>
+      <span class="font-mono text-[11px] text-dim">3 lines</span>
+    </div>
+
+    {
+      posts.map((post) => (
+        <article class="log-row group">
+          <div class="font-mono text-[11px] text-dim">
+            <time datetime={`${post.date}T${post.time}`}>
+              {post.date} <span class="text-[#3a3a3a]">·</span> {post.time}
+            </time>
+          </div>
+
+          <div>
+            <div class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+              <span class="tag">{post.tag}</span>
+              <h3 class="log-title">{post.title}</h3>
+            </div>
+            <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+              {post.excerpt}
+            </p>
+          </div>
+        </article>
+      ))
+    }
+
+    <p class="mt-6 flex items-center gap-2 font-mono text-[11px] text-dim">
+      <span aria-hidden="true">--</span> EOF
+      <span class="caret" style="height:0.85em;width:0.35em" aria-hidden="true"></span>
+    </p>
+  </section>
+</Layout>

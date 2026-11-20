@@ -1,0 +1,199 @@
+---
+import "@fontsource-variable/jetbrains-mono";
+import "@fontsource-variable/inter";
+import "../styles/global.css";
+import { withBase } from "../utils/url";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "atlas — notes, write-ups and projects from a cybersecurity student and ethical hacker.",
+} = Astro.props;
+
+const nav = [
+  { href: "/", label: "home", index: "01" },
+  { href: "/portfolio", label: "portfolio", index: "02" },
+  { href: "/wiki", label: "wiki", index: "03" },
+  { href: "/blog", label: "blog", index: "04" },
+];
+
+// Trailing-slash tolerant: "/blog/" and "/blog" both match.
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
+
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en" class="dark" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <title>{title} — atlas</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={`${title} — atlas`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+
+  <body class="flex min-h-dvh flex-col">
+    <a class="skip-link" href="#main">skip to content</a>
+
+    <header
+      class="sticky top-0 z-50 border-b border-line-soft bg-void/85 backdrop-blur-md"
+    >
+      <div class="shell flex h-[var(--header-h)] items-center justify-between gap-4">
+        <a
+          href={withBase("/")}
+          class="group flex items-center gap-2 font-mono text-sm tracking-tight"
+          aria-label="atlas — home"
+        >
+          <span class="text-accent" aria-hidden="true">$</span>
+          <span class="text-ink">atlas</span>
+          <span
+            class="caret opacity-60 transition-opacity group-hover:opacity-100"
+            style="height:0.82em;width:0.38em;vertical-align:-0.06em;margin-left:0"
+            aria-hidden="true"></span>
+        </a>
+
+        <nav class="hidden items-center gap-7 md:flex" aria-label="Main">
+          {
+            nav.map((item) => (
+              <a
+                href={withBase(item.href)}
+                class="nav-tab"
+                aria-current={isActive(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <button
+          type="button"
+          data-menu-toggle
+          data-open="false"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          class="group relative -mr-2 grid size-11 place-items-center text-muted transition-colors hover:text-ink md:hidden"
+        >
+          <span class="sr-only">toggle navigation</span>
+          <span
+            class="absolute h-px w-4 bg-current transition-transform duration-300 ease-quint -translate-y-[3px] group-data-[open=true]:translate-y-0 group-data-[open=true]:rotate-45"
+          ></span>
+          <span
+            class="absolute h-px w-4 bg-current transition-transform duration-300 ease-quint translate-y-[3px] group-data-[open=true]:translate-y-0 group-data-[open=true]:-rotate-45"
+          ></span>
+        </button>
+      </div>
+
+      <div
+        id="mobile-menu"
+        data-menu
+        hidden
+        class="border-t border-line-soft bg-void md:hidden"
+      >
+        <nav class="shell py-1" aria-label="Mobile">
+          <ul>
+            {
+              nav.map((item) => (
+                <li>
+                  <a
+                    href={withBase(item.href)}
+                    class="flex items-center justify-between border-b border-line-soft py-3 font-mono text-sm last:border-b-0"
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                  >
+                    <span class="flex items-baseline gap-3">
+                      <span class="text-[11px] text-dim">{item.index}</span>
+                      <span class={isActive(item.href) ? "text-accent" : "text-muted"}>
+                        ./{item.label}
+                      </span>
+                    </span>
+                    <span class="text-xs text-dim" aria-hidden="true">→</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="shell page-enter flex-1 pb-16 pt-10 sm:pt-14">
+      <slot />
+    </main>
+
+    <footer class="border-t border-line-soft">
+      <div class="shell py-8">
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <p class="font-mono text-xs text-dim">
+            visitor@atlas:~$ <span class="text-ink">echo "built with astro + tailwind"</span>
+          </p>
+
+          <nav aria-label="Footer">
+            <ul class="flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs text-muted">
+              {
+                nav.map((item) => (
+                  <li>
+                    <a href={withBase(item.href)} class="transition-colors hover:text-accent">
+                      ./{item.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </div>
+
+        <div
+          class="mt-6 flex flex-col gap-1.5 border-t border-line-soft pt-5 font-mono text-[11px] text-dim sm:flex-row sm:items-center sm:justify-between"
+        >
+          <p>© {year} atlas — all rights reserved</p>
+          <p>status: 200 · mode: dark · locale: en</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+      const panel = document.querySelector<HTMLElement>("[data-menu]");
+
+      if (toggle && panel) {
+        const isOpen = () => toggle.getAttribute("aria-expanded") === "true";
+
+        const setOpen = (open: boolean) => {
+          toggle.setAttribute("aria-expanded", String(open));
+          toggle.dataset.open = String(open);
+          panel.hidden = !open;
+        };
+
+        toggle.addEventListener("click", () => setOpen(!isOpen()));
+        panel
+          .querySelectorAll("a")
+          .forEach((link) => link.addEventListener("click", () => setOpen(false)));
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && isOpen()) {
+            setOpen(false);
+            toggle.focus();
+          }
+        });
+
+        window
+          .matchMedia("(min-width: 768px)")
+          .addEventListener("change", (event) => {
+            if (event.matches) setOpen(false);
+          });
+      }
+    </script>
+  </body>
+</html>
