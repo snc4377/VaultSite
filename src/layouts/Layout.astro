@@ -11,7 +11,7 @@ interface Props {
 
 const {
   title,
-  description = "atlas — notes, write-ups and projects from a cybersecurity student and ethical hacker.",
+  description = "snc4377 — notes, write-ups and projects from a cybersecurity student and ethical hacker.",
 } = Astro.props;
 
 const nav = [
@@ -37,9 +37,9 @@ const year = new Date().getFullYear();
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#0a0a0a" />
     <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
-    <title>{title} — atlas</title>
+    <title>{title} — snc4377</title>
     <meta name="description" content={description} />
-    <meta property="og:title" content={`${title} — atlas`} />
+    <meta property="og:title" content={`${title} — snc4377`} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
   </head>
@@ -54,10 +54,10 @@ const year = new Date().getFullYear();
         <a
           href={withBase("/")}
           class="group flex items-center gap-2 font-mono text-sm tracking-tight"
-          aria-label="atlas — home"
+          aria-label="snc4377 — home"
         >
           <span class="text-accent" aria-hidden="true">$</span>
-          <span class="text-ink">atlas</span>
+          <span class="text-ink">snc4377</span>
           <span
             class="caret opacity-60 transition-opacity group-hover:opacity-100"
             style="height:0.82em;width:0.38em;vertical-align:-0.06em;margin-left:0"
@@ -136,7 +136,7 @@ const year = new Date().getFullYear();
       <div class="shell py-8">
         <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <p class="font-mono text-xs text-dim">
-            visitor@atlas:~$ <span class="text-ink">echo "built with astro + tailwind"</span>
+            visitor@snc4377:~$ <span class="text-ink">echo "built with astro + tailwind"</span>
           </p>
 
           <nav aria-label="Footer">
@@ -157,7 +157,7 @@ const year = new Date().getFullYear();
         <div
           class="mt-6 flex flex-col gap-1.5 border-t border-line-soft pt-5 font-mono text-[11px] text-dim sm:flex-row sm:items-center sm:justify-between"
         >
-          <p>© {year} atlas — all rights reserved</p>
+          <p>© {year} snc4377 — all rights reserved</p>
           <p>status: 200 · mode: dark · locale: en</p>
         </div>
       </div>
