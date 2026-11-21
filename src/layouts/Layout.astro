@@ -2,7 +2,7 @@
 import "@fontsource-variable/jetbrains-mono";
 import "@fontsource-variable/inter";
 import "../styles/global.css";
-import { withBase } from "../utils/url";
+import { stripBase, withBase } from "../utils/url";
 
 interface Props {
   title: string;
@@ -21,8 +21,8 @@ const nav = [
   { href: "/blog", label: "blog", index: "04" },
 ];
 
-// Trailing-slash tolerant: "/blog/" and "/blog" both match.
-const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+// Trailing-slash tolerant and base-aware: "/VaultSite/blog/" -> "/blog".
+const path = stripBase(Astro.url.pathname);
 const isActive = (href: string) =>
   href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
 

@@ -1,16 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import WikiSidebar from "../components/WikiSidebar.astro";
+import { getCollection } from "astro:content";
+import { withBase } from "../utils/url";
 
-const tree = [
-  { prefix: "├─", label: "01_environment/", href: "#", active: false },
-  { prefix: "│  ├─", label: "shell", href: "#shell", active: true },
-  { prefix: "│  └─", label: "packages", href: "#packages", active: false },
-  { prefix: "├─", label: "02_recon/", href: "#", active: false },
-  { prefix: "└─", label: "03_privilege-escalation/", href: "#", active: false },
-];
+const notes = (await getCollection("wiki")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
 
-const inline =
-  "rounded-sm border border-line-soft bg-panel px-1.5 py-0.5 font-mono text-[0.8em] text-ink";
+const iso = (date: Date) => date.toISOString().slice(0, 10);
+
+const excerpt = (body = "") => {
+  const text = body
+    .replace(/^#{1,6}\s+.*$/gm, "")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`~>]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return text.length > 150 ? `${text.slice(0, 150).trimEnd()}…` : text;
+};
 ---
 
 <Layout
@@ -19,122 +28,63 @@ const inline =
 >
   <div class="grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10">
     <aside class="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
-      <div class="panel">
-        <div class="panel-head">
-          <span>[ contents ]</span>
-          <span>03</span>
-        </div>
-
-        <nav aria-label="Wiki contents" class="p-3">
-          <ul class="space-y-1 font-mono text-xs">
-            {
-              tree.map((item) => (
-                <li>
-                  <a
-                    href={item.href}
-                    class:list={[
-                      "flex gap-2 py-0.5 transition-colors",
-                      item.active ? "text-accent" : "text-muted hover:text-ink",
-                    ]}
-                    aria-current={item.active ? "page" : undefined}
-                  >
-                    <span class="whitespace-pre text-[#3a3a3a]" aria-hidden="true">
-                      {item.prefix}
-                    </span>
-                    <span>{item.label}</span>
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
-      </div>
-
-      <div class="panel mt-3">
-        <div class="panel-head">
-          <span>git log -1</span>
-        </div>
-        <div class="px-3 py-2.5 font-mono text-[11px] leading-relaxed">
-          <p class="text-muted">a3f9c21 docs: shell + packages</p>
-          <p class="text-dim">2026-11-18 · snc4377</p>
-        </div>
-      </div>
+      <WikiSidebar />
     </aside>
 
-    <article class="min-w-0">
-      <nav class="font-mono text-[11px] text-dim" aria-label="Breadcrumb">
-        ~/wiki/environment
-      </nav>
-
-      <h1
-        class="mt-2 font-mono text-[clamp(1.6rem,3.6vw,2.25rem)] font-semibold leading-tight tracking-tight text-ink"
-      >
-        Environment setup
-      </h1>
-
-      <p class="mt-2 font-mono text-[11px] text-dim">
-        2026-11-18 · 2 min read · <span class="text-muted">#basics</span>
-      </p>
-
-      <p class="mt-5 max-w-2xl text-[0.9375rem] leading-[1.8] text-ink/85">
-        Every machine I rebuild starts here: a shell that behaves, a package list
-        I can replay, and notes short enough to actually read. This is the page I
-        open before I open anything else.
-      </p>
-
-      <h2
-        id="shell"
-        class="mt-10 flex items-baseline gap-2 scroll-mt-28 font-mono text-lg font-medium text-ink"
-      >
-        <span class="text-dim" aria-hidden="true">##</span> Shell
-      </h2>
-
-      <p class="mt-3 max-w-2xl text-[0.9375rem] leading-[1.8] text-ink/85">
-        zsh with a minimal prompt, tmux for anything long-running, and
-        <span class={inline}>fzf</span> bound to history search. Nothing that needs
-        a plugin manager to survive an update.
-      </p>
-
-      <div class="code mt-4">
-        <div class="panel-head">
-          <span>bash — ./setup.sh</span>
-          <span>utf-8</span>
-        </div>
-        <pre><code><span class="tok-comment"># default shell + the essentials</span>
-<span class="prompt">$</span> sudo apt install <span class="tok-flag">-y</span> zsh tmux fzf ripgrep
-<span class="prompt">$</span> chsh <span class="tok-flag">-s</span> <span class="tok-str">"$(which zsh)"</span>
-<span class="prompt">$</span> exec zsh</code></pre>
-      </div>
-
-      <h2
-        id="packages"
-        class="mt-10 flex items-baseline gap-2 scroll-mt-28 font-mono text-lg font-medium text-ink"
-      >
-        <span class="text-dim" aria-hidden="true">##</span> Packages
-      </h2>
-
-      <p class="mt-3 max-w-2xl text-[0.9375rem] leading-[1.8] text-ink/85">
-        Installed from a single list so a rebuild takes minutes, not an evening.
-        The list lives in the repo; this page only explains why each entry is
-        there.
-      </p>
-
-      <div class="note mt-4">
-        <span class="mark" aria-hidden="true">&gt;</span>
-        <p>
-          <strong class="font-mono text-[0.78rem] text-ink">note:</strong>{" "}
-          keep the package list in version control — a wiki you cannot replay is
-          just a diary.
+    <div class="min-w-0">
+      <header class="max-w-3xl">
+        <p class="font-mono text-[11px] text-dim">// 03 — wiki</p>
+        <h1
+          class="mt-3 font-mono text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-tight tracking-tight text-ink"
+        >
+          knowledge base
+        </h1>
+        <p class="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-muted">
+          Notes written for the version of me that has forgotten how this worked.
+          One idea per entry, newest first.
         </p>
-      </div>
+      </header>
 
-      <div
-        class="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line-soft pt-4 font-mono text-[11px] text-dim"
-      >
-        <span>last modified 2026-11-18</span>
-        <span class="text-[#3a3a3a]" aria-hidden="true">|</span>
-        <span>tags: <span class="text-muted">#basics</span></span>
-      </div>
-    </article>
+      <section class="mt-9 sm:mt-12" aria-label="Wiki notes">
+        <div
+          class="flex items-baseline justify-between gap-4 border-b border-line-soft pb-2"
+        >
+          <h2 class="font-mono text-[0.8125rem] text-ink">
+            <span class="text-accent" aria-hidden="true">$</span> ls ./wiki
+          </h2>
+          <span class="font-mono text-[11px] text-dim">{notes.length} notes</span>
+        </div>
+
+        {
+          notes.length === 0 && (
+            <p class="py-6 font-mono text-xs text-dim">
+              no notes yet — add a .md file to src/content/wiki
+            </p>
+          )
+        }
+
+        {
+          notes.map((note) => (
+            <a href={withBase(`/wiki/${note.id}`)} class="log-row group">
+              <div class="font-mono text-[11px] text-dim">
+                <time datetime={iso(note.data.date)}>{iso(note.data.date)}</time>
+              </div>
+
+              <div>
+                <div class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                  {note.data.tags.slice(0, 2).map((tag) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                  <h3 class="log-title">{note.data.title}</h3>
+                </div>
+                <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+                  {note.data.description ?? excerpt(note.body)}
+                </p>
+              </div>
+            </a>
+          ))
+        }
+      </section>
+    </div>
   </div>
 </Layout>

@@ -11,6 +11,14 @@ export default defineConfig({
   server: {
     host: true
   },
+  markdown: {
+    // Shiki's default github-dark ships a #24292e background, which reads
+    // grey-blue against this palette. Vesper is near-black with mint/peach.
+    shikiConfig: {
+      theme: 'vesper',
+      wrap: true
+    }
+  },
   vite: {
     plugins: [tailwindcss()]
   }

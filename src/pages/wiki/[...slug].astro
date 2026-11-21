@@ -1,0 +1,61 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import WikiSidebar from "../../components/WikiSidebar.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import { withBase } from "../../utils/url";
+
+export async function getStaticPaths() {
+  const notes = await getCollection("wiki");
+  return notes.map((note) => ({ params: { slug: note.id }, props: { note } }));
+}
+
+interface Props {
+  note: CollectionEntry<"wiki">;
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const published = note.data.date.toISOString().slice(0, 10);
+---
+
+<Layout
+  title={note.data.title}
+  description={note.data.description ?? `${note.data.title} — a note by snc4377.`}
+>
+  <div class="grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10">
+    <aside class="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
+      <WikiSidebar current={note.id} />
+    </aside>
+
+    <article class="min-w-0 max-w-3xl">
+      <nav class="font-mono text-[11px] text-dim" aria-label="Breadcrumb">
+        <a href={withBase("/wiki")} class="transition-colors hover:text-accent">~/wiki</a
+        ><span class="text-[#3a3a3a]">/</span>{note.id}
+      </nav>
+
+      <h1
+        class="mt-3 font-mono text-[clamp(1.4rem,3.2vw,2rem)] font-semibold leading-snug tracking-tight text-ink"
+      >
+        {note.data.title}
+      </h1>
+
+      <p class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] text-dim">
+        <time datetime={published}>{published}</time>
+        <span class="text-[#3a3a3a]" aria-hidden="true">·</span>
+        <span>{note.data.tags.map((tag) => `#${tag}`).join(" ")}</span>
+      </p>
+
+      <div class="prose-doc mt-8">
+        <Content />
+      </div>
+
+      <div class="mt-12 border-t border-line-soft pt-4">
+        <a
+          href={withBase("/wiki")}
+          class="font-mono text-xs text-dim transition-colors hover:text-accent"
+          >← cd ..</a
+        >
+      </div>
+    </article>
+  </div>
+</Layout>
