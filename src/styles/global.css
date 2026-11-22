@@ -450,6 +450,11 @@
       gap: 1.5rem;
       padding-inline: 0.75rem;
     }
+
+    /* No date cell to align to: let the title use the full row. */
+    .log-row--undated {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .log-row:hover {

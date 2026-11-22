@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { noteDate, sortNotes } from "../utils/note";
 import { withBase } from "../utils/url";
 
 interface Props {
@@ -8,12 +9,10 @@ interface Props {
 
 const { current } = Astro.props;
 
-const notes = (await getCollection("wiki")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
+const notes = sortNotes(await getCollection("wiki"));
 
-const iso = (date: Date) => date.toISOString().slice(0, 10);
 const latest = notes[0];
+const latestDate = latest ? noteDate(latest) : null;
 ---
 
 <div class="panel">
@@ -56,6 +55,6 @@ const latest = notes[0];
   </div>
   <div class="px-3 py-2.5 font-mono text-[11px] leading-relaxed">
     <p class="truncate text-muted">{latest?.id ?? "—"}</p>
-    <p class="text-dim">{latest ? iso(latest.data.date) : "no notes yet"}</p>
+    <p class="text-dim">{latest ? latestDate ?? "undated" : "no notes yet"}</p>
   </div>
 </div>

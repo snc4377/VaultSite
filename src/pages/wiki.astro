@@ -2,13 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 import WikiSidebar from "../components/WikiSidebar.astro";
 import { getCollection } from "astro:content";
+import { noteDate, noteTitle, sortNotes } from "../utils/note";
 import { withBase } from "../utils/url";
 
-const notes = (await getCollection("wiki")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
-
-const iso = (date: Date) => date.toISOString().slice(0, 10);
+const notes = sortNotes(await getCollection("wiki"));
 
 const excerpt = (body = "") => {
   const text = body
@@ -58,31 +55,42 @@ const excerpt = (body = "") => {
         {
           notes.length === 0 && (
             <p class="py-6 font-mono text-xs text-dim">
-              no notes yet — add a .md file to src/content/wiki
+              no notes yet — run the wiki sync
             </p>
           )
         }
 
         {
-          notes.map((note) => (
-            <a href={withBase(`/wiki/${note.id}`)} class="log-row group">
-              <div class="font-mono text-[11px] text-dim">
-                <time datetime={iso(note.data.date)}>{iso(note.data.date)}</time>
-              </div>
+          notes.map((note) => {
+            const published = noteDate(note);
+            return (
+              <a
+                href={withBase(`/wiki/${note.id}`)}
+                class:list={[
+                  "log-row group",
+                  { "log-row--undated": !published },
+                ]}
+              >
+                {published && (
+                  <div class="font-mono text-[11px] text-dim">
+                    <time datetime={published}>{published}</time>
+                  </div>
+                )}
 
-              <div>
-                <div class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                  {note.data.tags.slice(0, 2).map((tag) => (
-                    <span class="tag">{tag}</span>
-                  ))}
-                  <h3 class="log-title">{note.data.title}</h3>
+                <div>
+                  <div class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                    {note.data.tags.slice(0, 2).map((tag) => (
+                      <span class="tag">{tag}</span>
+                    ))}
+                    <h3 class="log-title">{noteTitle(note)}</h3>
+                  </div>
+                  <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+                    {note.data.description ?? excerpt(note.body)}
+                  </p>
                 </div>
-                <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-                  {note.data.description ?? excerpt(note.body)}
-                </p>
-              </div>
-            </a>
-          ))
+              </a>
+            );
+          })
         }
       </section>
     </div>
