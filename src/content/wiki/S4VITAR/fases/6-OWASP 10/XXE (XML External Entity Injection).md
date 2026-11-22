@@ -1,0 +1,153 @@
+When we talk about **XML External Entity** (**XXE**) **Injection**, we're referring to a security vulnerability where an attacker can use malicious XML input to access system resources that would normally be unavailable, such as local files or network services. This vulnerability can be exploited in applications that use XML to process input, such as web applications or web services.
+
+An XXE attack typically involves injecting a malicious XML **entity** into an HTTP request, which is processed by the server and can result in the exposure of sensitive information. For example, an attacker could inject an XML entity referencing a file on the server's system and obtain confidential information from that file.
+
+A common scenario where attackers can exploit XXE is when the web server doesn't properly validate the XML data input it receives. In this case, an attacker can inject a malicious XML entity containing references to system files the server has access to. This may allow the attacker to obtain sensitive system information, such as passwords, usernames, API keys, and other confidential data.
+
+It's worth noting that XML External Entity (XXE) Injection attacks don't always result in direct exposure of sensitive information in the server's response. In some cases, the attacker must work "**blindly**" to obtain confidential information through additional techniques.
+
+A common way to work "blindly" in an XXE attack is to send specially crafted requests from the server to connect to an externally defined **Document Type Definition** (**DTD**). The DTD is used to validate the structure of an XML file and may contain references to external resources, such as files on the server's system.
+
+This "blind" approach in an XXE attack can be slower and more labor-intensive than directly exploiting the vulnerability. However, it can be effective in cases where the attacker has a general idea of the system's available resources and wants to obtain specific information without being detected.
+
+Additionally, in some cases, an XXE attack can be used as a vector to exploit a **Server-Side Request Forgery** (**SSRF**) vulnerability. This attack technique may allow an attacker to scan **internal ports** on a machine that would normally be protected by an external firewall.
+
+An SSRF attack involves sending HTTP requests from the server to internal IP addresses or ports on the victim's network. The XXE attack can be used to trigger an SSRF by injecting a malicious XML entity containing a reference to an internal IP address or port on the server's network.
+
+By successfully exploiting an SSRF, the attacker can send HTTP requests to internal services that would otherwise be unavailable to the external network. This may allow the attacker to obtain **sensitive information** or even **take control** of internal services.
+https://www.youtube.com/watch?v=UfILDa_qStQ
+
+https://github.com/jbarone/xxelab
+![[Pasted image 20260101155239.png]]
+Let's open Burp Suite to see how the web page processes requests in the background
+![[Pasted image 20260103143805.png]]
+![[Pasted image 20260103143823.png]]
+We see that it's processing via POST to process.php and handling an XML form
+
+XML 
+![[Pasted image 20260103143926.png]]
+
+After several tests with it
+
+Certain file types, such as `SVG`, `HTML`, `XML`, and even some image and document files, may allow us to introduce new vulnerabilities into the web application by uploading malicious versions of these files. This is why fuzzing allowed file extensions is an important exercise for any file upload attack. It lets us explore which attacks may be feasible on the web server. So, let's examine some of these attacks.
+
+---
+
+## XSS
+
+Many file types may allow us to introduce a `Stored XSS` vulnerability into the web application by uploading maliciously manipulated versions of them.
+
+The most basic example is when a web application allows us to upload `HTML` files. Although HTML files won't let us execute code (e.g., PHP), it would still be possible to embed JavaScript code within them to carry out an XSS or CSRF attack against anyone visiting the uploaded HTML page. If the target sees a link from a trusted website, and the website is vulnerable to HTML document uploads, it may be possible to trick them into visiting the link and executing the attack on their machines.
+
+Another example of XSS attacks involves web applications that display an image's metadata after upload. For such web applications, we can include an XSS payload in one of the metadata parameters that accept plain text, such as the `Comment` or `Artist` parameters, as follows:
+
+```
+exiftool -Comment=' "><img src=1 onerror=alert(window.origin)>' HTB.jpg
+snchh337@htb[/htb]$ exiftool HTB.jpg
+...SNIP...
+Comment                         :  "><img src=1 onerror=alert(window.origin)>
+```
+
+We can see that the `Comment` parameter was updated with our XSS payload. When the image metadata is displayed, the XSS payload should trigger, and the JavaScript code will execute to carry out the XSS attack. Additionally, if we change the image's MIME type (`MIME-Type`) to `text/html`, some web applications may display it as an HTML document instead of an image, in which case the XSS payload would trigger even if the metadata isn't directly displayed.
+
+Finally, XSS attacks can also be carried out with `SVG` images, along with various other attacks. `Scalable Vector Graphics (SVG)` images are XML-based and describe 2D vector graphics, which the browser renders into an image. For this reason, we can modify their XML data to include an XSS payload. For example, we can write the following in `HTB.svg`:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1" height="1">
+    <rect x="1" y="1" width="1" height="1" fill="green" stroke="black" />
+    <script type="text/javascript">alert(window.origin);</script>
+</svg>
+```
+
+Note title: Untitled
+
+Once we upload the image to the web application, the XSS payload will trigger every time the image is displayed.
+
+For more information about XSS, you can check the module [Cross-Site Scripting (XSS)](https://academy.hackthebox.com/app/module/103).
+
+**Exercise:** Test the above attacks with the exercise at the end of this section and verify if the XSS payload triggers and displays the alert.
+
+---
+
+## XXE
+
+Similar attacks can be carried out to lead to XXE exploitation. With SVG images, we can also include malicious XML data to leak the web application's source code and other internal server documents. The following example can be used for an SVG image that leaks the contents of (`/etc/passwd`):
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg [ <!ENTITY xxe SYSTEM "file:///contact/upload.php"> ]>
+<svg>&xxe;</svg>
+```
+
+Once the above SVG image is uploaded and viewed, the XML document will be processed, and we should get the (`/etc/passwd`) information printed on the page or displayed in the page's source code. Similarly, if the web application allows uploading `XML` documents, then the same payload can carry out the same attack when the XML data is displayed in the web application.
+
+Although reading system files like `/etc/passwd` can be very useful for server enumeration, it can have an even more significant benefit for web penetration testing, as it allows us to read the web application's source files. Access to the source code will enable us to find more vulnerabilities to exploit within the web application through Whitebox Penetration Testing. For file upload exploitation, it may allow us to `locate the upload directory, identify allowed extensions, or find the file naming scheme`, which can be useful for further exploitation.
+
+To use XXE to read the source code in PHP web applications, we can use the following payload in our SVG image:
+
+   ```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg [ <!ENTITY xxe SYSTEM "php://filter/convert.base64-encode/resource=index.php"> ]>
+<svg>&xxe;</svg>
+   ```
+
+Once the SVG image is displayed, we should obtain the base64-encoded content of `index.php`, which we can decode to read the source code. For more information on XXE, you can check the [Web Attacks](https://academy.hackthebox.com/app/module/134) module.
+
+The use of XML data is not exclusive to SVG images, as it is also used by many document types, such as `PDF`, `Word Documents`, `PowerPoint Documents`, among many others. All these documents include XML data internally to specify their format and structure. Suppose a web application uses a document viewer that is vulnerable to XXE and allows uploading any of these documents. In that case, we could also modify their XML data to include malicious XXE elements and be able to carry out a blind XXE attack (`blind XXE attack`) on the backend web server.
+
+Another similar attack that can also be achieved through these file types is an SSRF attack. We can use the XXE vulnerability to enumerate internally available services or even call private APIs to perform private actions. For more information on SSRF, you can check the [Server-Side Attacks](https://academy.hackthebox.com/app/module/145) module.
+
+---
+
+## DoS
+
+Finally, many file upload vulnerabilities can lead to a `Denial of Service` (`Denial of Service (DoS)`) attack on the web server. For example, we can use the previous XXE payloads to achieve DoS attacks, as discussed in the [Web Attacks](https://academy.hackthebox.com/app/module/134) module.
+
+Additionally, we can use a `Decompression Bomb` (`Decompression Bomb`) with file types that use data compression, such as `ZIP` files. If a web application automatically decompresses a ZIP file, it is possible to upload a malicious file containing nested ZIP files inside, which can eventually lead to many Petabytes of data, resulting in a backend server crash.
+
+Another possible DoS attack is a `Pixel Flood` (`Pixel Flood`) attack with some image files that use image compression, such as `JPG` or `PNG`. We can create any `JPG` image file with any image size (e.g., `500x500`), then manually modify its compression data to claim it has a size of (`0xffff x 0xffff`), resulting in an image with a perceived size of 4 Gigapixels. When the web application attempts to display the image, it will try to allocate all its memory to this image, leading to a backend server crash.
+
+Besides these attacks, we can try other methods to cause a DoS on the backend server. One way is to upload an excessively large file, as some upload forms may not limit the file size to be uploaded or verify it before uploading, which can fill the server's hard drive and cause it to crash or slow down significantly.
+
+If the upload function is vulnerable to directory traversal (`directory traversal`), we can also attempt to upload files to a different directory (e.g., `../../../etc/passwd`), which can also cause the server to crash. `Try looking for other examples of DoS attacks through a vulnerable file upload functionality`.
+
+## Filename Injections
+
+A common file upload attack uses a malicious string for the uploaded filename, which can be executed or processed if the filename is displayed (i.e., reflected) on the page. We can attempt to inject a command into the filename, and if the web application uses the filename within an OS command, it can lead to a command injection attack.
+
+For example, if we name a file as `file$(whoami).jpg` or ``file`whoami`.jpg`` or `file.jpg||whoami`, and then the web application tries to move the uploaded file with an OS command (e.g., `mv file /tmp`), our filename would inject the `whoami` command, which would execute, leading to remote code execution (remote code execution). You can check the [Command Injections](https://academy.hackthebox.com/app/module/109) module for more information.
+
+Similarly, we can use an XSS payload in the filename (e.g., `<script>alert(window.origin);</script>`), which would execute on the target's machine if the filename is displayed. We can also inject an SQL query into the filename (e.g., `file';select+sleep(5);--.jpg`), which may lead to SQL injection (SQL injection) if the filename is used unsafely in an SQL query.
+
+---
+
+## Upload Directory Disclosure
+
+In some file upload forms, such as a feedback or submission form, we may not have access to the link of our uploaded file and may not know the upload directory. In such cases, we can use fuzzing to search for the upload directory or even use other vulnerabilities (e.g., LFI/XXE) to find where uploaded files are stored by reading the web application's source code, as seen in the previous section. Additionally, the [Web Attacks/IDOR](https://academy.hackthebox.com/app/module/134) module discusses various methods to find where files may be stored and identify the file naming scheme.
+
+Another method we can use to disclose the upload directory is forcing error messages, as they often reveal useful information for further exploitation. One attack we can use to cause such errors is uploading a file with a name that already exists or sending two identical requests simultaneously. This can make the web server display an error indicating it failed to write the file, which might disclose the upload directory. We can also try uploading a file with an excessively long name (e.g., 5,000 characters). If the web application does not handle this correctly, it may also generate an error and disclose the upload directory.
+
+Similarly, we can test various other techniques to make the server generate an error and disclose the upload directory, along with other useful information.
+
+---
+
+## Windows-Specific Attacks
+
+We can also use some `Windows-Specific` techniques in some of the attacks discussed in the previous sections.
+
+One such attack is the use of reserved characters, such as (`|`, `<`, `>`, `*`, or `?`), which are generally reserved for special uses like wildcards. If the web application does not properly sanitize these names or enclose them in quotes, they may reference another file (which may not exist) and cause an error disclosing the upload directory. Similarly, we can use reserved Windows names for the uploaded filename, such as (`CON`, `COM1`, `LPT1`, or `NUL`), which can also cause an error since the web application will not be allowed to write a file with this name.
+
+Finally, we can use the [8.3 filename convention](https://en.wikipedia.org/wiki/8.3_filename) of Windows to overwrite existing files or reference non-existent files. Older versions of Windows were limited to a short length for filenames, so they used a tilde character (`~`) to complete the filename, which we can leverage.
+
+For example, to reference a file named (`hackthebox.txt`), we can use (`HAC~1.TXT`) or (`HAC~2.TXT`), where the digit represents the order of matching files starting with (`HAC`). Since Windows still supports this convention, we can write a file named (e.g., `WEB~1.CON`) to overwrite the `web.conf` file. Similarly, we can write a file that replaces sensitive system files. This attack can have various outcomes, such as causing information disclosure (information disclosure) through errors, triggering a DoS on the backend server, or even accessing private files.
+
+---
+
+## Advanced File Upload Attacks
+
+Beyond all the attacks we have discussed in this module, there are more advanced attacks that can be used with file upload functionalities. Any automatic processing that occurs on an uploaded file, such as encoding a video, compressing a file, or renaming a file, can be exploited if not securely coded.
+
+Some commonly used libraries may have public exploits for such vulnerabilities, like the AVI upload vulnerability leading to XXE in `ffmpeg`. However, when dealing with custom code and libraries, detecting such vulnerabilities requires more advanced knowledge and techniques, which can lead to discovering an advanced file upload vulnerability in some web applications.
+
+There are many other advanced file upload vulnerabilities not covered in this module. Try reading some bug bounty reports to explore more advanced file upload vulnerabilities.

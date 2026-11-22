@@ -1,0 +1,80 @@
+**LaTeX injections** are a type of attack that exploits vulnerabilities in web applications that allow users to input **formatted text** in LaTeX. LaTeX is a typesetting system commonly used in academic and scientific writing.
+
+LaTeX injection attacks occur when an attacker inputs malicious LaTeX code into a text input field that is then processed by a web application. The LaTeX code can be designed to exploit vulnerabilities in the application and **execute malicious code** on the server.
+
+An example of a LaTeX injection could be an attack that leverages LaTeX's ability to include graphics and files in a web application. An attacker could send LaTeX code containing a link to a malicious file, such as a virus or trojan, which could infect the server or network systems.
+
+To prevent LaTeX injections, web applications must properly validate and sanitize received data before processing it in LaTeX. This includes removing special characters and restricting the commands that can be executed in LaTeX.
+
+It is also important for web applications to run with minimal network privileges and to regularly monitor application activity to detect potential injections. Additionally, education on LaTeX security and how to avoid introducing malicious code should be promoted.
+
+**LAB**  
+- **LaTeX Injection Lab**: [https://github.com/internetwache/Internetwache-CTF-2016/tree/master/tasks/web90/code](https://github.com/internetwache/Internetwache-CTF-2016/tree/master/tasks/web90/code)
+
+Once the lab is deployed, we can see a web page  
+![[Pasted image 20260130194627.png]]  
+For this vulnerability, we need a user with write permissions.
+
+If we test creating a sample report, we'll get a URL  
+![[Pasted image 20260130194751.png]]  
+![[Pasted image 20260130194759.png]]  
+We test commands like `whoami`, `ls`, and also try escaping `whoami` with single quotes  
+![[Pasted image 20260130194909.png]]  
+![[Pasted image 20260130194917.png]]  
+
+If we search in PayloadsAllTheThings for LaTeX injection, we can find some payloads to view, for example, the `/etc/passwd` file  
+https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LaTeX%20Injection  
+![[Pasted image 20260130195050.png]]  
+We'll see that the PDF isn't created because the code is sanitized and blocked in the PDF  
+![[Pasted image 20260130195112.png]]  
+If we check the machine's code, we can see that the words `input` and `include` are banned  
+![[Pasted image 20260130195232.png]]  
+But we also see that it executes a `--shell-escape` parameter, which will later allow us to run commands  
+![[Pasted image 20260130195319.png]]  
+We search online for information about this parameter  
+https://0day.work/hacking-with-latex/  
+![[Pasted image 20260130195549.png]]  
+In the PayloadsAllTheThings GitHub, we see there are other ways to read files without using `input` or `include`.  
+For example, this allows us to read only the first line of a chosen file  
+![[Pasted image 20260130195746.png]]  
+![[Pasted image 20260130195756.png]]  
+![[Pasted image 20260130195806.png]]  
+If we want to read the next line, we just copy and paste `\read\file to\line` and repeat for the remaining lines  
+![[Pasted image 20260130195945.png]]  
+![[Pasted image 20260130195955.png]]  
+If we want to view them all at once, we need to assign a unique name to each line and in `\text{\line}` include the names of the lines  
+![[Pasted image 20260130200121.png]]  
+![[Pasted image 20260130200135.png]]  
+We could also create a script  
+![[Pasted image 20260130200314.png]]  
+Intercept with Burp  
+![[Pasted image 20260130200346.png]]  
+URL-decode it  
+![[Pasted image 20260130200407.png]]  
+Edit the script to download the PDF and process the request, adding automatic line breaks to display the entire file  
+![[Pasted image 20260130200909.png]]  
+![[Pasted image 20260130200927.png]]  
+We can also list `groups` or `hostname`  
+![[Pasted image 20260130201006.png]] ![[Pasted image 20260130201018.png]] ![[Pasted image 20260130201034.png]]  
+
+For command execution, we also have the `id` command in the GitHub  
+![[Pasted image 20260130201119.png]]  
+This command gives output, but not in the PDF itself—instead, it appears in the text below the webpage due to a compilation error  
+![[Pasted image 20260130201151.png]]  
+To see it in the generated document, we would paste the full payload `\immediate\write18{id > output}`, which runs `id` and sends the output to a file named `output`.  
+So if we combine the read payload with this execution command  
+![[Pasted image 20260130201441.png]]  
+![[Pasted image 20260130201453.png]]  
+
+Often, we don't need to complicate things.  
+For example, we could run a directory scan with `gobuster`, which would reveal a directory called `compile` with directory listing enabled  
+![[Pasted image 20260130201558.png]]  
+Here, we would see the `output` file we created  
+![[Pasted image 20260130201701.png]]  
+We could have listed `/etc/passwd` here  
+![[Pasted image 20260130201747.png]]  
+![[Pasted image 20260130201755.png]]  
+
+The code's restriction on the words `input` and `include` could also be bypassed using parameters like `\def\first{in}` and `\def\second{put}`, then combining them with `\first\second`.  
+
+![[Pasted image 20260130202100.png]]

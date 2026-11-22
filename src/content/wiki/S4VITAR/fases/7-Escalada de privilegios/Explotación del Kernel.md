@@ -1,0 +1,78 @@
+The **kernel** is the core part of the Linux operating system, responsible for managing system resources such as memory, processes, files, and devices. Due to its critical role in the system, any vulnerability in the kernel can have serious consequences for system security.
+
+In older versions of the Linux kernel, vulnerabilities have been discovered that can be exploited to allow attackers to gain superuser (**root**) access on the system.
+
+Privilege escalation refers to the technique used by attackers to obtain elevated permissions on the system, such as superuser (**root**), when they only have limited permissions. For example, a user with limited permissions on the system could exploit a kernel vulnerability to gain superuser access and subsequently compromise the system.
+
+Kernel vulnerabilities can be exploited in several ways. For instance, an attacker could leverage a vulnerability in a device driver to gain access to the kernel and perform malicious operations. Another common way kernel vulnerabilities are exploited is through buffer overflow techniques, which allow attackers to write malicious code into memory areas reserved for the kernel.
+
+To mitigate the risk of kernel vulnerabilities, it is important to keep the operating system updated and apply security patches as soon as they are available.
+
+**LABORATORY**
+- **Sumo 1 Machine**: [https://www.vulnhub.com/entry/sumo-1,480/](https://www.vulnhub.com/entry/sumo-1,480/)
+
+We deploy the machine and use arp-scan to perform a network scan to identify its IP.  
+![[Pasted image 20260214170035.png]]  
+Now we run nmap and see that port 80 is open.  
+
+![[Pasted image 20260214170108.png]]  
+
+If we use gobuster, we can search for directories with dir on the URL.  
+![[Pasted image 20260214170159.png]]  
+Here we see a cgi-bin, so if the bash version is outdated, we can perform a shell shock attack.  
+
+We perform fuzzing on cgi-bin to see what's behind it.  
+![[Pasted image 20260214170359.png]]  
+We find a test.sh.  
+![[Pasted image 20260214170411.png]]  
+
+Here we execute the [shell shock](obsidian://open?vault=David-Cyber&file=S4VITAR%2Ffases%2F6-OWASP%2010%2FEnumeraci%C3%B3n%20y%20explotaci%C3%B3n%20de%20SQUID%20Proxies).  
+![[Pasted image 20260215161205.png]]  
+![[Pasted image 20260215161227.png]]  
+
+Once we gain access to the TTY, we proceed with privilege escalation.  
+
+By running `uname -a`, we can check the kernel version.  
+![[Pasted image 20260215200048.png]]  
+
+We search for this kernel version in searchsploit to see if any exploits exist.  
+![[Pasted image 20260215200144.png]]  
+![[Pasted image 20260215200153.png]]  
+
+We notice repeated mentions of something called [Dirty COW](https://www.q2bstudio.com/nuestro-blog/46802/descubre-el-impacto-del-exploit-dirty-cow-en-linux-durante-2016), which is a C script.  
+![[Pasted image 20260215200344.png]]  
+We will use a Dirty COW variant that overwrites `/etc/passwd`.  
+![[Pasted image 20260215200441.png]]  
+
+We inspect the script.  
+![[Pasted image 20260215200505.png]]  
+![[Pasted image 20260215200514.png]]  
+
+This escalation uses race conditions.  
+
+We check if the compromised machine has gcc to compile this script.  
+![[Pasted image 20260215200706.png]]  
+
+We download the script to our attacking machine and transfer it to the victim machine by hosting an HTTP server on port 80.  
+![[Pasted image 20260215200751.png]]  
+![[Pasted image 20260215200800.png]]  
+![[Pasted image 20260215200807.png]]  
+
+The code itself explains how to compile it with gcc.  
+![[Pasted image 20260215200820.png]]  
+
+This script replaces the root user with one named firefart, allowing us to set a password, which is hardcoded in the passwd file.  
+
+When we execute the script, it asks for the password to set.  
+![[Pasted image 20260215201133.png]]  
+Here we see the new user.  
+![[Pasted image 20260215201153.png]]  
+![[Pasted image 20260215201234.png]]  
+
+There are countless kernel exploits.  
+![[Pasted image 20260215201349.png]]  
+![[Pasted image 20260215201354.png]]  
+
+As an automated tool, we have [linux-exploit-suggester](https://github.com/The-Z-Labs/linux-exploit-suggester), which automatically lists possible exploits. This tool is similar to linpeas or LSE but more focused on the kernel.  
+![[Pasted image 20260215201656.png]]  
+![[Pasted image 20260215201709.png]]

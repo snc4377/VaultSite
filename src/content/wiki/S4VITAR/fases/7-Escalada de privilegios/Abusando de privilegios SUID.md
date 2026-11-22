@@ -1,0 +1,53 @@
+It's important to note that for a file to grant root permissions via **SUID**, it doesn't matter who the user is, but rather the **file's physical permissions**. Unlike `sudo -l`, there's no list of names here; if the file has the "key" set, anyone who uses it becomes the owner.
+
+**For example:** We can have two users with no special permissions on the system, but if the `nmap` binary has the SUID bit enabled, **both** will be able to execute it with admin privileges and jump to a root shell. Here, the power lies not with the user, but with the file.
+
+**find / -perm -4000 -user root 2>/dev/null**
+- **`find /`**: Tells the system to start searching from the **root** (the entire hard drive).
+    
+- **`-perm -4000`**: This is the key. It searches for files with the **SUID** (Set User ID) bit enabled.
+    
+    - In binary/octal, the `4` in that position means that, regardless of who executes the file, it will run with the **owner's privileges** (usually `root`).
+        
+- **`-type f`**: Specifies to only search for regular **files**, ignoring directories or symbolic links.
+    
+- **`2>/dev/null`**: Sends all errors (like "Permission denied" when trying to read restricted folders) to the system's "black hole" so they don't clutter your screen, and you only see useful results.
+
+When running this command, it's crucial to proceed step by step, checking GTFO bins to see if any of the listed files are there. If we find suspicious files, we should examine them to see what they do.
+
+A **SUID** (**Set User ID**) privilege is a special permission that can be set on a binary file in Unix/Linux systems. This permission grants the user executing the file the **same privileges** as the file's **owner**.
+
+For example, if a binary file has the SUID permission set and is owned by the root user, any user who executes it will temporarily gain the same privileges as the root user, allowing them to perform actions they normally couldn't as a regular user.
+
+SUID privilege abuse is a technique used by attackers to elevate their access level on a compromised system. If an attacker gains access to a binary file with SUID permissions, they can execute commands with special privileges and perform malicious actions on the system.
+
+To prevent SUID privilege abuse, it's recommended to limit the number of files with SUID permissions and ensure they are only granted to files that require this permission to function correctly. Additionally, it's important to regularly monitor the system for unexpected changes in file permissions and to look for potential security breaches.
+
+In this example, we have the same users as in [sudoers Elevation](obsidian://open?vault=David-Cyber&file=S4VITAR%2Ffases%2F7-Escalada%20de%20privilegios%2FAbusando%20de%20privilegios%20a%20nivel%20de%20Sudoers)
+
+Let's play with the base64 binary (with this binary, we could only read or edit files), which, if we do an `ls -l`, we see doesn't have the SUID assigned, so let's set it.
+![[Pasted image 20260213174922.png]]
+![[Pasted image 20260213174949.png]]
+
+If we try to view `/etc/shadow` (where user password hashes are stored), it won't let us because we don't have permissions.
+![[Pasted image 20260213175106.png]]
+
+But we see that if we use base64 to read the content, it gives it to us.
+![[Pasted image 20260213175236.png]]
+We decode this:
+![[Pasted image 20260213175251.png]]
+And with this, we could try to crack the passwords using dictionaries, for example.
+
+Besides viewing files, we can also use it to edit files and elevate our privileges to become root.
+
+- **Prepare your user line:** Create a line for a new user (let's call it `hacker`) with a known password and root privileges (ID 0). `hacker:$1$hacker$TzyK76vGv6V3sV.1W6i9p/:0:0:root:/root:/bin/bash`
+    
+- **Convert it to Base64:** Since you'll use the `base64` binary, you need to pass the information in that format. `echo "hacker:$1$hacker$TzyK76vGv6V3sV.1W6i9p/:0:0:root:/root:/bin/bash" | base64`
+    
+- **Inject the code with SUID:** Use `base64` with SUID to decode your line and append it to the end of the system's user file:
+    
+    Bash
+    
+    ```
+    echo "TU_LINEA_EN_BASE64" | ./base64 -d | tee -a /etc/passwd
+    ```

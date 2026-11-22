@@ -7,10 +7,11 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "predev": "node scripts/normalize-content.mjs",
+    "predev": "node scripts/normalize-content.mjs && node scripts/sync-wiki.mjs",
     "build": "astro build",
-    "prebuild": "node scripts/normalize-content.mjs",
+    "prebuild": "node scripts/normalize-content.mjs && node scripts/sync-wiki.mjs",
     "preview": "astro preview",
+    "sync:wiki": "node scripts/sync-wiki.mjs",
     "astro": "astro"
   },
   "dependencies": {
