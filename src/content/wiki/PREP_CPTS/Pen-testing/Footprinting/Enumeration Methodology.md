@@ -1,4 +1,4 @@
-![[enum-method33.png]]
+![enum-method33](/VaultSite/wiki-images/enum-method33.png)
 ## Layer No.1: Internet Presence
 
 The first layer we have to pass is the "Internet Presence" layer, where we focus on finding the targets we can investigate. If the scope in the contract allows us to look for additional hosts, this layer is even more critical than for fixed targets only. In this layer, we use different techniques to find domains, subdomains, netblocks, and many other components and information that present the presence of the company and its infrastructure on the Internet.

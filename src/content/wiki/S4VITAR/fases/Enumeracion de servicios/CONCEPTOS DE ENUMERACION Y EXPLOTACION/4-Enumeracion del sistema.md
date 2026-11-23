@@ -4,12 +4,12 @@ This is done after we've compromised the system and gained access. Next, we perf
 - Download the tool from https://github.com/diego-treitos/linux-smart-enumeration
 - When executed, this tool will prompt for the password of the user we've compromised
 - The tool has 3 reconnaissance levels; use `-h` for more info. Typically we use `-l 2`
-- ![[Pasted image 20251209185221.png]]
+- ![Pasted image 20251209185221](/VaultSite/wiki-images/Pasted%20image%2020251209185221.png)
 - This reveals potential privilege escalation paths
 - Here we can see other users with shell access
-- ![[Pasted image 20251209185359.png]]
+- ![Pasted image 20251209185359](/VaultSite/wiki-images/Pasted%20image%2020251209185359.png)
 - We can check if sudo is possible without a password, read sudoers, etc.
-![[Pasted image 20251209185533.png]]
+![Pasted image 20251209185533](/VaultSite/wiki-images/Pasted%20image%2020251209185533.png)
 - Critical vulnerabilities are highlighted in red
 
 -------
@@ -17,16 +17,16 @@ This is done after we've compromised the system and gained access. Next, we perf
 We'd use this for privilege escalation when we don't have the user's password.
 
 Run `find -perm -4000 -ls 2>/dev/null` to search for SUID permissions. If owned by root with SUID, this lets us temporarily execute the binary as root without passwords.
-![[Pasted image 20251209190756.png]]
+![Pasted image 20251209190756](/VaultSite/wiki-images/Pasted%20image%2020251209190756.png)
 For example, let's assign SUID to Python:
-![[Pasted image 20251209190829.png]]
-![[Pasted image 20251209190856.png]]
+![Pasted image 20251209190829](/VaultSite/wiki-images/Pasted%20image%2020251209190829.png)
+![Pasted image 20251209190856](/VaultSite/wiki-images/Pasted%20image%2020251209190856.png)
 
 Now executing python3.9 as non-root user:
-![[Pasted image 20251209190934.png]]
-![[Pasted image 20251209190955.png]]
+![Pasted image 20251209190934](/VaultSite/wiki-images/Pasted%20image%2020251209190934.png)
+![Pasted image 20251209190955](/VaultSite/wiki-images/Pasted%20image%2020251209190955.png)
 Changing the ID shows it's temporarily executing with sudo:
-![[Pasted image 20251209191109.png]]
+![Pasted image 20251209191109](/VaultSite/wiki-images/Pasted%20image%2020251209191109.png)
 Now we have an interactive shell
 
 -----
@@ -39,13 +39,13 @@ These are minimal permissions for programs to function normally. Assigned indivi
 Set with `setcap cap_setuid+ep /usr/bin/python3.9`
 
 Now search again with getcap:
-![[Pasted image 20251209193026.png]]
+![Pasted image 20251209193026](/VaultSite/wiki-images/Pasted%20image%2020251209193026.png)
 Check for SUID (none found):
-![[Pasted image 20251209193327.png]]
+![Pasted image 20251209193327](/VaultSite/wiki-images/Pasted%20image%2020251209193327.png)
 But we see the capability in parallel:
-![[Pasted image 20251209193359.png]]
+![Pasted image 20251209193359](/VaultSite/wiki-images/Pasted%20image%2020251209193359.png)
 This specific capability allows setting user ID:
-![[Pasted image 20251209193455.png]]
+![Pasted image 20251209193455](/VaultSite/wiki-images/Pasted%20image%2020251209193455.png)
 LSE should report this, but this is the manual method for better understanding.
 
 ----
@@ -54,7 +54,7 @@ We check if root periodically executes any writable scripts we could modify.
 
 **PSPY**
 This tool monitors tasks/commands on the victim machine. Used post-compromise.
-![[Pasted image 20251209193942.png]]
+![Pasted image 20251209193942](/VaultSite/wiki-images/Pasted%20image%2020251209193942.png)
 
 **ps -eo user,command**
 Can be used to create a custom bash script:
@@ -71,7 +71,7 @@ old_process=$new_process                           # Update baseline
 done
 ```
 
-![[Pasted image 20251209195543.png]]
+![Pasted image 20251209195543](/VaultSite/wiki-images/Pasted%20image%2020251209195543.png)
 
 ###### **GTFOBINS**
 Critical resource: https://gtfobins.github.io/
@@ -79,9 +79,9 @@ Critical resource: https://gtfobins.github.io/
 Shows how to exploit found binaries.
 
 Example: if `find` has SUID permissions:
-![[Pasted image 20251209200119.png]]
+![Pasted image 20251209200119](/VaultSite/wiki-images/Pasted%20image%2020251209200119.png)
 Executing the shown command grants elevated privileges:
-![[Pasted image 20251209200204.png]]
-![[Pasted image 20251209200309.png]]
+![Pasted image 20251209200204](/VaultSite/wiki-images/Pasted%20image%2020251209200204.png)
+![Pasted image 20251209200309](/VaultSite/wiki-images/Pasted%20image%2020251209200309.png)
 Also shows capability exploitation for binaries:
-![[Pasted image 20251209200351.png]]
+![Pasted image 20251209200351](/VaultSite/wiki-images/Pasted%20image%2020251209200351.png)

@@ -19,59 +19,59 @@ In summary, GraphQL is a query language for APIs that allows clients to request 
 - **GraphQL IDOR**: [https://github.com/blabla1337/skf-labs/tree/master/nodeJs/Graphql-IDOR](https://github.com/blabla1337/skf-labs/tree/master/nodeJs/Graphql-IDOR)
 
 **GraphQL IDOR**  
-![[Pasted image 20260212155311.png]]  
+![Pasted image 20260212155311](/VaultSite/wiki-images/Pasted%20image%2020260212155311.png)  
 We are given credentials: jhondoe:password1  
-![[Pasted image 20260212155342.png]]  
+![Pasted image 20260212155342](/VaultSite/wiki-images/Pasted%20image%2020260212155342.png)  
 
 Let's fuzz the endpoints using GoBuster, Wfuzz, or FFuF.  
-![[Pasted image 20260212155438.png]]  
+![Pasted image 20260212155438](/VaultSite/wiki-images/Pasted%20image%2020260212155438.png)  
 We find a `/settings` endpoint.  
-![[Pasted image 20260212155450.png]]  
+![Pasted image 20260212155450](/VaultSite/wiki-images/Pasted%20image%2020260212155450.png)  
 Let's intercept this request with Burp.  
 We see the request is sending a GraphQL query via POST.  
-![[Pasted image 20260212155536.png]]  
-![[Pasted image 20260212155744.png]]  
+![Pasted image 20260212155536](/VaultSite/wiki-images/Pasted%20image%2020260212155536.png)  
+![Pasted image 20260212155744](/VaultSite/wiki-images/Pasted%20image%2020260212155744.png)  
 
 Let's test changing the `id` parameter—we can see the API key and other users' info.  
-![[Pasted image 20260212155733.png]]  
+![Pasted image 20260212155733](/VaultSite/wiki-images/Pasted%20image%2020260212155733.png)  
 
 **GraphQL Introspection**  
 Here we see a similar web app, but intercepting the request:  
-![[Pasted image 20260212160227.png]]  
+![Pasted image 20260212160227](/VaultSite/wiki-images/Pasted%20image%2020260212160227.png)  
 We can identify the query sent to GraphQL to fetch the displayed data.  
-![[Pasted image 20260212160350.png]]  
+![Pasted image 20260212160350](/VaultSite/wiki-images/Pasted%20image%2020260212160350.png)  
 If we go to `localhost:5000/graphql` and check HackTricks, we can grab a query to list all types.  
 
-![[Pasted image 20260212160519.png]]  
-![[Pasted image 20260212160504.png]]  
-![[Pasted image 20260212160535.png]]  
+![Pasted image 20260212160519](/VaultSite/wiki-images/Pasted%20image%2020260212160519.png)  
+![Pasted image 20260212160504](/VaultSite/wiki-images/Pasted%20image%2020260212160504.png)  
+![Pasted image 20260212160535](/VaultSite/wiki-images/Pasted%20image%2020260212160535.png)  
 We see various properties, some of which are particularly interesting.  
 
 To visualize this better, we can use introspection—a special query to enumerate the entire database schema.  
-![[Pasted image 20260212160747.png]]  
+![Pasted image 20260212160747](/VaultSite/wiki-images/Pasted%20image%2020260212160747.png)  
 Pasting this into the URL may return errors:  
-![[Pasted image 20260212161047.png]]  
+![Pasted image 20260212161047](/VaultSite/wiki-images/Pasted%20image%2020260212161047.png)  
 This is normal, as type names sometimes don't match. We adjust based on the errors—for example, `Type` should be `__Type`.  
-![[Pasted image 20260212161212.png]]  
+![Pasted image 20260212161212](/VaultSite/wiki-images/Pasted%20image%2020260212161212.png)  
 Once corrected, the schema is displayed.  
-![[Pasted image 20260212161313.png]]  
+![Pasted image 20260212161313](/VaultSite/wiki-images/Pasted%20image%2020260212161313.png)  
 Copy the output and paste it into [GraphQL Voyager](https://apis.guru/graphql-voyager/) for an interactive visualization. Under "Introspection," paste the schema.  
-![[Pasted image 20260212161446.png]]  
-![[Pasted image 20260212161502.png]]  
+![Pasted image 20260212161446](/VaultSite/wiki-images/Pasted%20image%2020260212161446.png)  
+![Pasted image 20260212161502](/VaultSite/wiki-images/Pasted%20image%2020260212161502.png)  
 
 Now that we understand the schema, we can intercept the request again and modify the query parameters to fetch specific data.  
-![[Pasted image 20260212161713.png]]  
-![[Pasted image 20260212161744.png]]  
+![Pasted image 20260212161713](/VaultSite/wiki-images/Pasted%20image%2020260212161713.png)  
+![Pasted image 20260212161744](/VaultSite/wiki-images/Pasted%20image%2020260212161744.png)  
 
 This is read-only. For data modification, we move to:  
 **GraphQL Mutations**  
 In this new web app, we see a button to create posts.  
-![[Pasted image 20260212161952.png]]  
+![Pasted image 20260212161952](/VaultSite/wiki-images/Pasted%20image%2020260212161952.png)  
 Intercepting this shows the query includes fields like `title`, `body`, and the author's `id`, which we can edit.  
 
-![[Pasted image 20260212162055.png]]  
-![[Pasted image 20260212162110.png]]  
+![Pasted image 20260212162055](/VaultSite/wiki-images/Pasted%20image%2020260212162055.png)  
+![Pasted image 20260212162110](/VaultSite/wiki-images/Pasted%20image%2020260212162110.png)  
 We can also add more fields based on the introspection findings.  
 
 Sending the modified request executes the mutation.  
-![[Pasted image 20260212162240.png]]
+![Pasted image 20260212162240](/VaultSite/wiki-images/Pasted%20image%2020260212162240.png)

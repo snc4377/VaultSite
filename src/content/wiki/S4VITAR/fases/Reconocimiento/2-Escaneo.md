@@ -123,7 +123,7 @@ SSL abuse
 cd ctfr
 pip3 install -r requirments.txt
 python3 ctfr.py -d [target domain]
-![[Pasted image 20251122150211.png]]
+![Pasted image 20251122150211](/VaultSite/wiki-images/Pasted%20image%2020251122150211.png)
 
 ### GOBUSTER subdomain listing
 
@@ -150,7 +150,7 @@ EXAMPLE:
 -dir: directory listing mode
 example: gobuster dir -u https://miwifi.com -w /usr/share/SecLists/Discovery/Web-content/directory-list-2.3-medium.txt -t 200 -b 403,404
 
-![[Pasted image 20260125224328.png]]
+![Pasted image 20260125224328](/VaultSite/wiki-images/Pasted%20image%2020260125224328.png)
 
 ### WFUZZ
 Tool for fuzzing - path discovery, parameter fuzzing, GET/POST requests, extensions. Can fuzz multiple parameters simultaneously.
@@ -170,11 +170,11 @@ https://book.h4ck.cl/metodologia-y-fases-de-hacking-etico/recopilacion-activa-de
 **Web file fuzzing example**
 wfuzz -c --hc=404,403 -t 200 -w /usr/share/SecLists/Discovery/Web-content/directory-list-2.3-medium.txt https://miwifi.com/FUZZ
 
-![[Pasted image 20251124182133.png]]
+![Pasted image 20251124182133](/VaultSite/wiki-images/Pasted%20image%2020251124182133.png)
 Here we can add a second payload with -z and .FUZ2Z for file extension fuzzing
 
 Example filtering by product ID range:
-![[Pasted image 20251124182415.png]]
+![Pasted image 20251124182415](/VaultSite/wiki-images/Pasted%20image%2020251124182415.png)
 
 We can filter by:
 -hl=(hide by line count, e.g. 600)
@@ -193,11 +193,11 @@ Identifying CMS and web technologies
 **WHATWEB**
 
 whatweb (url): shows versions
-![[Pasted image 20251124163525.png]]
+![Pasted image 20251124163525](/VaultSite/wiki-images/Pasted%20image%2020251124163525.png)
 Research any unknown versions for potential vulnerabilities
 
 We also have WAPPALYZER which shows us the same thing but as a browser add-on  
-![[Pasted image 20251124164027.png]]
+![Pasted image 20251124164027](/VaultSite/wiki-images/Pasted%20image%2020251124164027.png)
 
 
 

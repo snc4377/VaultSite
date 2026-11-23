@@ -33,7 +33,7 @@ Companies often map cloud storage to their subdomains for easier management.
     
 - **Example:** Seeing `s3-website-us-west-2.amazonaws.com` in a DNS lookup confirms the use of AWS S3.
     
-![[Pasted image 20260421184616.png]]
+![Pasted image 20260421184616](/VaultSite/wiki-images/Pasted%20image%2020260421184616.png)
 ### 2. Google Dorking
 
 Using advanced operators to find indexed files in cloud buckets.
@@ -43,8 +43,8 @@ Using advanced operators to find indexed files in cloud buckets.
 - `intext:"index of" "company_name" storage`
     
 - `filetype:pdf` or `filetype:xlsx` associated with cloud URLs.
-    ![[Pasted image 20260421184633.png]]
-![[Pasted image 20260421184649.png]]
+    ![Pasted image 20260421184633](/VaultSite/wiki-images/Pasted%20image%2020260421184633.png)
+![Pasted image 20260421184649](/VaultSite/wiki-images/Pasted%20image%2020260421184649.png)
 ### 3. Source Code Analysis
 
 Reviewing the HTML/JS of a target website often reveals:
@@ -53,7 +53,7 @@ Reviewing the HTML/JS of a target website often reveals:
     
 - Leaked API keys or hardcoded cloud credentials.
     
-![[Pasted image 20260421184704.png]]
+![Pasted image 20260421184704](/VaultSite/wiki-images/Pasted%20image%2020260421184704.png)
 ### 4. Third-Party Intelligence Tools
 
 | **Tool**           | **Purpose**                                                                          |
@@ -62,10 +62,10 @@ Reviewing the HTML/JS of a target website often reveals:
 | **GrayHatWarfare** | A dedicated search engine to discover and filter public AWS, Azure, and GCP storage. |
 
 Domain.Glass
-![[Pasted image 20260421184735.png]]
+![Pasted image 20260421184735](/VaultSite/wiki-images/Pasted%20image%2020260421184735.png)
 
 GrayHatWarfare
-![[Pasted image 20260421184754.png]]
+![Pasted image 20260421184754](/VaultSite/wiki-images/Pasted%20image%2020260421184754.png)
 
 
 ---
@@ -79,4 +79,4 @@ Human error and high-pressure environments often lead to the exposure of:
 - **Source Code:** Hardcoded credentials or proprietary logic.
     
 - **Personal Data:** PDFs, spreadsheets, and internal documents containing PII or company secrets.
-![[Pasted image 20260421184813.png]]
+![Pasted image 20260421184813](/VaultSite/wiki-images/Pasted%20image%2020260421184813.png)

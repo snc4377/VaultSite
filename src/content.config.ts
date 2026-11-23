@@ -36,6 +36,9 @@ const wiki = defineCollection({
     // and `date` are optional. Pages derive a title from the entry id.
     title: z.string().optional(),
     date: z.coerce.date().optional(),
+    // Ordered category path, e.g. ["Recopilación", "Activa", "Nmap"].
+    // Missing or empty falls back to the "Uncategorized" root in the sidebar.
+    category: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
     description: z.string().optional(),
   }),

@@ -12,67 +12,67 @@ To mitigate the risk of kernel vulnerabilities, it is important to keep the oper
 - **Sumo 1 Machine**: [https://www.vulnhub.com/entry/sumo-1,480/](https://www.vulnhub.com/entry/sumo-1,480/)
 
 We deploy the machine and use arp-scan to perform a network scan to identify its IP.  
-![[Pasted image 20260214170035.png]]  
+![Pasted image 20260214170035](/VaultSite/wiki-images/Pasted%20image%2020260214170035.png)  
 Now we run nmap and see that port 80 is open.  
 
-![[Pasted image 20260214170108.png]]  
+![Pasted image 20260214170108](/VaultSite/wiki-images/Pasted%20image%2020260214170108.png)  
 
 If we use gobuster, we can search for directories with dir on the URL.  
-![[Pasted image 20260214170159.png]]  
+![Pasted image 20260214170159](/VaultSite/wiki-images/Pasted%20image%2020260214170159.png)  
 Here we see a cgi-bin, so if the bash version is outdated, we can perform a shell shock attack.  
 
 We perform fuzzing on cgi-bin to see what's behind it.  
-![[Pasted image 20260214170359.png]]  
+![Pasted image 20260214170359](/VaultSite/wiki-images/Pasted%20image%2020260214170359.png)  
 We find a test.sh.  
-![[Pasted image 20260214170411.png]]  
+![Pasted image 20260214170411](/VaultSite/wiki-images/Pasted%20image%2020260214170411.png)  
 
 Here we execute the [shell shock](obsidian://open?vault=David-Cyber&file=S4VITAR%2Ffases%2F6-OWASP%2010%2FEnumeraci%C3%B3n%20y%20explotaci%C3%B3n%20de%20SQUID%20Proxies).  
-![[Pasted image 20260215161205.png]]  
-![[Pasted image 20260215161227.png]]  
+![Pasted image 20260215161205](/VaultSite/wiki-images/Pasted%20image%2020260215161205.png)  
+![Pasted image 20260215161227](/VaultSite/wiki-images/Pasted%20image%2020260215161227.png)  
 
 Once we gain access to the TTY, we proceed with privilege escalation.  
 
 By running `uname -a`, we can check the kernel version.  
-![[Pasted image 20260215200048.png]]  
+![Pasted image 20260215200048](/VaultSite/wiki-images/Pasted%20image%2020260215200048.png)  
 
 We search for this kernel version in searchsploit to see if any exploits exist.  
-![[Pasted image 20260215200144.png]]  
-![[Pasted image 20260215200153.png]]  
+![Pasted image 20260215200144](/VaultSite/wiki-images/Pasted%20image%2020260215200144.png)  
+![Pasted image 20260215200153](/VaultSite/wiki-images/Pasted%20image%2020260215200153.png)  
 
 We notice repeated mentions of something called [Dirty COW](https://www.q2bstudio.com/nuestro-blog/46802/descubre-el-impacto-del-exploit-dirty-cow-en-linux-durante-2016), which is a C script.  
-![[Pasted image 20260215200344.png]]  
+![Pasted image 20260215200344](/VaultSite/wiki-images/Pasted%20image%2020260215200344.png)  
 We will use a Dirty COW variant that overwrites `/etc/passwd`.  
-![[Pasted image 20260215200441.png]]  
+![Pasted image 20260215200441](/VaultSite/wiki-images/Pasted%20image%2020260215200441.png)  
 
 We inspect the script.  
-![[Pasted image 20260215200505.png]]  
-![[Pasted image 20260215200514.png]]  
+![Pasted image 20260215200505](/VaultSite/wiki-images/Pasted%20image%2020260215200505.png)  
+![Pasted image 20260215200514](/VaultSite/wiki-images/Pasted%20image%2020260215200514.png)  
 
 This escalation uses race conditions.  
 
 We check if the compromised machine has gcc to compile this script.  
-![[Pasted image 20260215200706.png]]  
+![Pasted image 20260215200706](/VaultSite/wiki-images/Pasted%20image%2020260215200706.png)  
 
 We download the script to our attacking machine and transfer it to the victim machine by hosting an HTTP server on port 80.  
-![[Pasted image 20260215200751.png]]  
-![[Pasted image 20260215200800.png]]  
-![[Pasted image 20260215200807.png]]  
+![Pasted image 20260215200751](/VaultSite/wiki-images/Pasted%20image%2020260215200751.png)  
+![Pasted image 20260215200800](/VaultSite/wiki-images/Pasted%20image%2020260215200800.png)  
+![Pasted image 20260215200807](/VaultSite/wiki-images/Pasted%20image%2020260215200807.png)  
 
 The code itself explains how to compile it with gcc.  
-![[Pasted image 20260215200820.png]]  
+![Pasted image 20260215200820](/VaultSite/wiki-images/Pasted%20image%2020260215200820.png)  
 
 This script replaces the root user with one named firefart, allowing us to set a password, which is hardcoded in the passwd file.  
 
 When we execute the script, it asks for the password to set.  
-![[Pasted image 20260215201133.png]]  
+![Pasted image 20260215201133](/VaultSite/wiki-images/Pasted%20image%2020260215201133.png)  
 Here we see the new user.  
-![[Pasted image 20260215201153.png]]  
-![[Pasted image 20260215201234.png]]  
+![Pasted image 20260215201153](/VaultSite/wiki-images/Pasted%20image%2020260215201153.png)  
+![Pasted image 20260215201234](/VaultSite/wiki-images/Pasted%20image%2020260215201234.png)  
 
 There are countless kernel exploits.  
-![[Pasted image 20260215201349.png]]  
-![[Pasted image 20260215201354.png]]  
+![Pasted image 20260215201349](/VaultSite/wiki-images/Pasted%20image%2020260215201349.png)  
+![Pasted image 20260215201354](/VaultSite/wiki-images/Pasted%20image%2020260215201354.png)  
 
 As an automated tool, we have [linux-exploit-suggester](https://github.com/The-Z-Labs/linux-exploit-suggester), which automatically lists possible exploits. This tool is similar to linpeas or LSE but more focused on the kernel.  
-![[Pasted image 20260215201656.png]]  
-![[Pasted image 20260215201709.png]]
+![Pasted image 20260215201656](/VaultSite/wiki-images/Pasted%20image%2020260215201656.png)  
+![Pasted image 20260215201709](/VaultSite/wiki-images/Pasted%20image%2020260215201709.png)

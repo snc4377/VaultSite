@@ -18,14 +18,14 @@ By successfully exploiting an SSRF, the attacker can send HTTP requests to inter
 https://www.youtube.com/watch?v=UfILDa_qStQ
 
 https://github.com/jbarone/xxelab
-![[Pasted image 20260101155239.png]]
+![Pasted image 20260101155239](/VaultSite/wiki-images/Pasted%20image%2020260101155239.png)
 Let's open Burp Suite to see how the web page processes requests in the background
-![[Pasted image 20260103143805.png]]
-![[Pasted image 20260103143823.png]]
+![Pasted image 20260103143805](/VaultSite/wiki-images/Pasted%20image%2020260103143805.png)
+![Pasted image 20260103143823](/VaultSite/wiki-images/Pasted%20image%2020260103143823.png)
 We see that it's processing via POST to process.php and handling an XML form
 
 XML 
-![[Pasted image 20260103143926.png]]
+![Pasted image 20260103143926](/VaultSite/wiki-images/Pasted%20image%2020260103143926.png)
 
 After several tests with it
 

@@ -1,18 +1,18 @@
-![[Pasted image 20240710162024.png]]
+![Pasted image 20240710162024](/VaultSite/wiki-images/Pasted%20image%2020240710162024.png)
 - **Confidentiality** is a set of rules that prevents sensitive information from being disclosed to unauthorized individuals, resources, and processes. Methods used to ensure confidentiality include **data encryption**, **authentication**, and **access control**.
   
 - Integrity ensures that system information or processes are protected against intentional or accidental modifications. One way to ensure integrity is by using a **hash function** or **checksum**.
   
 - **Availability** means that authorized users can access systems and data when and where needed, while those who do not meet the established conditions cannot. This can be achieved **by maintaining equipment**, **performing hardware repairs**, **keeping operating systems and software updated, and creating backups**.
 
-![[Pasted image 20240710162110.png]]
+![Pasted image 20240710162110](/VaultSite/wiki-images/Pasted%20image%2020240710162110.png)
 - Processing refers to data used to perform an operation, such as updating a database record (data in process).
   
 - Storage refers to data stored in memory or on a permanent storage device, such as a hard drive, solid-state drive, or USB drive (data at rest).
   
 - Transmission refers to data traveling between information systems (data in transit).
 
-![[Pasted image 20240710162123.png]]
+![Pasted image 20240710162123](/VaultSite/wiki-images/Pasted%20image%2020240710162123.png)
 - **Awareness**, training, and education are measures implemented by an organization to ensure users are informed about potential security threats and actions they can take to protect information systems.
   
 - **Technology** refers to software (and hardware) solutions designed to protect information systems, such as firewalls, which continuously monitor the network for potential malicious incidents.

@@ -27,7 +27,7 @@ Interface: 192.168.100.50 --- 0xc
 
 
 User mike:diamond     flag a46be65770984ec0825f061aa6578bdd
-![[Pasted image 20260410193341.png]]
+![Pasted image 20260410193341](/VaultSite/wiki-images/Pasted%20image%2020260410193341.png)
 
 
 Machine 2 WINSERVER02   Microsoft Windows Server 2012 R2 Standard      ftp anonymous
@@ -42,7 +42,7 @@ PORT      STATE SERVICE
 3389/tcp  open  ms-wbt-server
 5985/tcp  open  wsman
 47001/tcp open  winrm
-![[Pasted image 20260410190316.png]]
+![Pasted image 20260410190316](/VaultSite/wiki-images/Pasted%20image%2020260410190316.png)
 
 
 

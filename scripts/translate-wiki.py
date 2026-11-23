@@ -16,9 +16,13 @@ Obsidian `[[Wikilinks]]` keep resolving inside the output vault.
 Usage:
     python3 scripts/translate-wiki.py --check            # list languages, no API calls
     python3 scripts/translate-wiki.py --dry-run          # plan, no API calls, no writes
+    python3 scripts/translate-wiki.py --dry-run --force  # include existing notes in the plan
     python3 scripts/translate-wiki.py                    # translate + write
-    python3 scripts/translate-wiki.py --force            # retranslate everything
+    python3 scripts/translate-wiki.py --force            # rewrite every existing note
     python3 scripts/translate-wiki.py --only "Some Note.md"
+
+Public image URLs default to /wiki-images/...; pass `--public-base /VaultSite`
+for a GitHub Pages project site served under that base.
 
 API keys are provider-specific (DEEPSEEK_API_KEY or OPENROUTER_API_KEY),
 read from the environment first and then from the active Hermes profile's
@@ -40,6 +44,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from urllib.parse import quote, unquote
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, NoReturn
@@ -86,6 +91,27 @@ HERMES_ENVS = (
 MANIFEST_NAME = ".translate-manifest.json"
 
 FRONTMATTER_RE = re.compile(r"\A---[ \t]*\r?\n(.*?)\r?\n---[ \t]*(?:\r?\n|\Z)", re.S)
+
+# Images are copied flat into the Astro project's public folder.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_IMAGES_DIR = PROJECT_ROOT / "public" / "wiki-images"
+
+IMAGE_EXTENSIONS = {
+    ".avif",
+    ".bmp",
+    ".gif",
+    ".ico",
+    ".jpeg",
+    ".jpg",
+    ".png",
+    ".svg",
+    ".tif",
+    ".tiff",
+    ".webp",
+}
+
+OBSIDIAN_IMAGE_RE = re.compile(r"!\[\[([^\]]+)\]\]")
+MARKDOWN_IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)]*)\)")
 
 # Language checks — ordered most-specific first. A note is "Spanish" when it
 # contains Spanish function words that are absent from English, and its
@@ -297,6 +323,8 @@ Rules:
 - Leave these verbatim: fenced code blocks and their contents, inline code,
   URLs, image paths, HTML tags, Obsidian [[Wikilinks]] and ![[embeds]],
   callout markers (e.g. "> [!warning]"), math, and filenames.
+- Never rewrite, reorder or drop image embeds (`![[...]]`) or Markdown
+  images (`![...](...)`); keep the image syntax exactly as written.
 - Do not translate the filename; filenames are never changed.
 - Domain terms: when the standard English term is well known (e.g. "keylogger",
   "phishing", "payload", "shell"), use it. Otherwise translate plainly."""
@@ -411,6 +439,7 @@ class Job:
 class RunStats:
     translated: list[str] = field(default_factory=list)
     copied: list[str] = field(default_factory=list)
+    refreshed: list[str] = field(default_factory=list)
     unchanged: list[str] = field(default_factory=list)
     failed: list[str] = field(default_factory=list)
     unknown: list[str] = field(default_factory=list)
@@ -490,6 +519,238 @@ def chunk_text(text: str, limit: int = MAX_CHUNK) -> list[str]:
     if current.strip():
         chunks.append(current)
     return chunks or [text]
+
+
+class ImageHandler:
+    """Copy referenced vault images into public/wiki-images and rewrite links."""
+
+    def __init__(
+        self,
+        src: Path,
+        images_dir: Path,
+        public_base: str = "",
+        dry_run: bool = False,
+    ) -> None:
+        self.src = src
+        self.images_dir = images_dir
+        self.public_base = public_base.rstrip("/")
+        self.dry_run = dry_run
+        self.index = self._index_images()
+        self.planned: dict[str, Path] = {}
+        self.copied = 0
+        self.skipped = 0
+        self.rewritten = 0
+        self.missing: set[str] = set()
+
+    def _index_images(self) -> dict[str, list[Path]]:
+        """Basename -> candidate files, shortest path first."""
+        index: dict[str, list[Path]] = {}
+        for path in self.src.rglob("*"):
+            if not path.is_file() or path.suffix.lower() not in IMAGE_EXTENSIONS:
+                continue
+            rel = path.relative_to(self.src)
+            if any(part.startswith(".") or part in EXCLUDE_DIRS for part in rel.parts):
+                continue
+            index.setdefault(path.name.casefold(), []).append(path)
+
+        for candidates in index.values():
+            candidates.sort(
+                key=lambda path: (
+                    len(path.relative_to(self.src).parts),
+                    path.relative_to(self.src).as_posix(),
+                )
+            )
+        return index
+
+    def _closeness(self, candidate: Path, note_rel: Path) -> tuple[int, int, str]:
+        """Prefer images in the note's folder or its nearest ancestor."""
+        candidate_dir = candidate.relative_to(self.src).parts[:-1]
+        note_dir = note_rel.parent.parts
+        common = 0
+        for left, right in zip(candidate_dir, note_dir):
+            if left.casefold() != right.casefold():
+                break
+            common += 1
+        return (-common, len(candidate_dir), candidate.relative_to(self.src).as_posix())
+
+    def resolve(self, target: str, note_rel: Path) -> Path | None:
+        """Find one referenced image in the source vault, or None."""
+        target = unquote(target.strip()).replace("\\", "/")
+        target = target.split("|", 1)[0].split("#", 1)[0].strip()
+        if not target or target.startswith(
+            ("http://", "https://", "//", "data:", "obsidian:")
+        ):
+            return None
+        target = target.removeprefix("./")
+
+        def inside(path: Path) -> Path | None:
+            try:
+                resolved = path.resolve()
+            except OSError:
+                return None
+            return resolved if resolved.is_relative_to(self.src) else None
+
+        root_candidate = inside(self.src / target)
+        note_candidate = inside(self.src / note_rel.parent / target)
+        exact = [path for path in (root_candidate, note_candidate) if path and path.is_file()]
+
+        # An explicit path should win over a same-named file elsewhere.
+        if "/" in target.strip("/") and exact:
+            return exact[0]
+
+        name = Path(target).name.casefold()
+        pool = [path for path in self.index.get(name, []) if path.is_file()]
+        pool.extend(exact)
+        if not pool:
+            return None
+        pool.sort(key=lambda path: self._closeness(path, note_rel))
+        return pool[0]
+
+    @staticmethod
+    def _same_file(left: Path, right: Path) -> bool:
+        try:
+            if left.stat().st_size != right.stat().st_size:
+                return False
+            return (
+                hashlib.sha256(left.read_bytes()).hexdigest()
+                == hashlib.sha256(right.read_bytes()).hexdigest()
+            )
+        except OSError:
+            return False
+
+    def _unique_name(self, source: Path) -> str:
+        digest = hashlib.sha256(str(source).encode("utf-8")).hexdigest()[:8]
+        stem = f"{source.stem}-{digest}"
+        suffix = source.suffix.lower()
+        counter = 0
+        while True:
+            name = f"{stem}{suffix}" if counter == 0 else f"{stem}-{counter}{suffix}"
+            planned = self.planned.get(name)
+            if planned is not None and planned != source:
+                counter += 1
+                continue
+            dest = self.images_dir / name
+            if dest.exists() and not self._same_file(dest, source):
+                counter += 1
+                continue
+            return name
+
+    def copy(self, source: Path) -> str:
+        """Copy one image once; return its filename inside wiki-images."""
+        name = source.name
+        dest = self.images_dir / name
+
+        if name in self.planned:
+            if self.planned[name] == source:
+                return name
+            name = self._unique_name(source)
+        elif dest.exists():
+            if self._same_file(dest, source):
+                self.planned[name] = source
+                self.skipped += 1
+                return name
+            name = self._unique_name(source)
+
+        dest = self.images_dir / name
+        if dest.exists() and self._same_file(dest, source):
+            self.planned[name] = source
+            self.skipped += 1
+            return name
+
+        self.planned[name] = source
+        if not self.dry_run:
+            self.images_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, dest)
+        self.copied += 1
+        return name
+
+    def _public_url(self, name: str) -> str:
+        prefix = f"{self.public_base}/wiki-images" if self.public_base else "/wiki-images"
+        return f"{prefix}/{quote(name)}"
+
+    @staticmethod
+    def _alt(alt: str, target: str) -> str:
+        alt = alt.split("|", 1)[0].strip()
+        if not alt:
+            alt = Path(target).stem
+        return alt.replace("[", "").replace("]", "")
+
+    def _rewrite_text(self, text: str, note_rel: Path, warnings: list[str]) -> str:
+        def standard(match: re.Match[str]) -> str:
+            alt, inner = match.group(1), match.group(2).strip()
+            if inner.startswith("<") and ">" in inner:
+                target = inner[1 : inner.index(">")].strip()
+            else:
+                target = re.split(r"\s+[\"']", inner, maxsplit=1)[0].strip()
+            if not target or target.startswith(
+                ("http://", "https://", "//", "data:")
+            ):
+                return match.group(0)
+            if "/wiki-images/" in target or target.startswith("wiki-images/"):
+                return match.group(0)
+
+            source = self.resolve(target, note_rel)
+            if source is None:
+                warnings.append(f"missing image '{target}' in {note_rel.as_posix()}")
+                self.missing.add(target)
+                return match.group(0)
+
+            self.rewritten += 1
+            name = self.copy(source)
+            return f"![{self._alt(alt, target)}]({self._public_url(name)})"
+
+        def obsidian(match: re.Match[str]) -> str:
+            raw = match.group(1)
+            target = raw.split("|", 1)[0].split("#", 1)[0].strip()
+            if not target or target.startswith(
+                ("http://", "https://", "//", "data:", "obsidian:")
+            ):
+                return match.group(0)
+            if Path(target).suffix.lower() not in IMAGE_EXTENSIONS:
+                return match.group(0)
+
+            source = self.resolve(target, note_rel)
+            if source is None:
+                warnings.append(f"missing image '{target}' in {note_rel.as_posix()}")
+                self.missing.add(target)
+                return match.group(0)
+
+            self.rewritten += 1
+            name = self.copy(source)
+            return f"![{self._alt('', target)}]({self._public_url(name)})"
+
+        # Standard Markdown first, then Obsidian embeds: rewritten standard
+        # images contain `](`, so the Obsidian regex cannot touch them.
+        text = MARKDOWN_IMAGE_RE.sub(standard, text)
+        return OBSIDIAN_IMAGE_RE.sub(obsidian, text)
+
+    def _rewrite_body(self, body: str, note_rel: Path, warnings: list[str]) -> str:
+        out: list[str] = []
+        for is_code, segment in split_fences(body):
+            out.append(
+                segment if is_code else self._rewrite_text(segment, note_rel, warnings)
+            )
+        return "".join(out)
+
+    def rewrite(self, text: str, note_rel: Path) -> tuple[str, list[str]]:
+        """Rewrite image references in the body, leaving valid frontmatter alone."""
+        warnings: list[str] = []
+        match = FRONTMATTER_RE.match(text)
+        if match:
+            raw = match.group(1)
+            try:
+                data = yaml.safe_load(raw)
+            except yaml.YAMLError:
+                data = object()
+            if isinstance(data, dict) or (data is None and not raw.strip()):
+                body = text[match.end() :]
+                return (
+                    text[: match.end()] + self._rewrite_body(body, note_rel, warnings),
+                    warnings,
+                )
+
+        # No frontmatter, or a leading `---` block that is really content.
+        return self._rewrite_body(text, note_rel, warnings), warnings
 
 
 def translate_body(client: DeepSeekClient, body: str, title: str) -> str:
@@ -579,7 +840,7 @@ def main() -> int:
     parser.add_argument("--dst", type=Path, default=DST, help=f"output vault (default {DST})")
     parser.add_argument("--check", action="store_true", help="report languages only; no API calls, no writes")
     parser.add_argument("--dry-run", action="store_true", help="plan the run; no API calls, no writes")
-    parser.add_argument("--force", action="store_true", help="retranslate every note, ignoring the manifest")
+    parser.add_argument("--force", action="store_true", help="retranslate and rewrite every note, ignoring the manifest")
     parser.add_argument("--only", metavar="GLOB", help="limit to relative paths matching this glob, e.g. 'git/*.md'")
     parser.add_argument(
         "--provider",
@@ -592,6 +853,17 @@ def main() -> int:
         "--prune",
         action="store_true",
         help="remove outputs whose source note no longer exists (managed files only)",
+    )
+    parser.add_argument(
+        "--images-dir",
+        type=Path,
+        default=DEFAULT_IMAGES_DIR,
+        help=f"public image directory (default {DEFAULT_IMAGES_DIR})",
+    )
+    parser.add_argument(
+        "--public-base",
+        default="",
+        help="URL prefix for public images, e.g. /VaultSite (default: none)",
     )
     args = parser.parse_args()
 
@@ -638,7 +910,15 @@ def main() -> int:
             print(f"  [{tag}] {job.rel}  ({job.verdict.reason})")
         return 0
 
+    images_dir: Path = args.images_dir.expanduser().resolve()
+    public_base = args.public_base.rstrip("/")
+
     if args.dry_run:
+        images = ImageHandler(src, images_dir, public_base=public_base, dry_run=True)
+        print(
+            f"images:  {images_dir}"
+            f"{'' if images_dir.is_dir() else ' (will be created)'}\n"
+        )
         manifest = {} if args.force else load_manifest(dst / MANIFEST_NAME)
         for job in jobs:
             target = dst / job.rel
@@ -650,7 +930,21 @@ def main() -> int:
                 "unknown": "skip",
             }[job.verdict.language]
             print(f"  {action:<9} {job.rel}")
-        print("\ndry run: no API calls, no files written")
+            image_warnings: list[str] = []
+            if action in {"translate", "copy"}:
+                _, image_warnings = images.rewrite(job.text, job.rel)
+            elif action == "unchanged":
+                existing = target.read_text(encoding="utf-8")
+                refreshed, image_warnings = images.rewrite(existing, job.rel)
+                if refreshed != existing:
+                    print(f"  images    {job.rel}")
+            for warning in image_warnings:
+                print(f"    image: {warning}", file=sys.stderr)
+        print(
+            f"\nimages: {images.copied} to copy, {images.skipped} already present, "
+            f"{len(images.missing)} missing"
+        )
+        print("dry run: no API calls, no files written")
         return 0
 
     provider = args.provider
@@ -684,6 +978,18 @@ def main() -> int:
         if not os.access(directory, os.W_OK):
             die(f"directory is not writable: {directory}")
 
+    if images_dir == src or src in images_dir.parents or images_dir in src.parents:
+        die("image directory must live outside the source vault")
+    try:
+        images_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError:
+        die(f"cannot create image directory: {images_dir}")
+    if not os.access(images_dir, os.W_OK):
+        die(f"image directory is not writable: {images_dir}")
+
+    images = ImageHandler(src, images_dir, public_base=public_base, dry_run=False)
+    print(f"images:  {images_dir}\n")
+
     client: DeepSeekClient | None = None
     needs_llm = any(j.verdict.language == "es" for j in jobs)
     if needs_llm:
@@ -694,6 +1000,21 @@ def main() -> int:
         print(f"translating with {provider} ({client.model})\n")
 
     stats = RunStats()
+
+    def refresh_existing(target_path: Path, rel: Path, key: str) -> bool:
+        """Rewrite images in an already-translated output without an LLM call."""
+        existing = target_path.read_text(encoding="utf-8")
+        refreshed, image_warnings = images.rewrite(existing, rel)
+        for warning in image_warnings:
+            print(f"    image: {warning}", file=sys.stderr)
+        if refreshed == existing:
+            return False
+        backup_if_present(target_path, backup_root, rel)
+        target_path.write_text(refreshed, encoding="utf-8")
+        stats.refreshed.append(key)
+        print(f"  images    {key}")
+        return True
+
     for job in jobs:
         target = dst / job.rel
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -704,11 +1025,15 @@ def main() -> int:
         try:
             if job.verdict.language == "en":
                 if fresh and cached.get("status") == "copied":
-                    stats.unchanged.append(key)
-                    print(f"  unchanged {key}")
+                    if not refresh_existing(target, job.rel, key):
+                        stats.unchanged.append(key)
+                        print(f"  unchanged {key}")
                     continue
                 backup_if_present(target, backup_root, job.rel)
-                shutil.copyfile(job.src, target)
+                text, image_warnings = images.rewrite(job.text, job.rel)
+                for warning in image_warnings:
+                    print(f"    image: {warning}", file=sys.stderr)
+                target.write_text(text, encoding="utf-8")
                 manifest[key] = {"status": "copied", "sha256": job.sha}
                 stats.copied.append(key)
                 print(f"  copy      {key}")
@@ -722,13 +1047,17 @@ def main() -> int:
 
             # Spanish: skip only when the source hash is unchanged.
             if fresh and cached.get("status") == "translated":
-                stats.unchanged.append(key)
-                print(f"  unchanged {key}")
+                if not refresh_existing(target, job.rel, key):
+                    stats.unchanged.append(key)
+                    print(f"  unchanged {key}")
                 continue
 
             assert client is not None
             print(f"  translate {key}")
             translated = translate_note(job, client)
+            translated, image_warnings = images.rewrite(translated, job.rel)
+            for warning in image_warnings:
+                print(f"    image: {warning}", file=sys.stderr)
             backup_if_present(target, backup_root, job.rel)
             target.write_text(translated, encoding="utf-8")
             manifest[key] = {
@@ -756,7 +1085,12 @@ def main() -> int:
 
     print(
         f"\ndone: {len(stats.translated)} translated, {len(stats.copied)} copied, "
-        f"{len(stats.unchanged)} unchanged, {len(stats.unknown)} unknown, {len(stats.failed)} failed"
+        f"{len(stats.refreshed)} image-refreshed, {len(stats.unchanged)} unchanged, "
+        f"{len(stats.unknown)} unknown, {len(stats.failed)} failed"
+    )
+    print(
+        f"images: {images.copied} copied, {images.skipped} already present, "
+        f"{len(images.missing)} missing"
     )
     if client:
         print(f"LLM calls: {client.calls}")

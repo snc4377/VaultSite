@@ -22,7 +22,7 @@ As example : medium-sized company has hired us to test their entire infrastructu
 
 
 The first point of presence on the internet can be the SSL certificate of the main website. This website may have several subdomains associated with the same certificate.
-![[Pasted image 20260421171057.png]]\
+![Pasted image 20260421171057](/VaultSite/wiki-images/Pasted%20image%2020260421171057.png)\
 
 Another way is using some services as crt.sh or censys
 

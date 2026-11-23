@@ -20,37 +20,37 @@ https://www.profesionalreview.com/2019/01/05/ldap/
 
 Using Docker, we'll set up a machine to act as an LDAP server and an LDAP client machine.
 
-![[Pasted image 20260128162215.png]]
+![Pasted image 20260128162215](/VaultSite/wiki-images/Pasted%20image%2020260128162215.png)
 
 We'll perform reconnaissance with nmap.
 
 If we search with `locate .nse` and filter with `grep ldap`, we'll see the scripts nmap has for LDAP.  
-![[Pasted image 20260128162531.png]]
+![Pasted image 20260128162531](/VaultSite/wiki-images/Pasted%20image%2020260128162531.png)
 
 We'll run nmap with all scripts that start or contain the word LDAP on port 389 (the default LDAP port) and the specific IP. In `namingContexts`, we see `dc=example, dc=org`. This corresponds to the search base. If the domain were named david.org, it would show `dc=david,dc=org`.  
-![[Pasted image 20260128162646.png]]
+![Pasted image 20260128162646](/VaultSite/wiki-images/Pasted%20image%2020260128162646.png)
 
 With `ldapsearch`, we perform a search using `-b` to add what we captured with nmap, `-D` to specify the user we want to authenticate, and `-w` to specify the password.  
-![[Pasted image 20260128162934.png]]  
+![Pasted image 20260128162934](/VaultSite/wiki-images/Pasted%20image%2020260128162934.png)  
 In the last part where we put `'cn=admin'`, this is an LDAP search filter. We can play with ANDs (`&`) and ORs (`|`) to concatenate filters and make them more complex.
 
 In the next query, we'll search for information about an admin user with the description LDAP.  
-![[Pasted image 20260128163432.png]]
+![Pasted image 20260128163432](/VaultSite/wiki-images/Pasted%20image%2020260128163432.png)
 
 In LDAP, we can use `*`. If the code isn't sanitized, an asterisco acts like a regex wildcard for the entire password.  
-![[Pasted image 20260128164309.png]]  
-![[Pasted image 20260128164315.png]]
+![Pasted image 20260128164309](/VaultSite/wiki-images/Pasted%20image%2020260128164309.png)  
+![Pasted image 20260128164315](/VaultSite/wiki-images/Pasted%20image%2020260128164315.png)
 
 Let's open Burp Suite.  
-![[Pasted image 20260128164406.png]]  
+![Pasted image 20260128164406](/VaultSite/wiki-images/Pasted%20image%2020260128164406.png)  
 We send it to the Repeater.  
 We see that if we send it with `*`, we get a 301 code.  
-![[Pasted image 20260128164529.png]]
+![Pasted image 20260128164529](/VaultSite/wiki-images/Pasted%20image%2020260128164529.png)
 
 If we play with the asterisk, we could try, for example, `a*` for the user, which means "user starts with a".  
-![[Pasted image 20260128164611.png]]  
+![Pasted image 20260128164611](/VaultSite/wiki-images/Pasted%20image%2020260128164611.png)  
 If we try `b*`:  
-![[Pasted image 20260128164656.png]]  
+![Pasted image 20260128164656](/VaultSite/wiki-images/Pasted%20image%2020260128164656.png)  
 We see it redirects us back to the initial page because there's no user starting with b.
 
 We'd keep testing letter by letter until we can list users.  
@@ -62,20 +62,20 @@ To speed this up, we'll create a script.
 To discover these ATTRIBUTES, we'd use the dictionary `seclists/LDAP-openldap-attributes.txt` with `wfuzz`.  
 
 In this case, since we saw the data is sent via POST, we'll specify it in wfuzz with `-d 'burpsuite_data'`.  
-![[Pasted image 20260128171155.png]]  
-![[Pasted image 20260128171230.png]]  
+![Pasted image 20260128171155](/VaultSite/wiki-images/Pasted%20image%2020260128171155.png)  
+![Pasted image 20260128171230](/VaultSite/wiki-images/Pasted%20image%2020260128171230.png)  
 And since we also want to filter a new attribute, we'd need to add parentheses for the new data and another one so the query isn't applied to the password field, plus a null byte to prevent comparison: `(FUZZ=*))%00`.  
-![[Pasted image 20260128171548.png]]  
-![[Pasted image 20260128171644.png]]
+![Pasted image 20260128171548](/VaultSite/wiki-images/Pasted%20image%2020260128171548.png)  
+![Pasted image 20260128171644](/VaultSite/wiki-images/Pasted%20image%2020260128171644.png)
 
 We'll apply a filter since we see most responses show 439 characters, and now we'll see valid attributes.  
-![[Pasted image 20260128171659.png]]  
-![[Pasted image 20260128171718.png]]
+![Pasted image 20260128171659](/VaultSite/wiki-images/Pasted%20image%2020260128171659.png)  
+![Pasted image 20260128171718](/VaultSite/wiki-images/Pasted%20image%2020260128171718.png)
 
 Now that we know the valid attributes, we can try to see phone numbers by fuzzing that specific field. Let's try with the user `s4vitar`.  
-![[Pasted image 20260128172034.png]]  
+![Pasted image 20260128172034](/VaultSite/wiki-images/Pasted%20image%2020260128172034.png)  
 We see it starts with 6. Now we'd add numbers right before the FUZZ until we have the complete phone number.  
-![[Pasted image 20260128172143.png]]  
+![Pasted image 20260128172143](/VaultSite/wiki-images/Pasted%20image%2020260128172143.png)  
 And so on for any other fields we want to know.
 
 We'll automate this with a script for speed.

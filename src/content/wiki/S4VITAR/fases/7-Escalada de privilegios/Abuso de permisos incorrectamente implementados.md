@@ -12,11 +12,11 @@ LSE is designed to be easy to use and provides clear, readable output to facilit
 ### 1. Write Abuse in /etc/passwd
 
 We enumerate the system and find that the `/etc/passwd` file has write permissions for "others" (world-writable), which is a massive configuration blunder.  
-![[Pasted image 20260214130747.png]]  
-![[Pasted image 20260214130649.png]]  
+![Pasted image 20260214130747](/VaultSite/wiki-images/Pasted%20image%2020260214130747.png)  
+![Pasted image 20260214130649](/VaultSite/wiki-images/Pasted%20image%2020260214130649.png)  
 
 If we try to read `/etc/shadow` (where the real hashes are stored), it won't let us. But since we can write to `passwd`, we can use a trick. In the `root` line, where there's usually an `x` (meaning "look for the password in shadow"), we can delete that `x` and place our own hashed password directly there.  
-![[Pasted image 20260214130642.png]]  
+![Pasted image 20260214130642](/VaultSite/wiki-images/Pasted%20image%2020260214130642.png)  
 
 First, we generate a hash for a password of our choice (e.g., "hola"):  
 
@@ -26,10 +26,10 @@ Bash
 openssl passwd "hola"
 # Nos devolverá algo tipo: $1$y7...
 ```
-![[Pasted image 20260214130705.png]]
+![Pasted image 20260214130705](/VaultSite/wiki-images/Pasted%20image%2020260214130705.png)
 
 Now we edit `/etc/passwd` (with nano or vi), remove the `x` from the root user and paste the hash we just generated:
-![[Pasted image 20260214130727.png]]
+![Pasted image 20260214130727](/VaultSite/wiki-images/Pasted%20image%2020260214130727.png)
 Once saved, the system will read the password from here instead of shadow. We simply run `su root`, enter "hola" and we're in.
 
 ---
@@ -37,7 +37,7 @@ Once saved, the system will read the password from here instead of shadow. We si
 ### 2. Cron Job Abuse (Writable Directory)
 
 Here we see that root is running a cron job every minute. It executes a script located in a directory we own (`/home/savitar`), but the script itself belongs to root, so we can't edit it directly.
-![[Pasted image 20260214130819.png]]
+![Pasted image 20260214130819](/VaultSite/wiki-images/Pasted%20image%2020260214130819.png)
 
 But note: since the **directory** is ours, even though we can't edit the file, we can **delete it** and create a new one with the same name (Hijacking).
 
@@ -51,7 +51,7 @@ rm script_de_root.sh
 
 Note title: Untitled
 
-![[Pasted image 20260214130831.png]]
+![Pasted image 20260214130831](/VaultSite/wiki-images/Pasted%20image%2020260214130831.png)
 
 And we create a new one with the same name, inserting whatever we want. In this case, we'll make it assign SUID permissions to `/bin/bash` so we can become root whenever we want:
 
@@ -63,7 +63,7 @@ chmod u+s /bin/bash
 ```
 Note title: Untitled
 
-![[Pasted image 20260214130849.png]]
+![Pasted image 20260214130849](/VaultSite/wiki-images/Pasted%20image%2020260214130849.png)
 
 Important to give execution permissions so cron doesn't fail when trying to run it:
 
@@ -83,8 +83,8 @@ watch -n 1 ls -l /bin/bash
 
 Note title: Untitled
 
-![[Pasted image 20260214130901.png]]
-![[Pasted image 20260214130907.png]]
+![Pasted image 20260214130901](/VaultSite/wiki-images/Pasted%20image%2020260214130901.png)
+![Pasted image 20260214130907](/VaultSite/wiki-images/Pasted%20image%2020260214130907.png)
 Once we see that the bash has the `s` (rwsr-xr-x), we're good. All that's left is to run it in privileged mode to become root:
 
 
@@ -120,8 +120,8 @@ And we launch it. If we want to get straight to the point, we use verbosity leve
 
 Note title: Untitled
 
-![[Pasted image 20260214130928.png]]
-![[Pasted image 20260214130935.png]]
-![[Pasted image 20260214130941.png]]
+![Pasted image 20260214130928](/VaultSite/wiki-images/Pasted%20image%2020260214130928.png)
+![Pasted image 20260214130935](/VaultSite/wiki-images/Pasted%20image%2020260214130935.png)
+![Pasted image 20260214130941](/VaultSite/wiki-images/Pasted%20image%2020260214130941.png)
 
 

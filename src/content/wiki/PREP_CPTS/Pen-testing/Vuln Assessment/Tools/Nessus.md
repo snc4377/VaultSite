@@ -15,7 +15,7 @@ Follow these steps to get Nessus running on your Kali machine:
 **Step A: Download and Install**
 
 Download the `.deb` package from Tenable and install it using `dpkg`:
-![[Pasted image 20260428174020.png]]
+![Pasted image 20260428174020](/VaultSite/wiki-images/Pasted%20image%2020260428174020.png)
 
 ```
 5nch7344@kali$ sudo dpkg -i Nessus-10.8.3-ubuntu1604_amd64.deb
@@ -41,7 +41,7 @@ You can manage the Nessus scanner using `systemctl`:
 2. **Note:** You will see an SSL certificate warning. This is normal; click "Advanced" and "Accept the Risk and Continue."
     
 3. Choose **Nessus Essentials** and follow the activation prompts to download the latest plugins.
-    ![[Pasted image 20260428174125.png]]
+    ![Pasted image 20260428174125](/VaultSite/wiki-images/Pasted%20image%2020260428174125.png)
 ---
 
 ###  Scanning Workflow
@@ -55,9 +55,9 @@ Once the plugins are initialized, you can start your first scan:
 |**Targeting**|Define the target IP, range, or hostname.|
 |**Discovery**|Choose between a fast "port scan" or a more comprehensive "deep scan."|
 |**Credentials**|(Optional) Add SSH/Windows credentials for an **Authenticated Scan**, which provides much deeper visibility into installed software and patches.|
-![[Pasted image 20260428174204.png]]
+![Pasted image 20260428174204](/VaultSite/wiki-images/Pasted%20image%2020260428174204.png)
 
-![[Pasted image 20260428174322.png]]
+![Pasted image 20260428174322](/VaultSite/wiki-images/Pasted%20image%2020260428174322.png)
 
 ---
 
@@ -83,9 +83,9 @@ Enter your Nessus Username: admin
 Vulnerability scanning can be "noisy" and resource-heavy. Monitoring your interface with `vnstat` reveals the significant difference between idle traffic and an active scan:
 
 - **Idle Traffic:** ~300 bit/s
-    ![[Pasted image 20260428174604.png|373]]
+    ![Pasted image 20260428174604](/VaultSite/wiki-images/Pasted%20image%2020260428174604.png)
 - **Scanning Traffic:** ~300-500 kbit/s (per host)
-    ![[Pasted image 20260428174625.png|373]]
+    ![Pasted image 20260428174625](/VaultSite/wiki-images/Pasted%20image%2020260428174625.png)
 
 > [!IMPORTANT]
 > 

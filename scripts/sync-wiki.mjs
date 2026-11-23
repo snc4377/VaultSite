@@ -129,7 +129,12 @@ async function rewriteImages(text, noteRel, expected, stats, hasAssets) {
     last = match.index + full.length;
 
     const raw = (angled ?? plain ?? "").trim();
-    if (!raw || REMOTE.test(raw)) {
+    if (
+      !raw ||
+      REMOTE.test(raw) ||
+      raw.includes("/wiki-images/") ||
+      raw.startsWith("wiki-images/")
+    ) {
       out += full;
       continue;
     }

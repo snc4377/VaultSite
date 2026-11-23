@@ -12,4 +12,4 @@ The security impact of race conditions depends on the nature of the shared resou
 - **SKF-LABS Race Condition**: [https://github.com/blabla1337/skf-labs/tree/master/nodeJs/RaceCondition](https://github.com/blabla1337/skf-labs/tree/master/nodeJs/RaceCondition)
 - **SKF-LABS Race Condition 2**: [https://github.com/blabla1337/skf-labs/tree/master/nodeJs/RaceCondition-file-write](https://github.com/blabla1337/skf-labs/tree/master/nodeJs/RaceCondition-file-write)
 
-![[Pasted image 20260211204545.png]]
+![Pasted image 20260211204545](/VaultSite/wiki-images/Pasted%20image%2020260211204545.png)

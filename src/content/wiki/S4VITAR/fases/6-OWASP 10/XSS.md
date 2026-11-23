@@ -17,8 +17,8 @@ XSS attacks can have serious consequences for businesses and individual users. F
 This vulnerability is commonly seen in web applications and allows us to inject JavaScript code or other types of languages.
 
 For example, here we have a web portal that allows us to create entries for the web, and by testing, we see that if in the text section we enter `<script>alert("XSS")</script>`, it should display a pop-up window if the web is vulnerable.
-![[Pasted image 20251226165732.png]]
-![[Pasted image 20251226165742.png]]
+![Pasted image 20251226165732](/VaultSite/wiki-images/Pasted%20image%2020251226165732.png)
+![Pasted image 20251226165742](/VaultSite/wiki-images/Pasted%20image%2020251226165742.png)
 This should be reported immediately because it is a fairly significant vulnerability.
 
 Now let's create a script to execute on the web:
@@ -33,11 +33,11 @@ Now let's create a script to execute on the web:
 	 }
 </script>
 ```
-Now we copy this script and paste it into the post creation section, adding a title and everything to make it seem important so that the user clicks and enters their email. ![[Pasted image 20251226170847.png]]
-Now we start a server on port 80 on our attacker machine so that when the user enters their credentials, they are sent to us. ![[Pasted image 20251226171056.png]]
+Now we copy this script and paste it into the post creation section, adding a title and everything to make it seem important so that the user clicks and enters their email. ![Pasted image 20251226170847](/VaultSite/wiki-images/Pasted%20image%2020251226170847.png)
+Now we start a server on port 80 on our attacker machine so that when the user enters their credentials, they are sent to us. ![Pasted image 20251226171056](/VaultSite/wiki-images/Pasted%20image%2020251226171056.png)
 Here, for example, we use Java and HTML code to interpret it as well. We are also asking for the password, mixing these languages to make it seem more professional. *XSS MUST BE COMBINED WITH SOCIAL ENGINEERING TO DECEIVE USERS AND MAKE IT AS UNSUSPICIOUS AS POSSIBLE.*
-![[Pasted image 20251226171335.png]]
-![[Pasted image 20251226171437.png]]
+![Pasted image 20251226171335](/VaultSite/wiki-images/Pasted%20image%2020251226171335.png)
+![Pasted image 20251226171437](/VaultSite/wiki-images/Pasted%20image%2020251226171437.png)
 And we would listen as before.
 
 **Keylogger**
@@ -53,7 +53,7 @@ Let's create a keylogger using script tags to log everything the user does on th
 	}
 </script>
 ```
-And here we can see how it has logged the user's input. ![[Pasted image 20251226172441.png]]
+And here we can see how it has logged the user's input. ![Pasted image 20251226172441](/VaultSite/wiki-images/Pasted%20image%2020251226172441.png)
 
 Now let's try to redirect the user to another location.
 ```html
@@ -71,14 +71,14 @@ This is done for CSRF tokens, which are dynamic and change frequently.
 1= URL of the web where we publish this code
 2= The variable that will store all the HTML text
 3= The URL of our server in listening mode, and we specify that the information should be sent in base64 with `btoa`.
-![[Pasted image 20251226184521.png]]
-Now on the web, we publish this line with our path to the malicious file. ![[Pasted image 20251226185018.png]]
-![[Pasted image 20251226185036.png]]
+![Pasted image 20251226184521](/VaultSite/wiki-images/Pasted%20image%2020251226184521.png)
+Now on the web, we publish this line with our path to the malicious file. ![Pasted image 20251226185018](/VaultSite/wiki-images/Pasted%20image%2020251226185018.png)
+![Pasted image 20251226185036](/VaultSite/wiki-images/Pasted%20image%2020251226185036.png)
 Now we decode it in base64 and see the entire HTML.
 
 Now we will parse ("a program or component that breaks down input data (text, code, etc.) into smaller parts and organizes them according to specific rules") the response.
 1= Here with the `parser` variable, we take the response and the format 'text/html'.
 2= It is the name of the variable in the code that stores the token, in this case "csrftoken" (this can change). We can see the name by pressing Control + U on the web.
 3= This is in case this variable repeats; for example, now we are only interested in this result, so we put 0, but if we wanted more, we would put a different number.
-![[Pasted image 20251226185352.png|941]]
-We have to execute this on the web. ![[Pasted image 20251226185018.png]]
+![Pasted image 20251226185352](/VaultSite/wiki-images/Pasted%20image%2020251226185352.png)
+We have to execute this on the web. ![Pasted image 20251226185018](/VaultSite/wiki-images/Pasted%20image%2020251226185018.png)

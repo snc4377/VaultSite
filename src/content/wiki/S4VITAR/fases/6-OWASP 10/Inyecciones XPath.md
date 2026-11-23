@@ -12,42 +12,42 @@ To protect against XPath vulnerabilities, it is important to validate all user i
 **LABORATORY**  
 - **XVWA 1**: [https://www.vulnhub.com/entry/xtreme-vulnerable-web-application-xvwa-1,209/](https://www.vulnhub.com/entry/xtreme-vulnerable-web-application-xvwa-1,209/)
 
-![[Pasted image 20260209170211.png]]
+![Pasted image 20260209170211](/VaultSite/wiki-images/Pasted%20image%2020260209170211.png)
 
 We see a search by ID on the main page. The first thing that comes to mind is to test SQL or NoSQL injections.  
-![[Pasted image 20260209170405.png]]
+![Pasted image 20260209170405](/VaultSite/wiki-images/Pasted%20image%2020260209170405.png)
 
 Let's open Burp to begin while we send the request.  
-![[Pasted image 20260209170649.png]]
+![Pasted image 20260209170649](/VaultSite/wiki-images/Pasted%20image%2020260209170649.png)
 
 First, let's try SQLi in the search field by entering a `'`, but we see it returns "item not found," even if we try other types of SQL injections.  
 
-![[Pasted image 20260209170731.png]] ![[Pasted image 20260209170804.png]]
+![Pasted image 20260209170731](/VaultSite/wiki-images/Pasted%20image%2020260209170731.png) ![Pasted image 20260209170804](/VaultSite/wiki-images/Pasted%20image%2020260209170804.png)
 
 With SQL injections, it's common that when we have a query like `select * from users where username = 'input'`, if we try the typical `1'` in the input, a hanging quote causes a syntax error. To avoid this, we can use **`select * from users where username = '' or '1'='1'`**, which avoids dangling quotes that would trigger errors.  
 
 Here, we can see all the products:  
-![[Pasted image 20260209171141.png]]  
+![Pasted image 20260209171141](/VaultSite/wiki-images/Pasted%20image%2020260209171141.png)  
 Here, we would try to sort based on columns, but we see no results, so we discard SQLi and also NoSQLi.  
-![[Pasted image 20260209171359.png]]
+![Pasted image 20260209171359](/VaultSite/wiki-images/Pasted%20image%2020260209171359.png)
 
 This seems odd because the first SQL injection worked, but the others didn't.  
 
 If we look at XPath query syntax, we can see it's quite similar:  
-![[Pasted image 20260209171705.png]]  
+![Pasted image 20260209171705](/VaultSite/wiki-images/Pasted%20image%2020260209171705.png)  
 but the rest of the queries are completely different.  
 
 Now, we'll try to see all the tags in the XML to reconstruct it ourselves.  
 
 To see how many primary tags the XML has, we could inject **`and count(/* )='1`**. With this query, we're saying the product is 1 and concatenating a query that counts the total number of tags (the 1). We'd adjust this parameter until we find the correct one.  
-![[Pasted image 20260209172158.png]]  
+![Pasted image 20260209172158](/VaultSite/wiki-images/Pasted%20image%2020260209172158.png)  
 If the number of tags isn't correct, nothing appears.  
-![[Pasted image 20260209172236.png]]
+![Pasted image 20260209172236](/VaultSite/wiki-images/Pasted%20image%2020260209172236.png)
 
 So, we now know there's only one primary tag. Next, we'd replace `count` with `name`, add a `[1]` (if there were more tags, we'd adjust the number accordingly), and specify the tag name, which we already know.  
-![[Pasted image 20260209172630.png]]  
+![Pasted image 20260209172630](/VaultSite/wiki-images/Pasted%20image%2020260209172630.png)  
 Normally, we wouldn't know this, so we'd have to use a script (like with time-based SQL) or manually filter by the first character and iterate through each character, adjusting the second parameter and the letter.  
-![[Pasted image 20260209172811.png]]  
+![Pasted image 20260209172811](/VaultSite/wiki-images/Pasted%20image%2020260209172811.png)  
 #### SCRIPT
 #!/usr/bin/python3
 import requests
@@ -114,14 +114,14 @@ if __name__ == '__main__':
 
 #### SECOND PART OF THE LABORATORY
 Now, we'll enumerate the secondary tags. To do this, we'll add `[1]/*` to the `count` we used earlier, where `[1]` refers to the primary tag we found, and `/*` tells it to search for secondary tags within this primary tag. If there were more primary tags, we'd adjust the `[1]` parameter.  
-![[Pasted image 20260209175320.png]]  
+![Pasted image 20260209175320](/VaultSite/wiki-images/Pasted%20image%2020260209175320.png)  
 Here, we're checking if there are more than 9, and we see there are. When we reach 10, nothing appears, but if we use `>=10`, we see it, so we know there are 10 secondary tags.  
-![[Pasted image 20260209175454.png]]  
+![Pasted image 20260209175454](/VaultSite/wiki-images/Pasted%20image%2020260209175454.png)  
 Now, we'd repeat the same process as before to find the names of the tags, listing each letter or the length of the tag name with Burp, adding `[1]/*`.
 
 Once we've listed all the tags we want, the next step is to list the content of those tags. For this, we'll take product 1 (the one we're examining) and use `substring` to guess the first character of, for example, the `secret` field, which we already know.  
 We see it starts with `E`:  
-![[Pasted image 20260209181004.png]]  
+![Pasted image 20260209181004](/VaultSite/wiki-images/Pasted%20image%2020260209181004.png)  
 
 The easiest way to do all this would be to adapt the previous script.  
 

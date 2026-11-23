@@ -25,10 +25,10 @@ You are **WebDev**, a senior frontend architect and UI/UX designer. Your mission
 
 Once the prompt is created, what we will do is edit the AGENT.md file so that it reads and understands the concept of the web we want and follows the instructions  
 `nano ~/.hermes/profiles/webdev/AGENT.md`  
-![[Pasted image 20261119194253.png|525]]  
+![Pasted image 20261119194253](/VaultSite/wiki-images/Pasted%20image%2020261119194253.png)  
 
 Now we will select the AI model  
-![[Pasted image 20261119194359.png]]  
+![Pasted image 20261119194359](/VaultSite/wiki-images/Pasted%20image%2020261119194359.png)  
 And now we will install the two main skills for this project:  
 
 [Open-design](https://hermesatlas.com/projects/nexu-io/open-design)  
@@ -37,7 +37,7 @@ OpenDesign is an open-source collaborative workspace for creating and refining p
 [Superpowers](https://hermesatlas.com/projects/obra/superpowers)  
 Superpowers is a software development methodology for coding agents, built from composable skills and initial instructions that guide agents to use them. Its workflow elicits and presents a specification, creates an implementation plan emphasizing TDD, YAGNI, and DRY, then uses subagents to carry out and review engineering tasks.  
 
-![[Pasted image 20261119195212.png]]  
+![Pasted image 20261119195212](/VaultSite/wiki-images/Pasted%20image%2020261119195212.png)  
 We now have the skills installed in the profile.  
 
 We restart the container with Hermes.  
@@ -62,18 +62,18 @@ Show me the exact terminal commands you are running and then output the code for
 ```
 Note title: Untitled
 
-![[Pasted image 20261119201908.png]]
+![Pasted image 20261119201908](/VaultSite/wiki-images/Pasted%20image%2020261119201908.png)
 It is very important in the workspace section to change the path to a separate folder we have, as everything will be created there, and this way we will have everything controlled and organized.
 
-![[Pasted image 20261119202750.png]]
+![Pasted image 20261119202750](/VaultSite/wiki-images/Pasted%20image%2020261119202750.png)
 
 We press enter and start the agent working.
-![[Pasted image 20261119203457.png]]![[Pasted image 20261119203948.png]]
+![Pasted image 20261119203457](/VaultSite/wiki-images/Pasted%20image%2020261119203457.png)![Pasted image 20261119203948](/VaultSite/wiki-images/Pasted%20image%2020261119203948.png)
 
 As the next step, we will need to customize the website since it will have created a website on port 4321 of the container, but it is the default Astro website.
 
 So now, to edit the style of the website, what we would have to do is create a `brand.md` file in the project path and tell the webdev to use the file as a reference and use the tools of open design and claude design to finish designing the website.
-![[Pasted image 20261119214046.png]]
+![Pasted image 20261119214046](/VaultSite/wiki-images/Pasted%20image%2020261119214046.png)
 
 ### Synchronization with GitHub
 
@@ -102,13 +102,13 @@ Please do the following steps:
 I will provide the GitHub Personal Access Token for authentication when you prompt for it.
 ```
 
-![[Pasted image 20261120010940.png]]
+![Pasted image 20261120010940](/VaultSite/wiki-images/Pasted%20image%2020261120010940.png)
 
 If everything went well, we should get a URL to our repository but for the deploy keys section.
-![[Pasted image 20261120011346.png]]
+![Pasted image 20261120011346](/VaultSite/wiki-images/Pasted%20image%2020261120011346.png)
 
 Here we'll paste the SSH key provided by the agent. *IMPORTANT*: allow write access for the key.
-![[Pasted image 20261120011509.png|698]]
+![Pasted image 20261120011509](/VaultSite/wiki-images/Pasted%20image%2020261120011509.png)
 
 Now we simply return to the agent and confirm we've added it.
 
@@ -118,13 +118,13 @@ Go back to the GitHub repository:
 2. In the left menu, find and click **Pages**.
 3. In the Build and deployment section, locate the Source subsection.
 4. Change it from "Deploy from a branch" to **"GitHub Actions"**.
-![[Pasted image 20261120012414.png]]
+![Pasted image 20261120012414](/VaultSite/wiki-images/Pasted%20image%2020261120012414.png)
 
 Go to the Actions section and trigger the workflow.
-![[Pasted image 20261120013157.png]]
+![Pasted image 20261120013157](/VaultSite/wiki-images/Pasted%20image%2020261120013157.png)
 
 Once the light turns from yellow to green, the site will be live.
-![[Pasted image 20261120013506.png]]
+![Pasted image 20261120013506](/VaultSite/wiki-images/Pasted%20image%2020261120013506.png)
 
 ### Wiki Creation
 
@@ -134,33 +134,33 @@ Let's create a new container with n8n:
 `bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/n8n.sh)"`
 
 Once the n8n container is created, it will provide an IP. Access it via browser at the IP on port 5678.
-![[Pasted image 20261120160225.png]]
+![Pasted image 20261120160225](/VaultSite/wiki-images/Pasted%20image%2020261120160225.png)
 
 Inside, go to PERSONAL>NEW CREDENTIAL, select GitHub API, and enter the API key we created earlier in Git along with the username.
-![[Pasted image 20261120161402.png]]
+![Pasted image 20261120161402](/VaultSite/wiki-images/Pasted%20image%2020261120161402.png)
 
 Now let's go to the Obsidian Sync container we created. We'll need to edit the local.ini file.
 
 First, stop the CouchDB service:
 Scroll down to the [admins] section, remove the semicolon and enter our password.
-![[Pasted image 20261121020627.png]]
+![Pasted image 20261121020627](/VaultSite/wiki-images/Pasted%20image%2020261121020627.png)
 
 Now restart the service and we'll have web access.
-![[Pasted image 20261121020819.png]]
+![Pasted image 20261121020819](/VaultSite/wiki-images/Pasted%20image%2020261121020819.png)
 
 Once we've accessed CouchDB, we'll see a pre-existing database called obsidiannotes.
-![[Pasted image 20261121145020.png]]
+![Pasted image 20261121145020](/VaultSite/wiki-images/Pasted%20image%2020261121145020.png)
 
 Now we need to go to our Obsidian and install/activate the livesync plugin.
-![[Pasted image 20261121145142.png]]
+![Pasted image 20261121145142](/VaultSite/wiki-images/Pasted%20image%2020261121145142.png)
 
 Go to the plugin settings and edit remote access:
-![[Pasted image 20261121145243.png]]
-![[Pasted image 20261121150611.png]]
-![[Pasted image 20261121150646.png]]
+![Pasted image 20261121145243](/VaultSite/wiki-images/Pasted%20image%2020261121145243.png)
+![Pasted image 20261121150611](/VaultSite/wiki-images/Pasted%20image%2020261121150611.png)
+![Pasted image 20261121150646](/VaultSite/wiki-images/Pasted%20image%2020261121150646.png)
 
 Connection config:
-![[Pasted image 20261121150707.png]]![[Pasted image 20261121150834.png]]
+![Pasted image 20261121150707](/VaultSite/wiki-images/Pasted%20image%2020261121150707.png)![Pasted image 20261121150834](/VaultSite/wiki-images/Pasted%20image%2020261121150834.png)
 
 Now go to the encryption selection and set a passphrase. 
 

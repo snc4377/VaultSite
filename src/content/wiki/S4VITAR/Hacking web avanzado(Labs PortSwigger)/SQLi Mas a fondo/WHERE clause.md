@@ -13,9 +13,9 @@ This lab focuses on an SQLi vulnerability in the product category filter.
 When a user selects a product category, the website application executes an SQL query like the following:
 
 `SELECT * FROM products WHERE category ='gifts' AND released = 1`
-![[Pasted image 20260414182320.png]]
-![[Pasted image 20260414183409.png]]
-![[Pasted image 20260414183424.png]]
+![Pasted image 20260414182320](/VaultSite/wiki-images/Pasted%20image%2020260414182320.png)
+![Pasted image 20260414183409](/VaultSite/wiki-images/Pasted%20image%2020260414183409.png)
+![Pasted image 20260414183424](/VaultSite/wiki-images/Pasted%20image%2020260414183424.png)
 
 In this query, our INPUT is the category parameter ("gifts" in this case):
 `SELECT * FROM products WHERE category ='gifts' AND released = 1`
@@ -25,4 +25,4 @@ We can modify our input to display, for example, unreleased products.
 If we add a ' in our URL, the query becomes:
 `SELECT * FROM products WHERE category ='gifts'' AND released = 1`
 Here the query closes at 'gifts' but leaves another ' open, allowing us to insert our malicious SQLi statement like `or 1=1 -- -` (where -- - comments out everything remaining).
-![[Pasted image 20260414184454.png]]
+![Pasted image 20260414184454](/VaultSite/wiki-images/Pasted%20image%2020260414184454.png)

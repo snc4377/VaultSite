@@ -129,7 +129,7 @@ C:\Users\sadams> rundll32 keymgr.dll,KRShowKeyMgr
 ```
 
 Choose a destination path and filename, then set the password to `1234`. This generates a `.crd` file that could be imported into other Windows systems; however, we will proceed by extracting the credentials directly.
-![[Pasted image 20260510174219.png]]
+![Pasted image 20260510174219](/VaultSite/wiki-images/Pasted%20image%2020260510174219.png)
 ### 3. Enumerate Credentials with cmdkey
 
 ```
@@ -153,7 +153,7 @@ C:\Users\sadams> runas /user:SRV01\mcharles /savecred cmd
 ```
 
 > [!NOTE] GUI tools like **Credential Manager** and `keymgr.dll` did not display the OneDrive credentials. The vaults and registry were also empty. At this point, it became evident that administrative access was required to proceed.
-![[Pasted image 20260510174256.png]]
+![Pasted image 20260510174256](/VaultSite/wiki-images/Pasted%20image%2020260510174256.png)
 
 ### 5. ==UAC Bypass via fodhelper.exe==
 
@@ -193,7 +193,7 @@ C:\Users\Administrator\Desktop>dir
 ### 6. Transferring Mimikatz
 
 Since we connected via RDP and shared our  folder from Kali, we will transfer the **Mimikatz** binary. Because the `sadams` path is easily accessible, we copy it there first and then move it to our current administrative working directory:
-![[Pasted image 20260510174344.png]]
+![Pasted image 20260510174344](/VaultSite/wiki-images/Pasted%20image%2020260510174344.png)
 
 And we move the file from sadams to our actual workplace in Administrator User
 ```

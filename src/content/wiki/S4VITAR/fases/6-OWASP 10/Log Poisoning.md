@@ -22,34 +22,34 @@ To prevent Log Poisoning, developers should:
 We'll use Docker to spin up an Ubuntu instance with Apache (port 80) and SSH (port 22).  
 
 Apache logs are in `/var/log`. Since we’re running Apache, we check its log directory:  
-![[Pasted image 20260122131204.png]]  
+![Pasted image 20260122131204](/VaultSite/wiki-images/Pasted%20image%2020260122131204.png)  
 The log folder is owned by `root:adm`. Users in the `adm` group can read logs. Verify group membership with `id`:  
-![[Pasted image 20260122131615.png]]  
+![Pasted image 20260122131615](/VaultSite/wiki-images/Pasted%20image%2020260122131615.png)  
 We belong to `adm`, so we can view logs (keep this in mind for LFI testing).  
 
 From the attacker machine, we can modify the `User-Agent` header via `curl -H`:  
-![[Pasted image 20260122131838.png]]  
-![[Pasted image 20260122131856.png]]  
+![Pasted image 20260122131838](/VaultSite/wiki-images/Pasted%20image%2020260122131838.png)  
+![Pasted image 20260122131856](/VaultSite/wiki-images/Pasted%20image%2020260122131856.png)  
 
 Since this is a PHP page, we attempt command injection via `User-Agent`:  
-![[Pasted image 20260122131952.png]]  
-![[Pasted image 20260122132013.png]]  
+![Pasted image 20260122131952](/VaultSite/wiki-images/Pasted%20image%2020260122131952.png)  
+![Pasted image 20260122132013](/VaultSite/wiki-images/Pasted%20image%2020260122132013.png)  
 
 This works if `system()` is enabled. To check, we send a `phpinfo()` as the `User-Agent`:  
-![[Pasted image 20260122132311.png]]  
-![[Pasted image 20260122132330.png]]  
+![Pasted image 20260122132311](/VaultSite/wiki-images/Pasted%20image%2020260122132311.png)  
+![Pasted image 20260122132330](/VaultSite/wiki-images/Pasted%20image%2020260122132330.png)  
 
 `phpinfo()` reveals system details. Filter for `disable_functions` to see blocked functions (e.g., `exec`, `system`, `passthru`):  
-![[Pasted image 20260122132449.png]]  
+![Pasted image 20260122132449](/VaultSite/wiki-images/Pasted%20image%2020260122132449.png)  
 
 Now, we inject `system()` with a command controlled via `cmd`:  
-![[Pasted image 20260122132939.png]]  
+![Pasted image 20260122132939](/VaultSite/wiki-images/Pasted%20image%2020260122132939.png)  
 The log doesn’t show the `User-Agent`:  
-![[Pasted image 20260122133038.png]]  
+![Pasted image 20260122133038](/VaultSite/wiki-images/Pasted%20image%2020260122133038.png)  
 
 Since `system()` executes OS commands, we append `&cmd=<COMMAND>` to the URL:  
-![[Pasted image 20260122133304.png]]  
-![[Pasted image 20260122133328.png]]  
+![Pasted image 20260122133304](/VaultSite/wiki-images/Pasted%20image%2020260122133304.png)  
+![Pasted image 20260122133328](/VaultSite/wiki-images/Pasted%20image%2020260122133328.png)  
 
 ---
 
@@ -57,20 +57,20 @@ Since `system()` executes OS commands, we append `&cmd=<COMMAND>` to the URL:
 SSH logs typically use **'auth.log'**, but some systems use **'btmp'**.  
 
 **'btmp'** is empty until a failed login occurs:  
-![[Pasted image 20260122133557.png]]  
+![Pasted image 20260122133557](/VaultSite/wiki-images/Pasted%20image%2020260122133557.png)  
 
 Inject PHP code via the SSH username during connection:  
-![[Pasted image 20260122133800.png]]  
-![[Pasted image 20260122133743.png]]  
+![Pasted image 20260122133800](/VaultSite/wiki-images/Pasted%20image%2020260122133800.png)  
+![Pasted image 20260122133743](/VaultSite/wiki-images/Pasted%20image%2020260122133743.png)  
 
 The log records the attempt:  
-![[Pasted image 20260122133831.png]]  
+![Pasted image 20260122133831](/VaultSite/wiki-images/Pasted%20image%2020260122133831.png)  
 
 View the log and execute commands via `&cmd=`:  
-![[Pasted image 20260122134038.png]]  
+![Pasted image 20260122134038](/VaultSite/wiki-images/Pasted%20image%2020260122134038.png)  
 
 List processes with `ps -faux`:  
-![[Pasted image 20260122134109.png]]  
+![Pasted image 20260122134109](/VaultSite/wiki-images/Pasted%20image%2020260122134109.png)  
 
 **Note:** Log poisoning has many variants (e.g., via SMTP/mail).  
 

@@ -32,10 +32,10 @@ Below is the link to the online utility **ExtendsClass** used in this class:
 - **ExtendsClass MySQL Online**: [https://extendsclass.com/mysql-online.html](https://extendsclass.com/mysql-online.html)  
 
 Here’s a script from s4vitar's class for brute-forcing databases when, for example, the input is sanitized and not corrupted with characters like `'` or `"`. This script would need editing depending on the type of injection we want to perform.  
-**![[Pasted image 20251218203911.png]]**  
-![[Pasted image 20251218203935.png]]  
+**![Pasted image 20251218203911](/VaultSite/wiki-images/Pasted%20image%2020251218203911.png)**  
+![Pasted image 20251218203935](/VaultSite/wiki-images/Pasted%20image%2020251218203935.png)  
 For example, here we're adapting the script for a time-based injection:  
-![[Pasted image 20251218204451.png]]
+![Pasted image 20251218204451](/VaultSite/wiki-images/Pasted%20image%2020251218204451.png)
 
 
 

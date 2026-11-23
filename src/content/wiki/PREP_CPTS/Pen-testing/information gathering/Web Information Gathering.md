@@ -1,4 +1,4 @@
-![[Pasted image 20260422200112.png]]
+![Pasted image 20260422200112](/VaultSite/wiki-images/Pasted%20image%2020260422200112.png)
 The first step on Penetration Testing is  [information gatheringh](https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/01-Information_Gathering/README) 
 
 

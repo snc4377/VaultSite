@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import WikiSidebar from "../../components/WikiSidebar.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { noteDate, noteTitle } from "../../utils/note";
+import { categoryPath } from "../../utils/wiki-tree";
 import { withBase } from "../../utils/url";
 
 export async function getStaticPaths() {
@@ -19,21 +20,34 @@ const { Content } = await render(note);
 const title = noteTitle(note);
 const published = noteDate(note);
 const tags = note.data.tags;
+const categories = categoryPath(note);
 ---
 
 <Layout
   title={title}
   description={note.data.description ?? `${title} — a note by snc4377.`}
 >
-  <div class="grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10">
+  <div class="grid gap-8 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-10">
     <aside class="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
       <WikiSidebar current={note.id} />
     </aside>
 
     <article class="min-w-0 max-w-3xl">
-      <nav class="font-mono text-[11px] text-dim" aria-label="Breadcrumb">
-        <a href={withBase("/wiki")} class="transition-colors hover:text-accent">~/wiki</a
-        ><span class="text-[#3a3a3a]">/</span>{note.id}
+      <nav
+        class="flex flex-wrap items-center gap-x-1 gap-y-0.5 font-mono text-[11px] text-dim"
+        aria-label="Breadcrumb"
+      >
+        <a href={withBase("/wiki")} class="transition-colors hover:text-accent"
+          >~/wiki</a
+        >
+        {categories.map((category) => (
+          <span class="contents">
+            <span class="text-[#3a3a3a]" aria-hidden="true">/</span>
+            <span>{category}</span>
+          </span>
+        ))}
+        <span class="text-[#3a3a3a]" aria-hidden="true">/</span>
+        <span class="text-muted">{title}</span>
       </nav>
 
       <h1

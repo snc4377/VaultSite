@@ -19,39 +19,39 @@ To prevent LFI attacks, it is crucial for web application developers to properly
 Let's start with the most basic LFI possible.
 
 We'll create a PHP script in /var/www/html so that when we point to it, we can append ?filename='document' and it will display the file. This is important because if the file were properly secured, we shouldn't be able to list anything outside /var/www/html, such as this test file we created:
-![[Pasted image 20260113163946.png]]
+![Pasted image 20260113163946](/VaultSite/wiki-images/Pasted%20image%2020260113163946.png)
 In the script, we'll set it up so that via a GET request, if filename=something is provided, it will display it:
-![[Pasted image 20260113164111.png]]
+![Pasted image 20260113164111](/VaultSite/wiki-images/Pasted%20image%2020260113164111.png)
 We start the Apache server:
-![[Pasted image 20260113164130.png]]
-![[Pasted image 20260113164153.png]]
+![Pasted image 20260113164130](/VaultSite/wiki-images/Pasted%20image%2020260113164130.png)
+![Pasted image 20260113164153](/VaultSite/wiki-images/Pasted%20image%2020260113164153.png)
 Since this index.php is not sanitized, we can navigate to other paths like /etc/passwd:
-![[Pasted image 20260113164244.png]]
+![Pasted image 20260113164244](/VaultSite/wiki-images/Pasted%20image%2020260113164244.png)
 
 Now, let's try to force the file to only search within this path. This means that if we try to list /etc/passwd again, it will look for /var/www/html/etc/passwd, which doesn't exist:
-![[Pasted image 20260113164400.png]]
+![Pasted image 20260113164400](/VaultSite/wiki-images/Pasted%20image%2020260113164400.png)
 
 But now, if we perform a directory path traversal by going back with ../:
-![[Pasted image 20260113164624.png]]
+![Pasted image 20260113164624](/VaultSite/wiki-images/Pasted%20image%2020260113164624.png)
 
 Next, we'll modify the PHP to block ../ by replacing it with nothing:
-![[Pasted image 20260113164808.png]]
+![Pasted image 20260113164808](/VaultSite/wiki-images/Pasted%20image%2020260113164808.png)
 
-![[Pasted image 20260113164843.png]]
+![Pasted image 20260113164843](/VaultSite/wiki-images/Pasted%20image%2020260113164843.png)
 However, this is not recursive, so if we enter ....//....//....//, it will still remove the ../, but the other dots and slashes will remain:
-![[Pasted image 20260113165128.png]]
+![Pasted image 20260113165128](/VaultSite/wiki-images/Pasted%20image%2020260113165128.png)
 
 Let's use preg_match to block access to /etc/passwd and display a message. However, if we don't use /etc/passwd but instead /etc///////passwd or /etc/././././././../passwd, it will still search for it and won't match the preg_match:
-![[Pasted image 20260113165902.png]]
+![Pasted image 20260113165902](/VaultSite/wiki-images/Pasted%20image%2020260113165902.png)
 As a side note, if we add a ? to the path, it will also display the file because the question mark matches files that fit the pattern:
-![[Pasted image 20260113170037.png]]
+![Pasted image 20260113170037](/VaultSite/wiki-images/Pasted%20image%2020260113170037.png)
 
 Let's try concatenating a file extension with an include:
-![[Pasted image 20260113170149.png]]
+![Pasted image 20260113170149](/VaultSite/wiki-images/Pasted%20image%2020260113170149.png)
 This works with older PHP versions.
 
 We can append a null byte at the end to bypass the PHP extension restriction:
-![[Pasted image 20260113171453.png]]
+![Pasted image 20260113171453](/VaultSite/wiki-images/Pasted%20image%2020260113171453.png)
 
 **Using Wrappers**
 What is a wrapper?
@@ -66,9 +66,9 @@ As an example URL, we'll use http://localhost/?filename=
 - **Example:** `?filename=php://filter/convert.base64-encode/resource=config.php` _(This will return the code of `config.php` in Base64)._
 
 With this type of wrapper, we have another vulnerability called **Filter Chains**, which involves encoding and decoding to execute code in the URL. For example, if we want to run `php whoami` to check our identity, we would encode the payload in Base64 using this tool: https://github.com/synacktiv/php_filter_chain_generator 
-![[Pasted image 20260121162200.png]]
+![Pasted image 20260121162200](/VaultSite/wiki-images/Pasted%20image%2020260121162200.png)
 Here, we have the command line encoded in Base64, which would tell us who we are via the URL:
-![[Pasted image 20260121162257.png]]
+![Pasted image 20260121162257](/VaultSite/wiki-images/Pasted%20image%2020260121162257.png)
 ### 2. `php://input` (For command execution)
 
 **Purpose:** Reads data sent in the POST request body. If the server allows it, you can send PHP code, and the server will execute it as if it were part of the file.
@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && realpath(__FILE__) == realpath($_SERV
 
 ...SNIP...
 ```
-![[Pasted image 20261001184418.png]]
+![Pasted image 20261001184418](/VaultSite/wiki-images/Pasted%20image%2020261001184418.png)
 
 ---
 

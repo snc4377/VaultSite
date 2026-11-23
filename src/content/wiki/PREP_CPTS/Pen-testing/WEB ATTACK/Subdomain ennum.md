@@ -3,10 +3,10 @@ Note title: Untitled
 
 crt.sh
 This website is for enumerating subdomains from a primary domain 
-![[Pasted image 20260417195234.png]]
+![Pasted image 20260417195234](/VaultSite/wiki-images/Pasted%20image%2020260417195234.png)
 
 Virustotal does the same but with less information 
-![[Pasted image 20260417195358.png]]
+![Pasted image 20260417195358](/VaultSite/wiki-images/Pasted%20image%2020260417195358.png)
 
 Subdomain identification involves searching for and enumerating subdomains associated with a primary domain.
 

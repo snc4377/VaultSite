@@ -32,22 +32,22 @@ Execute:
 ```bash
 arp-scan -I ens33 --localnet --ignoredups
 ```
-![[Pasted image 20260126210015.png]]
+![Pasted image 20260126210015](/VaultSite/wiki-images/Pasted%20image%2020260126210015.png)
 We've located the machine at IP 192.168.111.35.
 
 Now, let's run `nmap` to check open ports:
 ```bash
 nmap -p- -sS --open --min-rate 5000 -vvv -n -Pn 192.168.111.35
 ```
-![[Pasted image 20260126210221.png]]
+![Pasted image 20260126210221](/VaultSite/wiki-images/Pasted%20image%2020260126210221.png)
 We see port 80 (HTTP) is open, so let's check the website:
-![[Pasted image 20260126210304.png]]
+![Pasted image 20260126210304](/VaultSite/wiki-images/Pasted%20image%2020260126210304.png)
 
 ##### ENCRYPTION EXPLANATION
 This website uses CBC (Cipher-Block Chaining) encryption, a block cipher method that encrypts user-provided data while ensuring authentication.
-![[Pasted image 20260126210601.png]]
+![Pasted image 20260126210601](/VaultSite/wiki-images/Pasted%20image%2020260126210601.png)
 The cipher uses fixed-size blocks:
-![[Pasted image 20260126210825.png]]
+![Pasted image 20260126210825](/VaultSite/wiki-images/Pasted%20image%2020260126210825.png)
 To ensure the text fits perfectly into the blocks, padding is used. A common method is PKCS7. Our string above is "SUPERSECRET123", which is missing 2 bytes to fill the block, so it pads with the number of missing bytes (e.g., 0x02 for 2 bytes, 0x05 for 5 bytes).
 
 When an application decrypts this message, it first decrypts the text and then removes the padding. If during padding removal there's detectable behavior (errors, missing results, slower responses, etc.), we have a Padding Oracle.
@@ -71,46 +71,46 @@ If you know the result and one part, you can derive the other.
 
 ##### LAB
 Let's proceed to register on the website:
-![[Pasted image 20260126213634.png]]
+![Pasted image 20260126213634](/VaultSite/wiki-images/Pasted%20image%2020260126213634.png)
 
 Once logged in, if we press Ctrl+Shift+C and go to Storage, we'll see a session cookie:
-![[Pasted image 20260126213740.png]]
+![Pasted image 20260126213740](/VaultSite/wiki-images/Pasted%20image%2020260126213740.png)
 
 If the website is vulnerable to padding oracle, we can decrypt the cookie with PadBuster.
 
 **PadBuster**
 PadBuster is a tool designed to automate the decryption of messages encrypted in **CBC** mode using **PKCS7** padding. It allows attackers to send HTTP requests with **malicious padding** to determine if the padding is valid. This way, attackers can guess the encrypted content and decrypt the entire message.
 
-![[Pasted image 20260126213905.png]]
+![Pasted image 20260126213905](/VaultSite/wiki-images/Pasted%20image%2020260126213905.png)
 
 The PadBuster command format is:
 ```bash
 padbuster "URL" "EncryptedStuff" "BlockSize" 'auth=Cookie'
 ```
 For us, it would look like:
-![[Pasted image 20260126214501.png]]
+![Pasted image 20260126214501](/VaultSite/wiki-images/Pasted%20image%2020260126214501.png)
 We see it successfully decoded the cookie:
-![[Pasted image 20260126214559.png]]
+![Pasted image 20260126214559](/VaultSite/wiki-images/Pasted%20image%2020260126214559.png)
 Now that we've seen the plaintext cookie is "user=s4vitar", we'll encode "user=admin" to replace our cookie.
 
 We'll do this by adding `-plaintext 'user=admin'` to the command  
-![[Pasted image 20260126214813.png]]  
-![[Pasted image 20260126214827.png]]  
+![Pasted image 20260126214813](/VaultSite/wiki-images/Pasted%20image%2020260126214813.png)  
+![Pasted image 20260126214827](/VaultSite/wiki-images/Pasted%20image%2020260126214827.png)  
 Paste the cookie in the browser and if we refresh, we're admin  
-![[Pasted image 20260126214923.png]]  
-![[Pasted image 20260126214933.png]]  
+![Pasted image 20260126214923](/VaultSite/wiki-images/Pasted%20image%2020260126214923.png)  
+![Pasted image 20260126214933](/VaultSite/wiki-images/Pasted%20image%2020260126214933.png)  
 
 To make it easier, we created a user named 'cdmin' so the bit flipping is faster  
 Another way to do it is by capturing the packet with Burp Suite and using the Intruder to perform a bitflipper attack (which is brute-forcing by modifying bits until the server stops returning errors)  
-![[Pasted image 20260126215155.png]]  
+![Pasted image 20260126215155](/VaultSite/wiki-images/Pasted%20image%2020260126215155.png)  
 Select the cookie and set the attack to Sniper mode  
 
 Now go to the Payloads section, set Payload type to Bitflipper, set Format of original data to Literal Value, and uncheck URL-encode characters  
 Start the attack  
-![[Pasted image 20260126215420.png]]  
+![Pasted image 20260126215420](/VaultSite/wiki-images/Pasted%20image%2020260126215420.png)  
 We see one request that's different, and if we check the Response tab, it shows we're logged in as admin, so we copy the cookie  
-![[Pasted image 20260126215916.png]]  
-![[Pasted image 20260126215929.png]]
+![Pasted image 20260126215916](/VaultSite/wiki-images/Pasted%20image%2020260126215916.png)  
+![Pasted image 20260126215929](/VaultSite/wiki-images/Pasted%20image%2020260126215929.png)
 
 
 

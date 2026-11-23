@@ -112,5 +112,5 @@ Once we change `POST` to `HEAD` and forward the request, we will see that we no 
 http://SERVER_IP:PORT/
 ![File Manager interface with input for new file name and reset button.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/134/web_attacks_verb_tampering_after_reset.jpg)
 
-![[Pasted image 20261026155051.png]]
+![Pasted image 20261026155051](/VaultSite/wiki-images/Pasted%20image%2020261026155051.png)
 

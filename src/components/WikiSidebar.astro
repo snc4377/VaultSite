@@ -1,60 +1,124 @@
 ---
 import { getCollection } from "astro:content";
-import { noteDate, sortNotes } from "../utils/note";
+import { noteTitle } from "../utils/note";
+import { buildWikiTree, type WikiFolder } from "../utils/wiki-tree";
 import { withBase } from "../utils/url";
 
 interface Props {
   current?: string;
+  node?: WikiFolder;
+  listOnly?: boolean;
+  depth?: number;
 }
 
-const { current } = Astro.props;
+const { current, listOnly = false, depth = 0 } = Astro.props;
+const node = Astro.props.node ?? buildWikiTree(await getCollection("wiki"));
 
-const notes = sortNotes(await getCollection("wiki"));
-
-const latest = notes[0];
-const latestDate = latest ? noteDate(latest) : null;
+const openFolder = (folder: WikiFolder) =>
+  current !== undefined && folder.noteIds.has(current);
 ---
 
-<div class="panel">
-  <div class="panel-head">
-    <span>[ notes ]</span>
-    <span>{String(notes.length).padStart(2, "0")}</span>
-  </div>
-
-  <nav aria-label="Wiki notes" class="p-3">
-    <ul class="space-y-1 font-mono text-xs">
-      {
-        notes.map((note, index) => {
-          const active = current === note.id;
-          return (
-            <li>
-              <a
-                href={withBase(`/wiki/${note.id}`)}
-                class:list={[
-                  "flex gap-2 py-0.5 transition-colors",
-                  active ? "text-accent" : "text-muted hover:text-ink",
-                ]}
-                aria-current={active ? "page" : undefined}
+{
+  listOnly ? (
+    <ul class:list={["wiki-tree-list", depth > 0 && "wiki-tree-children"]}>
+      {node.folders.map((folder) => (
+        <li class="wiki-tree-folder">
+          <details open={openFolder(folder)}>
+            <summary
+              class="wiki-tree-summary"
+              aria-label={`${folder.name}, ${folder.noteCount} notes`}
+            >
+              <span class="wiki-chevron" aria-hidden="true">
+                ▶
+              </span>
+              <svg
+                class="wiki-folder-icon wiki-folder-closed"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linejoin="round"
+                aria-hidden="true"
               >
-                <span class="whitespace-pre text-[#3a3a3a]" aria-hidden="true">
-                  {index === notes.length - 1 ? "└─" : "├─"}
-                </span>
-                <span class="truncate">{note.id}</span>
-              </a>
-            </li>
-          );
-        })
-      }
-    </ul>
-  </nav>
-</div>
+                <path d="M1.75 3.25h4l1.5 1.5h7v8.5H1.75z" />
+              </svg>
+              <svg
+                class="wiki-folder-icon wiki-folder-open"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M1.75 3.25h4l1.5 1.5h7v2H1.75z" />
+                <path d="M1.75 6.75h12.5l-1.5 6.5H3.25z" />
+              </svg>
+              <span class="min-w-0 truncate">{folder.name}</span>
+              <span class="wiki-count" aria-hidden="true">
+                {folder.noteCount}
+              </span>
+            </summary>
 
-<div class="panel mt-3">
-  <div class="panel-head">
-    <span>last edit</span>
-  </div>
-  <div class="px-3 py-2.5 font-mono text-[11px] leading-relaxed">
-    <p class="truncate text-muted">{latest?.id ?? "—"}</p>
-    <p class="text-dim">{latest ? latestDate ?? "undated" : "no notes yet"}</p>
-  </div>
-</div>
+            <Astro.self
+              current={current}
+              node={folder}
+              listOnly
+              depth={depth + 1}
+            />
+          </details>
+        </li>
+      ))}
+
+      {node.notes.map((note) => {
+        const active = current === note.id;
+        return (
+          <li>
+            <a
+              href={withBase(`/wiki/${note.id}`)}
+              class:list={["wiki-note", active && "is-active"]}
+              aria-current={active ? "page" : undefined}
+              title={noteTitle(note)}
+            >
+              <svg
+                class="wiki-note-icon"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 1.75h5.25L12.5 5v9.25H4z" />
+                <path d="M9.25 1.75V5h3.25" />
+              </svg>
+              <span class="min-w-0 truncate">{noteTitle(note)}</span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  ) : (
+    <div class="panel">
+      <div class="panel-head">
+        <span>
+          <span class="text-accent" aria-hidden="true">
+            $
+          </span>{" "}
+          tree ./wiki
+        </span>
+        <span>{String(node.noteCount).padStart(2, "0")}</span>
+      </div>
+
+      <nav class="wiki-tree wiki-scroll" aria-label="Wiki notes">
+        {node.folders.length === 0 && node.notes.length === 0 ? (
+          <p class="px-3 py-3 font-mono text-xs text-dim">
+            no notes yet — run the wiki sync
+          </p>
+        ) : (
+          <Astro.self current={current} node={node} listOnly depth={0} />
+        )}
+      </nav>
+    </div>
+  )
+}

@@ -55,41 +55,41 @@ This is a vulnerability where you execute JavaScript in the victim’s domain.
 
 **LABORATORY**  
 https://github.com/blabla1337/skf-labs  
-![[Pasted image 20260210174105.png]]  
+![Pasted image 20260210174105](/VaultSite/wiki-images/Pasted%20image%2020260210174105.png)  
 We authenticate with the credentials admin:admin  
-![[Pasted image 20260210174215.png]]  
+![Pasted image 20260210174215](/VaultSite/wiki-images/Pasted%20image%2020260210174215.png)  
 As attackers, let’s assume we want the victim, when accessing our malicious resource (e.g., on localhost), to unknowingly send everything they see on the other webpage to our site.  
-![[Pasted image 20260210175439.png]]  
+![Pasted image 20260210175439](/VaultSite/wiki-images/Pasted%20image%2020260210175439.png)  
 If we intercept the request from the victim’s page, we’ll see something interesting in the headers:  
-![[Pasted image 20260210174633.png]]  
+![Pasted image 20260210174633](/VaultSite/wiki-images/Pasted%20image%2020260210174633.png)  
 This CORS is configured to allow all domains to fetch resources without restrictions.  
 
 Let’s test setting an `Origin` header in our request:  
-![[Pasted image 20260210174803.png]]  
+![Pasted image 20260210174803](/VaultSite/wiki-images/Pasted%20image%2020260210174803.png)  
 We see it allows this. Normally, it should have a predefined origin to restrict which domains can make requests to load resources from this domain.  
 
 Now, we could set up a malicious server and, by including it in the request, we’d be telling the victim’s page that our LOCALHOST (us) can load a resource from their page and display it on our site.  
-![[Pasted image 20260210175245.png]]  
+![Pasted image 20260210175245](/VaultSite/wiki-images/Pasted%20image%2020260210175245.png)  
 
 Let’s create the file so that when the victim accesses our malicious webpage on localhost, we can steal all their privileged information.  
-![[Pasted image 20260210175612.png]]  
+![Pasted image 20260210175612](/VaultSite/wiki-images/Pasted%20image%2020260210175612.png)  
 
 Once the code is created and our malicious web server is running:  
-![[Pasted image 20260210180959.png]]  
+![Pasted image 20260210180959](/VaultSite/wiki-images/Pasted%20image%2020260210180959.png)  
 If the victim, who also has the other webpage open, accesses ours, they’d see something like this:  
 The information from the real webpage, but displayed incorrectly because the images are loaded from repositories we don’t have.  
-![[Pasted image 20260210181050.png]]  
+![Pasted image 20260210181050](/VaultSite/wiki-images/Pasted%20image%2020260210181050.png)  
 If we check our HTTP server, we’ll see image paths—these are the routes we need to create and where to store the images to make our webpage identical.  
-![[Pasted image 20260210181306.png]]  
+![Pasted image 20260210181306](/VaultSite/wiki-images/Pasted%20image%2020260210181306.png)  
 We’d need to use `mkdir` to create each route and `wget` to download each image directly from the real webpage.  
-![[Pasted image 20260210181354.png]]  
-![[Pasted image 20260210181422.png]]  
+![Pasted image 20260210181354](/VaultSite/wiki-images/Pasted%20image%2020260210181354.png)  
+![Pasted image 20260210181422](/VaultSite/wiki-images/Pasted%20image%2020260210181422.png)  
 
-![[Pasted image 20260210181405.png]]  
+![Pasted image 20260210181405](/VaultSite/wiki-images/Pasted%20image%2020260210181405.png)  
 Now we’ve successfully included another domain from a third-party domain.  
 
 If we edit the CORS configuration on the target machine to add filtering:  
-![[Pasted image 20260210181655.png]]  
+![Pasted image 20260210181655](/VaultSite/wiki-images/Pasted%20image%2020260210181655.png)  
 We’ll see our page return to normal because CORS now blocks us.  
-![[Pasted image 20260210181722.png]]  
-![[Pasted image 20260210181743.png]]
+![Pasted image 20260210181722](/VaultSite/wiki-images/Pasted%20image%2020260210181722.png)  
+![Pasted image 20260210181743](/VaultSite/wiki-images/Pasted%20image%2020260210181743.png)

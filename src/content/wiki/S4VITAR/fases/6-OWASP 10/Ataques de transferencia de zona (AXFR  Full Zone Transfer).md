@@ -20,7 +20,7 @@ Where:
 AXFR is the query type, indicating to the DNS server that a full zone transfer is desired.
 
 To prevent AXFR attacks, it is crucial for network administrators to properly configure DNS servers and restrict zone transfers only to authorized servers. It is also important to keep DNS server software updated and use strong encryption and authentication techniques to protect data transmitted over the network. Administrators can also use DNS monitoring tools to detect and prevent potential zone transfer attacks.
-![[Pasted image 20260201203509.png]]
+![Pasted image 20260201203509](/VaultSite/wiki-images/Pasted%20image%2020260201203509.png)
 
 
 

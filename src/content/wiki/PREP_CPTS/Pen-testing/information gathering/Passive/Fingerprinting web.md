@@ -112,7 +112,7 @@ The -h flag specifies the target host. The -Tuning b flag tells Nikto to only ru
 
 Nikto will then initiate a series of tests, attempting to identify outdated software, insecure files or configurations, and other potential security risks.
 
-![[Pasted image 20260426171333.png]]
+![Pasted image 20260426171333](/VaultSite/wiki-images/Pasted%20image%2020260426171333.png)
 
 The reconnaissance scan on `inlanefreight.com` reveals several key findings:
 

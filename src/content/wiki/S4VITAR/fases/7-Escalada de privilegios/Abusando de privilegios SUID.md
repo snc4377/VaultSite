@@ -26,16 +26,16 @@ To prevent SUID privilege abuse, it's recommended to limit the number of files w
 In this example, we have the same users as in [sudoers Elevation](obsidian://open?vault=David-Cyber&file=S4VITAR%2Ffases%2F7-Escalada%20de%20privilegios%2FAbusando%20de%20privilegios%20a%20nivel%20de%20Sudoers)
 
 Let's play with the base64 binary (with this binary, we could only read or edit files), which, if we do an `ls -l`, we see doesn't have the SUID assigned, so let's set it.
-![[Pasted image 20260213174922.png]]
-![[Pasted image 20260213174949.png]]
+![Pasted image 20260213174922](/VaultSite/wiki-images/Pasted%20image%2020260213174922.png)
+![Pasted image 20260213174949](/VaultSite/wiki-images/Pasted%20image%2020260213174949.png)
 
 If we try to view `/etc/shadow` (where user password hashes are stored), it won't let us because we don't have permissions.
-![[Pasted image 20260213175106.png]]
+![Pasted image 20260213175106](/VaultSite/wiki-images/Pasted%20image%2020260213175106.png)
 
 But we see that if we use base64 to read the content, it gives it to us.
-![[Pasted image 20260213175236.png]]
+![Pasted image 20260213175236](/VaultSite/wiki-images/Pasted%20image%2020260213175236.png)
 We decode this:
-![[Pasted image 20260213175251.png]]
+![Pasted image 20260213175251](/VaultSite/wiki-images/Pasted%20image%2020260213175251.png)
 And with this, we could try to crack the passwords using dictionaries, for example.
 
 Besides viewing files, we can also use it to edit files and elevate our privileges to become root.

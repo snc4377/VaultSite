@@ -11,7 +11,7 @@ The impact of a Pickle Deserialization attack depends on the type and sensitivit
 **LAB**  
 - **SKF-LABS DES-Pickle**: [https://github.com/blabla1337/skf-labs/tree/master/python/DES-Pickle](https://github.com/blabla1337/skf-labs/tree/master/python/DES-Pickle)
 
-![[Pasted image 20260212011400.png]]  
+![Pasted image 20260212011400](/VaultSite/wiki-images/Pasted%20image%2020260212011400.png)  
 After researching Pickle and deserialization, we'll create a .py file:  
 ```python
 import pickle      # Import the vulnerable library (serialization)
@@ -46,13 +46,13 @@ if __name__ == '__main__':
 ```
 
 This script will output a string we'll paste into the web form:  
-![[Pasted image 20260212012628.png]]  
+![Pasted image 20260212012628](/VaultSite/wiki-images/Pasted%20image%2020260212012628.png)  
 This returns a 0 (exit status code indicating success):  
-![[Pasted image 20260212012641.png]]  
+![Pasted image 20260212012641](/VaultSite/wiki-images/Pasted%20image%2020260212012641.png)  
 
 For full confirmation, we'll perform a reverse shell as a final step while setting up a listener:  
-![[Pasted image 20260212012758.png]]  
-![[Pasted image 20260212012819.png]]  
-![[Pasted image 20260212012827.png]]  
+![Pasted image 20260212012758](/VaultSite/wiki-images/Pasted%20image%2020260212012758.png)  
+![Pasted image 20260212012819](/VaultSite/wiki-images/Pasted%20image%2020260212012819.png)  
+![Pasted image 20260212012827](/VaultSite/wiki-images/Pasted%20image%2020260212012827.png)  
 
 This works because the code isn't sanitized and trusts user input. 

@@ -13,24 +13,24 @@ The impact of a Prototype Pollution attack can be significant, as attackers may 
 
 Once the Docker container is deployed, navigate to localhost:5000  
 Register and log in:  
-![[Pasted image 20260131142819.png]]  
-![[Pasted image 20260131142835.png]]  
+![Pasted image 20260131142819](/VaultSite/wiki-images/Pasted%20image%2020260131142819.png)  
+![Pasted image 20260131142835](/VaultSite/wiki-images/Pasted%20image%2020260131142835.png)  
 We see it displays "admin:" because we are not administrators, and below we see we can send a message.  
 Prototype pollution is like poisoning the prototype (the property), allowing us to escalate our privileges and set ourselves as administrators.  
 
 If we examine the machine's code in the `index.js` file, we see some objects defined here:  
-![[Pasted image 20260131143201.png]]  
+![Pasted image 20260131143201](/VaultSite/wiki-images/Pasted%20image%2020260131143201.png)  
 And if we scroll further down, we see a merge operation (which combines two code branches into one). It processes the request body (the email and message to the admin defined on the page) and the IP address:  
-![[Pasted image 20260131143354.png]]  
-![[Pasted image 20260131143520.png]]  
+![Pasted image 20260131143354](/VaultSite/wiki-images/Pasted%20image%2020260131143354.png)  
+![Pasted image 20260131143520](/VaultSite/wiki-images/Pasted%20image%2020260131143520.png)  
 
 Let’s open Burp and intercept:  
-![[Pasted image 20260131144208.png]]  
+![Pasted image 20260131144208](/VaultSite/wiki-images/Pasted%20image%2020260131144208.png)  
 We see the structure and format are not optimal. Let’s try changing the `Content-Type` to JSON to see if it allows us to send it that way:  
-![[Pasted image 20260131144402.png]]  
+![Pasted image 20260131144402](/VaultSite/wiki-images/Pasted%20image%2020260131144402.png)  
 It allows JSON submission, so let’s attempt to pollute it by adding a new structure called `__proto__` (`__proto__` is the invisible thread connecting an object to its technical ancestry, enabling inheritance in JavaScript) with a field `admin:true` to see if we can pollute the prototype:  
-![[Pasted image 20260131144550.png]]  
+![Pasted image 20260131144550](/VaultSite/wiki-images/Pasted%20image%2020260131144550.png)  
 If we refresh the page, we are now admin:  
-![[Pasted image 20260131144627.png]]  
+![Pasted image 20260131144627](/VaultSite/wiki-images/Pasted%20image%2020260131144627.png)  
 There are many scenarios where we can pollute the prototype to escalate privileges, upload files, etc.  
 The `admin` field is not normally visible since we don’t have the code, but we could perform some brute-forcing to try and discover it. 

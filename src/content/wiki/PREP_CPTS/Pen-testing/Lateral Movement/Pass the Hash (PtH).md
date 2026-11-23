@@ -467,4 +467,4 @@ Invoke-WMIExec -Target DC01 -Domain inlanefreight.htb -Username julio -Hash 64F1
 
 Or we can mount the shared file in another partition and connect to it 
 
-![[Pasted image 20260516165854.png]]
+![Pasted image 20260516165854](/VaultSite/wiki-images/Pasted%20image%2020260516165854.png)

@@ -178,7 +178,7 @@ Employee-Passwords_OLD.psafe3
 ```
 
 ![](https://miro.medium.com/v2/resize:fit:644/1*D2cD19U5Il9orSaS4CNRdw.png)
-![[Pasted image 20260524185011.png]]
+![Pasted image 20260524185011](/VaultSite/wiki-images/Pasted%20image%2020260524185011.png)
 A password vault containing employee credentials.
 
 ## Cracking the Vault

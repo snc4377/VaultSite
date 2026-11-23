@@ -18,16 +18,16 @@ The GTFOBins resource is used to detect commands that could potentially be explo
 In this example, we have two users: a normal user "s4vitar" and another with root permissions "manolito."
 
 If we attempt to run `sudo -l` with the user s4vitar, we will see that we cannot execute that command on the hostname.  
-![[Pasted image 20260213171514.png]]
+![Pasted image 20260213171514](/VaultSite/wiki-images/Pasted%20image%2020260213171514.png)
 
 Let's grant root privileges in awk to s4vitar from the root user.  
-![[Pasted image 20260213171612.png]]
+![Pasted image 20260213171612](/VaultSite/wiki-images/Pasted%20image%2020260213171612.png)
 
 Now, with `sudo -l`, we can see that we can execute [[AWK]] without a password and as root.  
-![[Pasted image 20260213171835.png]]
+![Pasted image 20260213171835](/VaultSite/wiki-images/Pasted%20image%2020260213171835.png)
 
 If we now go to [https://gtfobins.github.io/](https://gtfobins.github.io/) and search for awk, we will see various one-liners. We will choose the sudo one, which, as we read here, will give us a `/bin/sh` (interactive shell).  
-![[Pasted image 20260213172523.png]]  
-![[Pasted image 20260213172617.png]]  
+![Pasted image 20260213172523](/VaultSite/wiki-images/Pasted%20image%2020260213172523.png)  
+![Pasted image 20260213172617](/VaultSite/wiki-images/Pasted%20image%2020260213172617.png)  
 
 And now we have a shell where we are root and can do whatever we want. 

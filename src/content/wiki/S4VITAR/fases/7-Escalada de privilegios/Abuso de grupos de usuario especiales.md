@@ -8,47 +8,47 @@ To mitigate the risk of abuse of special user groups, it is important to careful
 
 
 If we run `id`, we can see that we are part of the `sudo` group with the current user, which allows us—if we enter our password—to execute commands as if we were root.  
-![[Pasted image 20260216164206.png]]
+![Pasted image 20260216164206](/VaultSite/wiki-images/Pasted%20image%2020260216164206.png)
 
 Another example would be the `docker` group, which would allow us to list Docker images, containers, and deploy new machines.  
-![[Pasted image 20260216164402.png]]
+![Pasted image 20260216164402](/VaultSite/wiki-images/Pasted%20image%2020260216164402.png)
 
 What's interesting about this group? For example, let's imagine we don't know the current user's password but see they are in this group. We could try to deploy a container with the command `-v /:/mnt/root`, which would take the entire root of the host machine and copy it entirely into the container. Since we are root in the container, we could, for example, view `/etc/passwd`.  
-![[Pasted image 20260216164716.png]]  
-![[Pasted image 20260216164730.png]]  
-![[Pasted image 20260216164745.png]]  
-![[Pasted image 20260216164751.png]]
+![Pasted image 20260216164716](/VaultSite/wiki-images/Pasted%20image%2020260216164716.png)  
+![Pasted image 20260216164730](/VaultSite/wiki-images/Pasted%20image%2020260216164730.png)  
+![Pasted image 20260216164745](/VaultSite/wiki-images/Pasted%20image%2020260216164745.png)  
+![Pasted image 20260216164751](/VaultSite/wiki-images/Pasted%20image%2020260216164751.png)
 
 Even more interesting is that the mount connects the directory we specify with a directory in the container (in this case, `/mnt`). So, if we edit something in the container, it will immediately reflect in the host's path.
 
 Let’s add SUID permissions to `bash` in the container’s `/bin` path, and we’ll see that it has been edited outside the container, allowing us to get an interactive TTY as root.  
-![[Pasted image 20260216165254.png]]
+![Pasted image 20260216165254](/VaultSite/wiki-images/Pasted%20image%2020260216165254.png)
 
 Other groups could be `adm` or `lxd`.
 
 With the **ADM** group, we could read system logs.  
-![[Pasted image 20260216165404.png]]  
-![[Pasted image 20260216165431.png]]  
-![[Pasted image 20260216165445.png]]
+![Pasted image 20260216165404](/VaultSite/wiki-images/Pasted%20image%2020260216165404.png)  
+![Pasted image 20260216165431](/VaultSite/wiki-images/Pasted%20image%2020260216165431.png)  
+![Pasted image 20260216165445](/VaultSite/wiki-images/Pasted%20image%2020260216165445.png)
 
 **LXD Group**  
 
 LXD is very similar to Docker, and what we can do with it is quite similar to what we did with Docker.  
-![[Pasted image 20260216165617.png]]
+![Pasted image 20260216165617](/VaultSite/wiki-images/Pasted%20image%2020260216165617.png)
 
 If we search for LXD in Searchsploit, we’ll find a script to automate privilege escalation.  
-![[Pasted image 20260216165715.png]]  
-![[Pasted image 20260216165726.png]]  
-![[Pasted image 20260216165733.png]]  
+![Pasted image 20260216165715](/VaultSite/wiki-images/Pasted%20image%2020260216165715.png)  
+![Pasted image 20260216165726](/VaultSite/wiki-images/Pasted%20image%2020260216165726.png)  
+![Pasted image 20260216165733](/VaultSite/wiki-images/Pasted%20image%2020260216165733.png)  
 We would just need to follow the script, which tells us step by step what to do if we read it.
 
 But what it tells us is that on our attacking machine, with Alpine and the URL provided, we should mount the container, and this script will create a compressed file with the Alpine image.
 
 Now we’ll get a couple of files as output, which we need to transfer to the victim machine.  
-![[Pasted image 20260216170222.png]]
+![Pasted image 20260216170222](/VaultSite/wiki-images/Pasted%20image%2020260216170222.png)
 
 And with the following command, we would achieve privilege escalation:  
-![[Pasted image 20260216170327.png]]  
+![Pasted image 20260216170327](/VaultSite/wiki-images/Pasted%20image%2020260216170327.png)  
 Now we would go to the `/mnt` directory, where the script made the mount, and we could modify and edit files.  
-![[Pasted image 20260216170500.png]]
+![Pasted image 20260216170500](/VaultSite/wiki-images/Pasted%20image%2020260216170500.png)
 

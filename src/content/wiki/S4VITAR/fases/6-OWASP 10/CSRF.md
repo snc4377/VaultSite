@@ -19,41 +19,41 @@ samy:seedsamy
 We log in to www.seed-server.com as alice.  
 
 In the members tab, we can see different users. If we access their profiles by hovering over the "Add Friend" button, we'll see each has an assigned ID.  
-![[Pasted image 20260124145149.png]]  
+![Pasted image 20260124145149](/VaultSite/wiki-images/Pasted%20image%2020260124145149.png)  
 
 To test for CSRF, we'll try editing a user's profile on the page and intercept the request with Burp Suite.  
-![[Pasted image 20260124145303.png]]  
-![[Pasted image 20260124145314.png]]  
+![Pasted image 20260124145303](/VaultSite/wiki-images/Pasted%20image%2020260124145303.png)  
+![Pasted image 20260124145314](/VaultSite/wiki-images/Pasted%20image%2020260124145314.png)  
 We see two interesting parameters: `__elgg_token` and `__elgg_ts`.  
 The request is sent via POST. Right-clicking the request in Burp allows us to change the method.  
-![[Pasted image 20260124145506.png]]  
-![[Pasted image 20260124145524.png]]  
+![Pasted image 20260124145506](/VaultSite/wiki-images/Pasted%20image%2020260124145506.png)  
+![Pasted image 20260124145524](/VaultSite/wiki-images/Pasted%20image%2020260124145524.png)  
 
 Let's test if the server validates the tokens by removing them.  
-![[Pasted image 20260124145648.png]]  
+![Pasted image 20260124145648](/VaultSite/wiki-images/Pasted%20image%2020260124145648.png)  
 If we reload the browser page, we see the name has still changed, so those tokens aren't validated.  
-![[Pasted image 20260124145745.png]]  
+![Pasted image 20260124145745](/VaultSite/wiki-images/Pasted%20image%2020260124145745.png)  
 
 We'll use samy as the attacker and alice as the victim.  
 
 If we go to the messages section and send alice a message with the URL captured in Burp (with some parameters edited, like the ID depending on the target user), we can, for example, change her name just by her reading the message (in this example, each user has an ID represented in the URL as GUID).  
 
 Here, we're hiding in an `img src=` the server URL from Burp targeting alice with ID 56 to change her name to "HACKED".  
-![[Pasted image 20260124152217.png]]![[Pasted image 20260124152248.png]]  
-![[Pasted image 20260124152257.png]]  
+![Pasted image 20260124152217](/VaultSite/wiki-images/Pasted%20image%2020260124152217.png)![Pasted image 20260124152248](/VaultSite/wiki-images/Pasted%20image%2020260124152248.png)  
+![Pasted image 20260124152257](/VaultSite/wiki-images/Pasted%20image%2020260124152257.png)  
 
 In the password parameter, we see this:  
-![[Pasted image 20260124152340.png]]  
+![Pasted image 20260124152340](/VaultSite/wiki-images/Pasted%20image%2020260124152340.png)  
 If it didn't require the current password for validation, we could try changing the request to GET and attempt to set a new password, like we did with the name.  
 
 Let's verify if the current password field is actually validated.  
-![[Pasted image 20260124152515.png]]  
+![Pasted image 20260124152515](/VaultSite/wiki-images/Pasted%20image%2020260124152515.png)  
 Again, we see the tokens that aren't necessary, as we saw earlier.  
-![[Pasted image 20260124153123.png]]  
+![Pasted image 20260124153123](/VaultSite/wiki-images/Pasted%20image%2020260124153123.png)  
 We confirm the current password field is validated.  
 
 Let's try deleting it to see if the request still works without it.  
-![[Pasted image 20260124153308.png]]  
+![Pasted image 20260124153308](/VaultSite/wiki-images/Pasted%20image%2020260124153308.png)  
 It doesn't.  
 We could also try entering `[]`, but it still rejects the request.  
 

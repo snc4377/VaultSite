@@ -20,21 +20,21 @@ Allows us to send the request and see what would happen. This is the most common
 
 In this explanation, we're working on the Vulnhub CVE for ImageTragick.
 
-![[Pasted image 20251203200752.png]]
+![Pasted image 20251203200752](/VaultSite/wiki-images/Pasted%20image%2020251203200752.png)
 
 We can perform different types of attacks by selecting the attack type.
 
 In the payloads section, we can inject, for example in our practice case, file extensions for brute force.
 
-![[Pasted image 20251203201000.png]]
+![Pasted image 20251203201000](/VaultSite/wiki-images/Pasted%20image%2020251203201000.png)
 
 Then in the options section, we can go to "Grep Extract" to have the server return the error. We select the specific part we want returned.
 
-![[Pasted image 20251203201153.png]]
+![Pasted image 20251203201153](/VaultSite/wiki-images/Pasted%20image%2020251203201153.png)
 
 And we start the attack.
 
-![[Pasted image 20251203201217.png]]
+![Pasted image 20251203201217](/VaultSite/wiki-images/Pasted%20image%2020251203201217.png)
 
 Here we can see which files are being accepted.
 
@@ -42,15 +42,15 @@ Here we can see which files are being accepted.
 
 Now we return to Repeater and edit the file type.
 
-![[Pasted image 20251203201350.png]]
+![Pasted image 20251203201350](/VaultSite/wiki-images/Pasted%20image%2020251203201350.png)
 
 Here we're injecting code into a hidden GIF (though this isn't strictly necessary). The command `fill` examines the JPG, and `curl` checks the IP with the path we specify.
 
-![[Pasted image 20251203201709.png]]
+![Pasted image 20251203201709](/VaultSite/wiki-images/Pasted%20image%2020251203201709.png)
 
 Now we start an HTTP server to see if we receive the request.
 
-![[Pasted image 20251203201738.png]]
+![Pasted image 20251203201738](/VaultSite/wiki-images/Pasted%20image%2020251203201738.png)
 
 This confirms we have remote command execution.
 
@@ -58,18 +58,18 @@ This confirms we have remote command execution.
 
 Let's create our file.gif.
 
-![[Pasted image 20251203201909.png]]
+![Pasted image 20251203201909](/VaultSite/wiki-images/Pasted%20image%2020251203201909.png)
 
 We can see an `echo` and Base64 code.
 
 Let's see what this Base64 contains.
 
-![[Pasted image 20251203201951.png]]
+![Pasted image 20251203201951](/VaultSite/wiki-images/Pasted%20image%2020251203201951.png)
 
 It's setting up a reverse shell to port 8889 of our IP to give us a console.
 
 We upload the file and set up netcat to listen.
 
-![[Pasted image 20251203202328.png]]
+![Pasted image 20251203202328](/VaultSite/wiki-images/Pasted%20image%2020251203202328.png)
 
 We now have access. 

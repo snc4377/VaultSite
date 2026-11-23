@@ -2,7 +2,7 @@
 
 TCP - Guarantees data delivery and that the order matches the transmission sequence  
 	-Three way handshake SYN ACK ACK ACK (WE WILL ALWAYS SEE THESE THREE PACKETS WHEN CONNECTING VIA TCP)
-![[Pasted image 20251120182141.png]]
+![Pasted image 20251120182141](/VaultSite/wiki-images/Pasted%20image%2020251120182141.png)
 
 UDP - Sends data blindly without any verification  
 TCP 
@@ -15,7 +15,7 @@ TCP
 80 - http  
 443 - https  
 110 - POP3  
-139, 445 - SMB shared file/printer access or Windows network resources (SMB Relay hijacks legitimate user authentication to redirect credentials to a different system/resource![[Pasted image 20251120182849.png]])  
+139, 445 - SMB shared file/printer access or Windows network resources (SMB Relay hijacks legitimate user authentication to redirect credentials to a different system/resource![Pasted image 20251120182849](/VaultSite/wiki-images/Pasted%20image%2020251120182849.png))  
 143 - IMAP  
 
 

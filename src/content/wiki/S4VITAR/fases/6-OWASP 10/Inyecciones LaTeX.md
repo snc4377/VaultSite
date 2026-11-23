@@ -12,69 +12,69 @@ It is also important for web applications to run with minimal network privileges
 - **LaTeX Injection Lab**: [https://github.com/internetwache/Internetwache-CTF-2016/tree/master/tasks/web90/code](https://github.com/internetwache/Internetwache-CTF-2016/tree/master/tasks/web90/code)
 
 Once the lab is deployed, we can see a web page  
-![[Pasted image 20260130194627.png]]  
+![Pasted image 20260130194627](/VaultSite/wiki-images/Pasted%20image%2020260130194627.png)  
 For this vulnerability, we need a user with write permissions.
 
 If we test creating a sample report, we'll get a URL  
-![[Pasted image 20260130194751.png]]  
-![[Pasted image 20260130194759.png]]  
+![Pasted image 20260130194751](/VaultSite/wiki-images/Pasted%20image%2020260130194751.png)  
+![Pasted image 20260130194759](/VaultSite/wiki-images/Pasted%20image%2020260130194759.png)  
 We test commands like `whoami`, `ls`, and also try escaping `whoami` with single quotes  
-![[Pasted image 20260130194909.png]]  
-![[Pasted image 20260130194917.png]]  
+![Pasted image 20260130194909](/VaultSite/wiki-images/Pasted%20image%2020260130194909.png)  
+![Pasted image 20260130194917](/VaultSite/wiki-images/Pasted%20image%2020260130194917.png)  
 
 If we search in PayloadsAllTheThings for LaTeX injection, we can find some payloads to view, for example, the `/etc/passwd` file  
 https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LaTeX%20Injection  
-![[Pasted image 20260130195050.png]]  
+![Pasted image 20260130195050](/VaultSite/wiki-images/Pasted%20image%2020260130195050.png)  
 We'll see that the PDF isn't created because the code is sanitized and blocked in the PDF  
-![[Pasted image 20260130195112.png]]  
+![Pasted image 20260130195112](/VaultSite/wiki-images/Pasted%20image%2020260130195112.png)  
 If we check the machine's code, we can see that the words `input` and `include` are banned  
-![[Pasted image 20260130195232.png]]  
+![Pasted image 20260130195232](/VaultSite/wiki-images/Pasted%20image%2020260130195232.png)  
 But we also see that it executes a `--shell-escape` parameter, which will later allow us to run commands  
-![[Pasted image 20260130195319.png]]  
+![Pasted image 20260130195319](/VaultSite/wiki-images/Pasted%20image%2020260130195319.png)  
 We search online for information about this parameter  
 https://0day.work/hacking-with-latex/  
-![[Pasted image 20260130195549.png]]  
+![Pasted image 20260130195549](/VaultSite/wiki-images/Pasted%20image%2020260130195549.png)  
 In the PayloadsAllTheThings GitHub, we see there are other ways to read files without using `input` or `include`.  
 For example, this allows us to read only the first line of a chosen file  
-![[Pasted image 20260130195746.png]]  
-![[Pasted image 20260130195756.png]]  
-![[Pasted image 20260130195806.png]]  
+![Pasted image 20260130195746](/VaultSite/wiki-images/Pasted%20image%2020260130195746.png)  
+![Pasted image 20260130195756](/VaultSite/wiki-images/Pasted%20image%2020260130195756.png)  
+![Pasted image 20260130195806](/VaultSite/wiki-images/Pasted%20image%2020260130195806.png)  
 If we want to read the next line, we just copy and paste `\read\file to\line` and repeat for the remaining lines  
-![[Pasted image 20260130195945.png]]  
-![[Pasted image 20260130195955.png]]  
+![Pasted image 20260130195945](/VaultSite/wiki-images/Pasted%20image%2020260130195945.png)  
+![Pasted image 20260130195955](/VaultSite/wiki-images/Pasted%20image%2020260130195955.png)  
 If we want to view them all at once, we need to assign a unique name to each line and in `\text{\line}` include the names of the lines  
-![[Pasted image 20260130200121.png]]  
-![[Pasted image 20260130200135.png]]  
+![Pasted image 20260130200121](/VaultSite/wiki-images/Pasted%20image%2020260130200121.png)  
+![Pasted image 20260130200135](/VaultSite/wiki-images/Pasted%20image%2020260130200135.png)  
 We could also create a script  
-![[Pasted image 20260130200314.png]]  
+![Pasted image 20260130200314](/VaultSite/wiki-images/Pasted%20image%2020260130200314.png)  
 Intercept with Burp  
-![[Pasted image 20260130200346.png]]  
+![Pasted image 20260130200346](/VaultSite/wiki-images/Pasted%20image%2020260130200346.png)  
 URL-decode it  
-![[Pasted image 20260130200407.png]]  
+![Pasted image 20260130200407](/VaultSite/wiki-images/Pasted%20image%2020260130200407.png)  
 Edit the script to download the PDF and process the request, adding automatic line breaks to display the entire file  
-![[Pasted image 20260130200909.png]]  
-![[Pasted image 20260130200927.png]]  
+![Pasted image 20260130200909](/VaultSite/wiki-images/Pasted%20image%2020260130200909.png)  
+![Pasted image 20260130200927](/VaultSite/wiki-images/Pasted%20image%2020260130200927.png)  
 We can also list `groups` or `hostname`  
-![[Pasted image 20260130201006.png]] ![[Pasted image 20260130201018.png]] ![[Pasted image 20260130201034.png]]  
+![Pasted image 20260130201006](/VaultSite/wiki-images/Pasted%20image%2020260130201006.png) ![Pasted image 20260130201018](/VaultSite/wiki-images/Pasted%20image%2020260130201018.png) ![Pasted image 20260130201034](/VaultSite/wiki-images/Pasted%20image%2020260130201034.png)  
 
 For command execution, we also have the `id` command in the GitHub  
-![[Pasted image 20260130201119.png]]  
+![Pasted image 20260130201119](/VaultSite/wiki-images/Pasted%20image%2020260130201119.png)  
 This command gives output, but not in the PDF itself—instead, it appears in the text below the webpage due to a compilation error  
-![[Pasted image 20260130201151.png]]  
+![Pasted image 20260130201151](/VaultSite/wiki-images/Pasted%20image%2020260130201151.png)  
 To see it in the generated document, we would paste the full payload `\immediate\write18{id > output}`, which runs `id` and sends the output to a file named `output`.  
 So if we combine the read payload with this execution command  
-![[Pasted image 20260130201441.png]]  
-![[Pasted image 20260130201453.png]]  
+![Pasted image 20260130201441](/VaultSite/wiki-images/Pasted%20image%2020260130201441.png)  
+![Pasted image 20260130201453](/VaultSite/wiki-images/Pasted%20image%2020260130201453.png)  
 
 Often, we don't need to complicate things.  
 For example, we could run a directory scan with `gobuster`, which would reveal a directory called `compile` with directory listing enabled  
-![[Pasted image 20260130201558.png]]  
+![Pasted image 20260130201558](/VaultSite/wiki-images/Pasted%20image%2020260130201558.png)  
 Here, we would see the `output` file we created  
-![[Pasted image 20260130201701.png]]  
+![Pasted image 20260130201701](/VaultSite/wiki-images/Pasted%20image%2020260130201701.png)  
 We could have listed `/etc/passwd` here  
-![[Pasted image 20260130201747.png]]  
-![[Pasted image 20260130201755.png]]  
+![Pasted image 20260130201747](/VaultSite/wiki-images/Pasted%20image%2020260130201747.png)  
+![Pasted image 20260130201755](/VaultSite/wiki-images/Pasted%20image%2020260130201755.png)  
 
 The code's restriction on the words `input` and `include` could also be bypassed using parameters like `\def\first{in}` and `\def\second{put}`, then combining them with `\first\second`.  
 
-![[Pasted image 20260130202100.png]]
+![Pasted image 20260130202100](/VaultSite/wiki-images/Pasted%20image%2020260130202100.png)

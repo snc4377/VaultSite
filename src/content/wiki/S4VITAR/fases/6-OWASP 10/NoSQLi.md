@@ -8,13 +8,13 @@ Unlike SQL injections, NoSQL injections exploit the lack of data validation in a
 - **Vulnerable-Node-App**: [https://github.com/Charlie-belmer/vulnerable-node-app](https://github.com/Charlie-belmer/vulnerable-node-app)
 
 After setting up the machine with Docker, navigate to localhost:4000  
-![[Pasted image 20260127190344.png]]  
+![Pasted image 20260127190344](/VaultSite/wiki-images/Pasted%20image%2020260127190344.png)  
 Click "Reset Db" to create some users  
-![[Pasted image 20260127190410.png]]  
+![Pasted image 20260127190410](/VaultSite/wiki-images/Pasted%20image%2020260127190410.png)  
 There are different windows: authentication and user lookup to search for users in the database.
 
 If we try to log in as admin, it won't work:  
-![[Pasted image 20260127190501.png]]  
+![Pasted image 20260127190501](/VaultSite/wiki-images/Pasted%20image%2020260127190501.png)  
 
 Go to the [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings) Git repository and filter by NoSQL. In NoSQL, we can manipulate conditions like `=` (user not equal to admin or another user):
 
@@ -26,28 +26,28 @@ login[$nin][]=admin&login[$nin][]=test&pass[$ne]=toto
 ```
 
 For the lab, open Burp Suite and intercept an authentication request:  
-![[Pasted image 20260127190943.png]]  
+![Pasted image 20260127190943](/VaultSite/wiki-images/Pasted%20image%2020260127190943.png)  
 Send it to Repeater.  
 (We'll test NoSQL injections after SQLi since SQL databases are more common.)
 
 In the Repeater request, modify the password field to `{"$ne": ""}`, which means "password is not empty":  
-![[Pasted image 20260127191501.png]]  
-![[Pasted image 20260127191519.png]]  
+![Pasted image 20260127191501](/VaultSite/wiki-images/Pasted%20image%2020260127191501.png)  
+![Pasted image 20260127191519](/VaultSite/wiki-images/Pasted%20image%2020260127191519.png)  
 Now we have access.
 
 If we don’t know the username, we can do the same for the username field:  
-![[Pasted image 20260127191606.png]]  
+![Pasted image 20260127191606](/VaultSite/wiki-images/Pasted%20image%2020260127191606.png)  
 
 Next, let’s try to find admin’s password.  
 
 We’ll use `"$regex": "^a"` to test with a regex and confirm the username starts with "a":  
-![[Pasted image 20260127191938.png]]  
+![Pasted image 20260127191938](/VaultSite/wiki-images/Pasted%20image%2020260127191938.png)  
 If we test another letter and no user starts with it, access is denied:  
-![[Pasted image 20260127192043.png]]  
+![Pasted image 20260127192043](/VaultSite/wiki-images/Pasted%20image%2020260127192043.png)  
 With "g," there’s another user:  
-![[Pasted image 20260127192030.png]]  
+![Pasted image 20260127192030](/VaultSite/wiki-images/Pasted%20image%2020260127192030.png)  
 With "j," another user exists:  
-![[Pasted image 20260127192127.png]]  
+![Pasted image 20260127192127](/VaultSite/wiki-images/Pasted%20image%2020260127192127.png)  
 
 Now that we know the username, we can do the same for the password using regex. We can also determine the password length—this is well-documented in the Git repo.  
 
@@ -120,14 +120,14 @@ if __name__ == '__main__':
 ```
 
 With this script, we retrieve the password:  
-![[Pasted image 20260127194000.png]]  
-![[Pasted image 20260127194021.png]]  
+![Pasted image 20260127194000](/VaultSite/wiki-images/Pasted%20image%2020260127194000.png)  
+![Pasted image 20260127194021](/VaultSite/wiki-images/Pasted%20image%2020260127194021.png)  
 
 We could adapt the script to list other users by modifying the `post_data` line, changing "admin" to "guest," for example.  
 
 For MongoDB, payloads like `' || ' '1' == '1` are documented in [HackTricks](https://book.hacktricks.wiki/en/index.html) **(always check Git or HackTricks for reference).**  
 
 If we go to User Lookup:  
-![[Pasted image 20260127194754.png]]  
-![[Pasted image 20260127194804.png]]  
+![Pasted image 20260127194754](/VaultSite/wiki-images/Pasted%20image%2020260127194754.png)  
+![Pasted image 20260127194804](/VaultSite/wiki-images/Pasted%20image%2020260127194804.png)  
 We see a user starting with "a," but earlier, only "admin" was shown. This is because the script has a `break` to move to the next character after a match. If we remove it, it might find more users like "angryPrism."

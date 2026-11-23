@@ -40,7 +40,7 @@ https://github.com/thewhiteh4t/FinalRecon
 - `Wayback Machine`: Retrieves URLs from the last five years to analyse website changes and potential vulnerabilities.
 
 Installation is quick and easy:
-![[Pasted image 20260426180826.png]]
+![Pasted image 20260426180826](/VaultSite/wiki-images/Pasted%20image%2020260426180826.png)
 
 To get started, you will first clone the `FinalRecon` repository from GitHub using `git clone https://github.com/thewhiteh4t/FinalRecon.git`. This will create a new directory named "FinalRecon" containing all the necessary files.
 
@@ -66,4 +66,4 @@ Finally, you can verify that `FinalRecon` is installed correctly and get an ov
 | `--full`       |          | Perform a full reconnaissance scan on the target.   |
 
 For instance, if we want `FinalRecon` to gather header information and perform a Whois lookup for `inlanefreight.com`, we would use the corresponding flags (`--headers` and `--whois`), so the command would be:
-![[Pasted image 20260426180757.png|680]]
+![Pasted image 20260426180757](/VaultSite/wiki-images/Pasted%20image%2020260426180757.png)

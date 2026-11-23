@@ -9,28 +9,28 @@ To prevent the open redirection vulnerability, it is important for developers to
 - **Open Redirect 1**: [https://github.com/blabla1337/skf-labs/tree/master/nodeJs/Url-redirection](https://github.com/blabla1337/skf-labs/tree/master/nodeJs/Url-redirection)
 
 **LABORATORY**
-![[Pasted image 20260203174457.png]]
+![Pasted image 20260203174457](/VaultSite/wiki-images/Pasted%20image%2020260203174457.png)
 If we click the button, it applies a redirect to a new website.
-![[Pasted image 20260203174549.png]]
+![Pasted image 20260203174549](/VaultSite/wiki-images/Pasted%20image%2020260203174549.png)
 We open BURP.
 We see the redirect and a path.
-![[Pasted image 20260203174732.png]]
+![Pasted image 20260203174732](/VaultSite/wiki-images/Pasted%20image%2020260203174732.png)
 We see that in `newurl`, the website to which we are redirected is entered, so if we copy `redirect?newurl=` and put an alternative URL, we can make it send us there.
-![[Pasted image 20260203174850.png]]
-![[Pasted image 20260203174856.png]]
+![Pasted image 20260203174850](/VaultSite/wiki-images/Pasted%20image%2020260203174850.png)
+![Pasted image 20260203174856](/VaultSite/wiki-images/Pasted%20image%2020260203174856.png)
 And this is an Open Redirect.
 This is dangerous when, for example, using [UFONET](https://github.com/epsylon/ufonet), which allows us to create massive botnets that abuse Open Redirect and Google Dorking.
 
 **LABORATORY2**
 We have exactly the same website but with a bit more security.
 Let's open BURP.
-![[Pasted image 20260203175611.png]]
+![Pasted image 20260203175611](/VaultSite/wiki-images/Pasted%20image%2020260203175611.png)
 If we try to change the redirect, we see that it doesn't allow us. In the message, we see that it says "I cannot use '.'".
-![[Pasted image 20260203175648.png]]
+![Pasted image 20260203175648](/VaultSite/wiki-images/Pasted%20image%2020260203175648.png)
 If we apply URL-ENCODE to the dot, we see that the same message still appears.
-![[Pasted image 20260203175845.png]]
+![Pasted image 20260203175845](/VaultSite/wiki-images/Pasted%20image%2020260203175845.png)
 But if we apply URL-Encode to the `%`, the server will no longer detect the dot.
-![[Pasted image 20260203175951.png]]
+![Pasted image 20260203175951](/VaultSite/wiki-images/Pasted%20image%2020260203175951.png)
 
 The power of Open Redirect itself seems very low-risk and simple, but if we combine it with phishing, we can encounter cases like this:
 

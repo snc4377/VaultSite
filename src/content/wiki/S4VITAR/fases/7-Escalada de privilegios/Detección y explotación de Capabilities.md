@@ -34,28 +34,28 @@ Permitted capabilities can be further restricted via Mandatory Access Control (M
 
 
 Let's test with the tcpdump binary - normally only root or privileged users can capture traffic:
-![[Pasted image 20260214133325.png]]
-![[Pasted image 20260214133339.png]]
+![Pasted image 20260214133325](/VaultSite/wiki-images/Pasted%20image%2020260214133325.png)
+![Pasted image 20260214133339](/VaultSite/wiki-images/Pasted%20image%2020260214133339.png)
 
 We can list capabilities of running system binaries by checking process IDs in /proc/. For example, examining /proc/9/status:
-![[Pasted image 20260214133632.png]]
+![Pasted image 20260214133632](/VaultSite/wiki-images/Pasted%20image%2020260214133632.png)
 Filtering with grep for "cap" shows capabilities:
-![[Pasted image 20260214133718.png]]
+![Pasted image 20260214133718](/VaultSite/wiki-images/Pasted%20image%2020260214133718.png)
 
 Download [[CAPSH]] to decode capability information.
 
 Running it with --decode on a capability value shows details:
-![[Pasted image 20260214133946.png]]
-![[Pasted image 20260214134000.png]]
+![Pasted image 20260214133946](/VaultSite/wiki-images/Pasted%20image%2020260214133946.png)
+![Pasted image 20260214134000](/VaultSite/wiki-images/Pasted%20image%2020260214134000.png)
 
 As root, we assign capabilities to tcpdump:
-![[Pasted image 20260214134111.png]]
+![Pasted image 20260214134111](/VaultSite/wiki-images/Pasted%20image%2020260214134111.png)
 Here we granted a capability allowing any user to execute tcpdump.
 
 Switching back to an unprivileged user, listing capabilities with getcap:
-![[Pasted image 20260214134222.png]]
+![Pasted image 20260214134222](/VaultSite/wiki-images/Pasted%20image%2020260214134222.png)
 Now tcpdump executes successfully:
-![[Pasted image 20260214134354.png]]
+![Pasted image 20260214134354](/VaultSite/wiki-images/Pasted%20image%2020260214134354.png)
 
 
 # 🛡️ Linux Capabilities: Privilege Escalation

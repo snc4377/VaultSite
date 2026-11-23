@@ -20,22 +20,22 @@ If the password stored in the system is also stored as an integer (instead of as
 
 **LAB**  
 For this lab, we created a PHP code for our page's login:  
-![[Pasted image 20260127164657.png]]
+![Pasted image 20260127164657](/VaultSite/wiki-images/Pasted%20image%2020260127164657.png)
 
 As attackers, what we'll do is change the data type being compared—in this case, a string with strcompare.  
 
 We'll open Burp Suite and attempt to send the password field as an array instead of a string:  
-![[Pasted image 20260127165325.png]]
+![Pasted image 20260127165325](/VaultSite/wiki-images/Pasted%20image%2020260127165325.png)
 
 We see that the password is currently a string, so we add `[]` to treat it as an array:  
-![[Pasted image 20260127165450.png]]
+![Pasted image 20260127165450](/VaultSite/wiki-images/Pasted%20image%2020260127165450.png)
 
 Let's test another, more robust case. Here, we can't leave fields empty, and the password is hashed in MD5:  
-![[Pasted image 20260127165530.png]]
+![Pasted image 20260127165530](/VaultSite/wiki-images/Pasted%20image%2020260127165530.png)
 
 The MD5-hashed password would be equivalent to `0` raised to some power, which when translated to plaintext gives `aabg7XSs`. If we try entering another password that, when hashed in MD5, results in `0` raised to some power—like `QNKCDZ0`:  
-![[Pasted image 20260127170309.png]]  
+![Pasted image 20260127170309](/VaultSite/wiki-images/Pasted%20image%2020260127170309.png)  
 It still lets us in:  
-![[Pasted image 20260127170331.png]]  
+![Pasted image 20260127170331](/VaultSite/wiki-images/Pasted%20image%2020260127170331.png)  
 
 In the code, this is easily sanitized by using `===` instead of `==`. 

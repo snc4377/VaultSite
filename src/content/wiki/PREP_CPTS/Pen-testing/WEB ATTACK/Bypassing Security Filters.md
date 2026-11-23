@@ -40,9 +40,9 @@ http://SERVER_IP:PORT/
 ![File Manager with input for 'New File Name', 'Reset' button, and links to 'file2', 'notes.txt', 'test', and 'file1'](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/134/web_attacks_verb_tampering_after_filter_bypass.jpg)
 
 This shows that we successfully bypassed the filter through an HTTP Verb Tampering vulnerability and achieved command injection. Without the HTTP Verb Tampering vulnerability, the web application may have been secure against Command Injection attacks, and this vulnerability allowed us to bypass the filters in place altogether.
-![[Pasted image 20261026155523.png]]
+![Pasted image 20261026155523](/VaultSite/wiki-images/Pasted%20image%2020261026155523.png)
 
 Change the request method to POST  and forward the request 
-![[Pasted image 20261026155608.png]]
-![[Pasted image 20261026155634.png]]
+![Pasted image 20261026155608](/VaultSite/wiki-images/Pasted%20image%2020261026155608.png)
+![Pasted image 20261026155634](/VaultSite/wiki-images/Pasted%20image%2020261026155634.png)
 

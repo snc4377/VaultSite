@@ -16,13 +16,13 @@ Steps for pivoting:
 Open Metasploit on the attacker machine.
 
 Use the multi/handler exploit
-![[Pasted image 20260404170354.png]]
+![Pasted image 20260404170354](/VaultSite/wiki-images/Pasted%20image%2020260404170354.png)
 Once inside, we need to set the parameters requested in `show options`, which are our machine's IP and the listening port.
-![[Pasted image 20260404170500.png]]
+![Pasted image 20260404170500](/VaultSite/wiki-images/Pasted%20image%2020260404170500.png)
 Now we need to specify the payload module used, which is the one we created with msfvenom for the reverse shell.
-![[Pasted image 20260404170632.png]]
+![Pasted image 20260404170632](/VaultSite/wiki-images/Pasted%20image%2020260404170632.png)
 This reverse shell must be uploaded to the victim machine. Typically, we first gain access to the machine through other methods, then set up an HTTP server on our attacker machine and download the file using wget or certutil.exe in Windows.
-![[Pasted image 20260404170856.png]]
+![Pasted image 20260404170856](/VaultSite/wiki-images/Pasted%20image%2020260404170856.png)
 
 Once the payload is on the victim machine and everything is configured in Metasploit, we simply need to set Metasploit to listen by running `run` and execute the reverse shell on the victim.
 

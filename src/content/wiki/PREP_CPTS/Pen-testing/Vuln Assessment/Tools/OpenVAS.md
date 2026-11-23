@@ -7,7 +7,7 @@ This is the English version of your OpenVAS (GVM) guide, optimized for your webs
 **OpenVAS** (Open Vulnerability Assessment System) is a powerful, full-featured vulnerability scanner and a core component of the **Greenbone Vulnerability Manager (GVM)**. It is the leading open-source alternative to proprietary scanners, allowing security professionals to perform both authenticated and unauthenticated testing across networks and servers.
 
 Unlike other tools, OpenVAS is completely free and integrated directly into the Kali Linux repositories.
-![[Pasted image 20260428175940.png]]
+![Pasted image 20260428175940](/VaultSite/wiki-images/Pasted%20image%2020260428175940.png)
 
 ---
 
@@ -142,17 +142,17 @@ UPDATE pg_database SET datistemplate = TRUE WHERE datname = 'template0';
 ### Running Your First Scan
 
 After logging into the web interface (`https://localhost:9392`), follow these steps:
-![[Pasted image 20260428180414.png]]
+![Pasted image 20260428180414](/VaultSite/wiki-images/Pasted%20image%2020260428180414.png)
 1. **Check Feed Status:** Navigate to **Administration > Feed Status**. Do not start a scan until the status is **Current**.
-    ![[Pasted image 20260428180441.png]]
-    ![[Pasted image 20260428180454.png]]
+    ![Pasted image 20260428180441](/VaultSite/wiki-images/Pasted%20image%2020260428180441.png)
+    ![Pasted image 20260428180454](/VaultSite/wiki-images/Pasted%20image%2020260428180454.png)
     
 2. **Add a Target:** * Go to **Configuration > Targets**.
     
     - Click the "New Target" icon.
         
     - Enter the IP/Range. To scan all ports, use: `T:1-65535,U:1-65535`.
-        ![[Pasted image 20260428180512.png]]
+        ![Pasted image 20260428180512](/VaultSite/wiki-images/Pasted%20image%2020260428180512.png)
 1. **Create a Task:**
     
     - Go to **Scans > Tasks**.
@@ -160,4 +160,4 @@ After logging into the web interface (`https://localhost:9392`), follow these st
     - Create a "New Task" and link it to the Target you just created.
         
     - Select your **Scan Config** (e.g., _Full and Fast_).
-        ![[Pasted image 20260428180528.png]]
+        ![Pasted image 20260428180528](/VaultSite/wiki-images/Pasted%20image%2020260428180528.png)
