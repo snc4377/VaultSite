@@ -1,6 +1,11 @@
+---
+title: "1 External Recon And Enumeration Principles"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "1 - External Recon and Enumeration Principles"]
+---
 
 
-***
+
+---
 
 Before kicking off any pentest, it can be beneficial to perform `external reconnaissance` of your target. This can serve many different functions, such as:
 

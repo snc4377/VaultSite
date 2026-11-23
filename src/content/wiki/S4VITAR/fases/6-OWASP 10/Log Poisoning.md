@@ -1,3 +1,8 @@
+---
+title: "Log Poisoning"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Log Poisoning"]
+---
+
 **LCI -> RCE**  
 **Log Poisoning** is an attack technique where an attacker **manipulates** **log files** to achieve a malicious outcome. This technique can be combined with an **LFI** vulnerability to achieve **remote command execution** on the server.
 

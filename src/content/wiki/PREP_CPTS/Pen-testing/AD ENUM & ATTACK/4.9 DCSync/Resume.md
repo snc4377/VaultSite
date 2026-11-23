@@ -1,3 +1,8 @@
+---
+title: "Resume"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "4.9 DCSync", "Resume"]
+---
+
 # DCSync and Golden Tickets
 
 ## 🔑 Core Idea

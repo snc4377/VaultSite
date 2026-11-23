@@ -1,3 +1,8 @@
+---
+title: "MSFVENOM"
+category: ["PREP_CPTS", "Pen-testing", "MSFVENOM"]
+---
+
 # Encoders
 
 ---

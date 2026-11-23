@@ -1,3 +1,8 @@
+---
+title: "Jenkins"
+category: ["PREP_CPTS", "Pen-testing", "Attack Common apps", "Servlet containers", "Jenkins"]
+---
+
 ## Discovery/Footprinting
 
 Let's assume we are working on an internal penetration test and have completed our web discovery scans. We notice what we believe is a Jenkins instance and know it is often installed on Windows servers running as the all-powerful SYSTEM account. If we can gain access via Jenkins and gain remote code execution as the SYSTEM account, we would have a foothold in Active Directory to begin enumeration of the domain environment.

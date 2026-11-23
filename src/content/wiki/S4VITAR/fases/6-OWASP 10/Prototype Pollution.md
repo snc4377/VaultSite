@@ -1,3 +1,8 @@
+---
+title: "Prototype Pollution"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Prototype Pollution"]
+---
+
 The **Prototype Pollution** attack is a technique that exploits vulnerabilities in JavaScript object implementations. This attack method is used to modify the "**prototype**" property of an object in a web application, which may allow an attacker to execute malicious code or manipulate the application's data.
 
 In JavaScript, the "prototype" property is used to define an object's properties and methods. Attackers can exploit this JavaScript feature to modify an object's properties and methods and take control of the application.

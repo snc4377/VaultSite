@@ -1,3 +1,8 @@
+---
+title: "Dorking"
+category: ["PREP_CPTS", "Pen-testing", "information gathering", "Google Dork", "Dorking"]
+---
+
 Search operators are like search engines' secret codes. These special commands and modifiers unlock a new level of precision and control, allowing you to pinpoint specific types of information amidst the vastness of the indexed web.
 
 While the exact syntax may vary slightly between search engines, the underlying principles remain consistent. Let's delve into some essential and advanced search operators:

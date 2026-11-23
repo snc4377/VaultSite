@@ -1,3 +1,8 @@
+---
+title: "Secuestro De La Biblioteca De Objetos Compartidos Enlazados Dinámicamente"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Secuestro de la biblioteca de objetos compartidos enlazados dinámicamente"]
+---
+
 **Shared libraries** are files that contain functions and resources used by multiple programs. When a program requires a function from a shared library, the operating system searches for the library and dynamically links the required function during program execution. However, if the system does not find the library in the default paths, it may search for it in other directories.
 
 An attacker can exploit this situation by creating a **malicious shared library** with the same name as the legitimate library and placing it in a directory where the system will search for it. When the program attempts to load the library, the system will load the malicious version instead of the legitimate one, allowing the attacker to execute malicious code with the privileges of the victim program.

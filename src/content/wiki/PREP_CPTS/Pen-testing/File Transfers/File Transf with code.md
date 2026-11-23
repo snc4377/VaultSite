@@ -1,3 +1,8 @@
+---
+title: "File Transf With Code"
+category: ["PREP_CPTS", "Pen-testing", "File Transfers", "File Transf with code"]
+---
+
 # Transferring Files with Code
 
 ---

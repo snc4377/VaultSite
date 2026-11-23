@@ -1,3 +1,8 @@
+---
+title: "SPN Attribute"
+category: ["PREP_CPTS", "Pen-testing", "Active Directory", "SPN  attribute"]
+---
+
 **Key Concept:** The Kerberoasting attack exploits legitimate Active Directory features to obtain service account passwords without raising suspicion.
 
 ### 1. What is an SPN (Service Principal Name)?

@@ -1,3 +1,8 @@
+---
+title: "Credential Hunting In Network Traffic"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "Linux", "Credential Hunting in Network Traffic"]
+---
+
 In today's security-conscious world, most applications wisely use TLS to encrypt sensitive data in transit. However, not all environments are fully secured. Legacy systems, misconfigured services, or test applications launched without HTTPS can still result in the use of unencrypted protocols such as HTTP or SNMP. These gaps present a valuable opportunity for attackers: `the chance to hunt for credentials in cleartext network traffic`. In this section, we'll explore practical techniques for identifying exposed information, such as usernames and passwords within common plaintext protocols using Wireshark. We'll also take a brief look at [Pcredz](https://github.com/lgandx/PCredz), a tool that can quickly scan network traffic for such data.
 
 The table below lists several common protocols alongside their encrypted counterparts. While it is now more common to encounter the secure versions, there was a time when plaintext protocols were widely used.

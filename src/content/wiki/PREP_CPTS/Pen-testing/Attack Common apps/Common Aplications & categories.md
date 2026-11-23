@@ -1,3 +1,8 @@
+---
+title: "Common Aplications & Categories"
+category: ["PREP_CPTS", "Pen-testing", "Attack Common apps", "Common Aplications & categories"]
+---
+
 Categories of applications https://enlyft.com/tech/ 
 
 |**Category**|**Applications**|

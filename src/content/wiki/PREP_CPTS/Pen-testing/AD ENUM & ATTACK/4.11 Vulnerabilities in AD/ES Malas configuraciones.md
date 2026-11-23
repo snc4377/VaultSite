@@ -1,3 +1,8 @@
+---
+title: "ES Malas Configuraciones"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "4.11 Vulnerabilities in AD", "ES Malas configuraciones"]
+---
+
 There are many other interesting attacks and misconfigurations we may encounter during an assessment. A broad knowledge of AD's intricacies will help us think creatively and uncover issues others would likely overlook.
 
 ---

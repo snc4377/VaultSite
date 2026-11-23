@@ -1,3 +1,8 @@
+---
+title: "+ Tecnicas Audit AD"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "+ Tecnicas audit AD"]
+---
+
 Alongside the discussion on hardening an AD domain, we wanted to talk about `AD auditing`. We aim to provide our clients with as much information as possible to help address potential issues we find. Doing so will give them more data to demonstrate they have a problem and help secure backing and funding to address those fixes. The tools in this section can be used to provide different visualizations and data outputs for this purpose.
 
 ---

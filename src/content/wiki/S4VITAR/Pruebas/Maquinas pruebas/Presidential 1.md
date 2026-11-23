@@ -1,3 +1,8 @@
+---
+title: "Presidential 1"
+category: ["S4VITAR", "Pruebas", "Maquinas pruebas", "Presidential 1"]
+---
+
 We performed an nmap scan with -sS on all ports of the machine  
 ![Pasted image 20260313154237](/VaultSite/wiki-images/Pasted%20image%2020260313154237.png)
 

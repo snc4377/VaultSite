@@ -1,3 +1,8 @@
+---
+title: "Fuzzing LFI"
+category: ["PREP_CPTS", "Pen-testing", "LFI", "Fuzzing LFI"]
+---
+
 It is essential to understand how file inclusion attacks work and how we can manually craft advanced payloads and use custom techniques to achieve remote code execution. This is because, in many cases, exploiting the vulnerability may require a custom payload that matches its specific configurations. Additionally, when dealing with security measures like a WAF (web application firewall) or a firewall, we must apply our knowledge to identify how a specific payload/character is being blocked and attempt to craft a custom payload to bypass it.
 
 We may not need to manually exploit the LFI vulnerability in many trivial cases. There are many automated methods that can help us quickly identify and exploit trivial LFI vulnerabilities. We can use fuzzing tools to test a large list of common LFI payloads and see if any of them work, or we can use specialized LFI tools to search for such vulnerabilities. This is what we will discuss in this section.

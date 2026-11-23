@@ -1,3 +1,8 @@
+---
+title: "3 OSINT"
+category: ["S4VITAR", "hackin first steps", "3-OSINT"]
+---
+
 # OSINT
 How to perform phishing 
 -----

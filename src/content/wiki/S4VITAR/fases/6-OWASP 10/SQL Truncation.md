@@ -1,3 +1,8 @@
+---
+title: "SQL Truncation"
+category: ["S4VITAR", "fases", "6-OWASP 10", "SQL Truncation"]
+---
+
 The **SQL truncation attack**, also known as **SQL Truncation**, is an attack technique where an attacker attempts to **truncate** or **cut** an SQL query to perform malicious actions on a **database**.
 
 A common example of this attack occurs when a web application has an input field with length limitations, such as for email, and fails to properly validate input data.

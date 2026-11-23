@@ -1,3 +1,8 @@
+---
+title: "SSRF"
+category: ["S4VITAR", "fases", "6-OWASP 10", "SSRF"]
+---
+
 **Server-Side Request Forgery** (**SSRF**) is a security vulnerability in which an attacker can force a web server to make HTTP requests on their behalf.
 
 In an SSRF attack, the attacker uses a user input, such as a URL or form field, to send an HTTP request to a web server. The attacker manipulates the request to target a vulnerable server or an internal network that the web server has access to.

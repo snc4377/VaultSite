@@ -1,3 +1,8 @@
+---
+title: "Install & Config"
+category: ["HOMELAB", "Hermes Agent", "Install & Config"]
+---
+
 First of all, let's go to https://community-scripts.org/scripts and search for the Hermes agent to install it in a Proxmox LXC container  
 ![Pasted image 20261110184042](/VaultSite/wiki-images/Pasted%20image%2020261110184042.png)  
 ```bash

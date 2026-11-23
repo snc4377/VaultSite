@@ -1,3 +1,8 @@
+---
+title: "Python Ataque De Deserializacion Yaml"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Python-Ataque de Deserializacion Yaml"]
+---
+
 A **YAML Deserialization Attack** (**DES-Yaml**) is a type of vulnerability that can occur in Python applications using [[YAML-Yet Another Markup Language-]] for object serialization and deserialization.
 
 The vulnerability arises when an attacker can control the YAML input passed to a deserialization function in the application. If the application code does not properly validate the YAML input, it may allow an attacker to inject malicious code into the deserialized object.

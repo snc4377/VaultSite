@@ -1,3 +1,8 @@
+---
+title: "TTY TREATMENT"
+category: ["PREP_CPTS", "Pen-testing", "TTY TREATMENT"]
+---
+
 
 Here is the translation of your notes into English, optimized for your Obsidian vault with clear formatting and technical terminology.
 

@@ -1,3 +1,8 @@
+---
+title: "Intercambio De Recursos De Origen Cruzado (CORS)"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Intercambio de recursos de origen cruzado (CORS)"]
+---
+
 **Cross-Origin Resource Sharing (CORS)** is a mechanism that allows a web server to **restrict access to resources** from **different origins**, meaning different domains or protocols. CORS is used to protect user privacy and security by preventing other websites from accessing sensitive information without permission.
 
 Suppose we have a web application on the domain "**example.com**" that uses a web API on the domain "**api.example.com**" to retrieve data. If the web application is properly configured for CORS, it will only allow cross-origin requests from the domain "**example.com**" to the API on "**api.example.com**". If a request is made from a different domain, such as "**attacker.com**", the request will be blocked by the web browser.

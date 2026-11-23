@@ -1,3 +1,8 @@
+---
+title: "SQL aTTACK"
+category: ["PREP_CPTS", "Pen-testing", "Attacking Common Services", "SQL aTTACK"]
+---
+
 [MySQL](https://www.mysql.com/) and [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-2019) (`MSSQL`) are [relational database](https://en.wikipedia.org/wiki/Relational_database) management systems that store data in tables, columns, and rows. Many relational database systems like MSSQL & MySQL use the [Structured Query Language](https://en.wikipedia.org/wiki/SQL) (`SQL`) for querying and maintaining the database.
 
 Databases hosts are considered to be high targets since they are responsible for storing all kinds of sensitive data, including, but not limited to, user credentials, `Personal Identifiable Information (PII)`, business-related data, and payment information. In addition, those services often are configured with highly privileged users. If we gain access to a database, we may be able to leverage those privileges for more actions, including lateral movement and privilege escalation.

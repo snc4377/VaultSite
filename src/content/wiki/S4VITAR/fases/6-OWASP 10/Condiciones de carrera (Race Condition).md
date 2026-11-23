@@ -1,3 +1,8 @@
+---
+title: "Condiciones De Carrera (Race Condition)"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Condiciones de carrera (Race Condition)"]
+---
+
 **Race conditions** (also known as **Race Condition**) are a type of vulnerability that can occur in computer systems where two or more processes or execution threads compete for the same resources without a proper synchronization mechanism to control access to them.
 
 This means that if two processes attempt to access the same shared resource simultaneously, the output of one or both processes may become unpredictable, or even result in unintended system behavior.

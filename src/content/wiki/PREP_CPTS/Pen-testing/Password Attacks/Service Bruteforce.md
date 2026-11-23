@@ -1,3 +1,8 @@
+---
+title: "Service Bruteforce"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "Service Bruteforce"]
+---
+
 # Network Services
 
 During our penetration tests, every computer network we encounter will have services installed to manage, edit, or create content. All these services are hosted using specific permissions and are assigned to specific users. Apart from web applications, these services include (but are not limited to) `FTP`, `SMB`, `NFS`, `IMAP/POP3`, `SSH`, `MySQL/MSSQL`, `RDP`, `WinRM`, `VNC`, `Telnet`, `SMTP`, and `LDAP`.

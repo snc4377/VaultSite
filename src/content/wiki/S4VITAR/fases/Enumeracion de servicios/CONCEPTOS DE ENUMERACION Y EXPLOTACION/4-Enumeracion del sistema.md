@@ -1,3 +1,8 @@
+---
+title: "4 Enumeracion Del Sistema"
+category: ["S4VITAR", "fases", "Enumeracion de servicios", "CONCEPTOS DE ENUMERACION Y EXPLOTACION", "4-Enumeracion del sistema"]
+---
+
 This is done after we've compromised the system and gained access. Next, we perform system reconnaissance to identify flaws that allow privilege escalation. These tools are permitted in OSCP (lse).
 
 ###### LSE (Linux Smart Enumeration)

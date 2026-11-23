@@ -1,3 +1,8 @@
+---
+title: "OpenVAS"
+category: ["PREP_CPTS", "Pen-testing", "Vuln Assessment", "Tools", "OpenVAS"]
+---
+
 This is the English version of your OpenVAS (GVM) guide, optimized for your website. I have updated the terminal prompts to your username **5nch7344**, improved the technical flow, and organized the troubleshooting steps for better readability.
 
 ---

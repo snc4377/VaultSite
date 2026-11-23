@@ -1,3 +1,8 @@
+---
+title: "Abuso De Permisos Incorrectamente Implementados"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Abuso de permisos incorrectamente implementados"]
+---
+
 In Linux systems, files and directories have permissions that control access to them. Permissions are divided into three categories: owner, group, and others. Each category can have read, write, and execute permissions. A file's permissions can be modified by its owner or by the system superuser.
 
 Abuse of incorrectly implemented permissions occurs when a critical file's permissions are misconfigured, allowing an unauthorized user to access or modify the file. This can enable an attacker to read sensitive information, modify important files, execute malicious commands, or even gain superuser access to the system.

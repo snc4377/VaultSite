@@ -1,3 +1,8 @@
+---
+title: "Explotando Un Binario Para Reforzar"
+category: ["S4VITAR", "fases", "Buffer Overflow", "Explotando un  binario para reforzar"]
+---
+
 To reinforce everything learned so far in this section, in this class we will attempt to exploit another Buffer Overflow. The procedure we will apply is the same, although the initial phase and the way to establish connections in Python will change slightly.
 
 "The attacker does not need access to the victim's debugger. They only need an identical copy of the software to find the weaknesses in their own testing environment. Buffer overflow is a **code** vulnerability, not a **machine** one, so it is reproducible."

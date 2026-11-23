@@ -1,3 +1,8 @@
+---
+title: "WHOIS LookUp"
+category: ["PREP_CPTS", "Pen-testing", "information gathering", "Passive", "WHOIS LookUp"]
+---
+
 Whois is a network protocol used to look up information about a domain, IP address, or block of IP addresses in a public database. Information obtainable through a Whois query includes the domain owner's name, contact information, registration date, expiration date, and associated domain name servers.
 
 **Why is WhoIs Important** 

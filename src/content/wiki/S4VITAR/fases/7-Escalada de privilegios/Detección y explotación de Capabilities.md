@@ -1,3 +1,8 @@
+---
+title: "Detección Y Explotación De Capabilities"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Detección y explotación de Capabilities"]
+---
+
 Note title: Untitled
 
 https://www.youtube.com/watch?v=_lo2dTYwZG8

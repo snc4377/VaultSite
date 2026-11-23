@@ -1,3 +1,8 @@
+---
+title: "Virtual Host"
+category: ["PREP_CPTS", "Pen-testing", "information gathering", "Active", "Virtual Host"]
+---
+
 # Virtual Host (vHost) Enumeration
 
 > [!info] Concept

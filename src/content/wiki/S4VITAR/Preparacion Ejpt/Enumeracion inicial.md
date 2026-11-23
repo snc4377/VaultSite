@@ -1,3 +1,8 @@
+---
+title: "Enumeracion Inicial"
+category: ["S4VITAR", "Preparacion Ejpt", "Enumeracion inicial"]
+---
+
 Note title: Untitled
 
 nmaIt's very important to create folders to keep everything organized by machines, and we'll use https://excalidraw.com/ to organize a diagram or draw.io

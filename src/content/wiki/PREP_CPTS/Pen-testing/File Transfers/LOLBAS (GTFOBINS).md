@@ -1,3 +1,8 @@
+---
+title: "LOLBAS (GTFOBINS)"
+category: ["PREP_CPTS", "Pen-testing", "File Transfers", "LOLBAS (GTFOBINS)"]
+---
+
 # Living off The Land
 
 ---

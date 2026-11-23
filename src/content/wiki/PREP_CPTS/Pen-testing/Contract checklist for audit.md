@@ -1,3 +1,8 @@
+---
+title: "Contract Checklist For Audit"
+category: ["PREP_CPTS", "Pen-testing", "Contract checklist for audit"]
+---
+
 ## Pre-Engagement Meeting
 
 Once we have an initial idea of the client's project requirements, we can move on to the `pre-engagement meeting`. This meeting discusses all relevant and essential components with the customer before the penetration test, explaining them to our customer. The information we gather during this phase, along with the data collected from the scoping questionnaire, will serve as inputs to the `Penetration Testing Proposal`, also known as the `Contract` or `Scope of Work` (`SoW`). We can think of the whole process as a visit to the doctor to inform ourselves regarding the planned examinations. This phase typically occurs via e-mail and during an online conference call or in-person meeting.

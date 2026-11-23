@@ -1,3 +1,8 @@
+---
+title: "GraphQL Introspection, Mutations E IDORs"
+category: ["S4VITAR", "fases", "6-OWASP 10", "GraphQL Introspection, Mutations e IDORs"]
+---
+
 **GraphQL** is a query language for **APIs** (**Application Programming Interfaces**) that has become increasingly popular in recent years. Unlike traditional APIs with fixed endpoints, GraphQL allows clients to request only the information they need and receive a customized response based on their requirements.
 
 **Introspection** in GraphQL is a mechanism that enables clients to **retrieve information** about a GraphQL API's schema. This means clients can explore and discover the data types, fields, and relationships available in the API, which is highly useful for developers building GraphQL clients. However, attackers can also leverage introspection to gather sensitive information about the API's structure and data, which can be used to carry out more sophisticated attacks.

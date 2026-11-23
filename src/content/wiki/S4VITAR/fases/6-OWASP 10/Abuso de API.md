@@ -1,3 +1,8 @@
+---
+title: "Abuso De API"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Abuso de API"]
+---
+
 When we talk about API abuse, we're referring to the exploitation of vulnerabilities in **Application Programming Interfaces (APIs)** used to enable communication and data exchange between different applications and services on a network.
 
 A simple example of an API could be the integration of Google Maps into a transportation app. Imagine a transportation app that needs to display a map and route so users can see the vehicle's location and the path to their destination. Instead of creating its own map, the app could use the Google Maps API to display the map within its interface.

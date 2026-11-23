@@ -1,3 +1,8 @@
+---
+title: "Que Es Buffer Overflow Y Laboratorio"
+category: ["S4VITAR", "fases", "Buffer Overflow", "Que es buffer Overflow y laboratorio"]
+---
+
 **Buffer overflow** is a common software vulnerability that can allow an attacker to execute malicious code or take control of a compromised system.
 
 This vulnerability occurs when a program attempts to store **more data** in a **buffer** (temporary memory area for data storage) than was allocated, and when exceeding the buffer's capacity, the extra data is written to adjacent memory areas.

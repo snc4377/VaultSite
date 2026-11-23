@@ -1,3 +1,8 @@
+---
+title: "Blind Data Ex"
+category: ["PREP_CPTS", "Pen-testing", "WEB ATTACK", "XXE", "Blind Data Ex"]
+---
+
 ## Out-of-band Data Exfiltration
 
  For cases where we did not receive any output containing any of our XML input entities, we can utilize a method known as `Out-of-band (OOB) Data Exfiltration`, which is often used in similar blind cases with many web attacks, like blind SQL injections, blind command injections, blind XSS, and of course, blind XXE. Both the [Cross-Site Scripting (XSS)](https://academy.hackthebox.com/course/preview/cross-site-scripting-xss) and the [Whitebox Pentesting 101: Command Injections](https://academy.hackthebox.com/course/preview/whitebox-pentesting-101-command-injection) modules discussed similar attacks, and here we will utilize a similar attack, with slight modifications to fit our XXE vulnerability.

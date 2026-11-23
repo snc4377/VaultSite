@@ -1,3 +1,8 @@
+---
+title: "CHECLIST DE AUDITORIA"
+category: ["S4VITAR", "fases", "CHECLIST DE AUDITORIA"]
+---
+
 Note title: Untitled
 
 - [ ] Perform reconnaissance (Content management systems (their APIs, their versions), services and their versions, technologies, etc.)

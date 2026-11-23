@@ -1,3 +1,8 @@
+---
+title: "5 Reverse Shells , Bind Shells ,Forward Shells"
+category: ["S4VITAR", "fases", "Enumeracion de servicios", "CONCEPTOS DE ENUMERACION Y EXPLOTACION", "5-Reverse Shells , Bind Shells ,Forward Shells"]
+---
+
 Note title: Untitled
 
 Normally, what we aim for with a shell is to send an interactive console from the victim machine to our attacking machine. There are different ways to achieve this.  

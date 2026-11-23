@@ -1,3 +1,8 @@
+---
+title: "Pass The Ticket (PtT) Linux"
+category: ["PREP_CPTS", "Pen-testing", "Lateral Movement", "Pass the Ticket (PtT) Linux"]
+---
+
 # Pass the Ticket (PtT) from Linux
 
 Although not common, Linux computers can connect to Active Directory to provide centralized identity management and integrate with the organization's systems, giving users the ability to have a single identity to authenticate on Linux and Windows computers.

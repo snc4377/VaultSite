@@ -1,3 +1,8 @@
+---
+title: "IDOR Identification"
+category: ["PREP_CPTS", "Pen-testing", "WEB ATTACK", "IDOR", "IDOR identification"]
+---
+
 
 https://www.youtube.com/watch?v=WjDVFJobYTY
 

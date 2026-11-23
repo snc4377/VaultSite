@@ -1,6 +1,11 @@
+---
+title: "Phishing"
+category: ["PREP_CPTS", "Pen-testing", "XSS", "Phishing"]
+---
 
 
-***
+
+---
 
 Another very common type of XSS attack is a phishing attack. Phishing attacks usually utilize legitimate-looking information to trick the victims into sending their sensitive information to the attacker. A common form of XSS phishing attacks is through injecting fake login forms that send the login details to the attacker's server, which may then be used to log in on behalf of the victim and gain control over their account and sensitive information.
 

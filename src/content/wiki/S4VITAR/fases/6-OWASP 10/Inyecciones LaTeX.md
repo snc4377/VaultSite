@@ -1,3 +1,8 @@
+---
+title: "Inyecciones LaTeX"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Inyecciones LaTeX"]
+---
+
 **LaTeX injections** are a type of attack that exploits vulnerabilities in web applications that allow users to input **formatted text** in LaTeX. LaTeX is a typesetting system commonly used in academic and scientific writing.
 
 LaTeX injection attacks occur when an attacker inputs malicious LaTeX code into a text input field that is then processed by a web application. The LaTeX code can be designed to exploit vulnerabilities in the application and **execute malicious code** on the server.

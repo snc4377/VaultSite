@@ -1,3 +1,8 @@
+---
+title: "Weevely(Linux) & SharPyShell(Win)"
+category: ["PREP_CPTS", "Pen-testing", "shells", "WebShells", "Weevely(Linux) & SharPyShell(Win)"]
+---
+
 
 # Weevely3(Linux)
 https://github.com/epinna/weevely3

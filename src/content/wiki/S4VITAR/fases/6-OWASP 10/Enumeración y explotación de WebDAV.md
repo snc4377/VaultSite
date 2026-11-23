@@ -1,3 +1,8 @@
+---
+title: "Enumeración Y Explotación De WebDAV"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Enumeración y explotación de WebDAV"]
+---
+
 **WebDAV** (**Web Distributed Authoring and Versioning**) is an extension of the HTTP protocol that allows users to **access** and **manipulate** **files** on a web server through a secure connection.
 
 When we talk about enumerating a WebDAV server, we refer to the process of gathering information about the available resources on the WebDAV server. Attackers can use WebDAV enumeration tools to search for protected resources on the server, such as configuration files, passwords, and other sensitive data. The information collected during enumeration can be used by attackers to plan more sophisticated attacks against the server.

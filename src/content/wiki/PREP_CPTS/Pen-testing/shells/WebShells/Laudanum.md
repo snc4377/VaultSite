@@ -1,3 +1,8 @@
+---
+title: "Laudanum"
+category: ["PREP_CPTS", "Pen-testing", "shells", "WebShells", "Laudanum"]
+---
+
 
 # Laudanum, One Webshell to Rule Them All
 

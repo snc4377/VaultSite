@@ -1,3 +1,8 @@
+---
+title: "WHERE Clause"
+category: ["S4VITAR", "Hacking web avanzado(Labs PortSwigger)", "SQLi Mas a fondo", "WHERE clause"]
+---
+
 The application executes an SQL query that searches for products in a specific category that are already published. The goal is to alter this logic to also view unpublished products.
 
 To achieve this, we intercept the request sending the selected category and modify its value by adding an '**OR 1=1**' condition, which forces the query to return all products regardless of their published status. Additionally, a trailing comment is used to ignore the remainder of the original query.

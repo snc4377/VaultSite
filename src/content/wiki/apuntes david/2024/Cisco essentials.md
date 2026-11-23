@@ -1,3 +1,8 @@
+---
+title: "Cisco Essentials"
+category: ["apuntes david", "2024", "Cisco essentials"]
+---
+
 ![Pasted image 20240710162024](/VaultSite/wiki-images/Pasted%20image%2020240710162024.png)
 - **Confidentiality** is a set of rules that prevents sensitive information from being disclosed to unauthorized individuals, resources, and processes. Methods used to ensure confidentiality include **data encryption**, **authentication**, and **access control**.
   

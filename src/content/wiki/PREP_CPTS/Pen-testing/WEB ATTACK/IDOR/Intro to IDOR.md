@@ -1,3 +1,8 @@
+---
+title: "Intro To IDOR"
+category: ["PREP_CPTS", "Pen-testing", "WEB ATTACK", "IDOR", "Intro to IDOR"]
+---
+
 **Key Concepts:**
 
 - **Insecure Direct Object Reference (IDOR):** This is a vulnerability where a web application exposes a direct link or reference to an internal object, like a file or a database entry (e.g., `download.php?file_id=123`). An attacker can manipulate this reference (e.g., change `123` to `124`) to access resources they shouldn't have permission to see or modify.

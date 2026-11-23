@@ -1,3 +1,8 @@
+---
+title: "Tomcat"
+category: ["PREP_CPTS", "Pen-testing", "Attack Common apps", "Servlet containers", "Tomcat"]
+---
+
 ## Discovery/Footprinting
 
 During our external penetration test, we run EyeWitness and see one host listed under "High Value Targets." The tool believes the host is running Tomcat, but we must confirm to plan our attacks. If we are dealing with Tomcat on the external network, this could be an easy foothold into the internal network environment.

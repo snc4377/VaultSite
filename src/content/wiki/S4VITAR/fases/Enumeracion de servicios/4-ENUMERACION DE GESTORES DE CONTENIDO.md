@@ -1,3 +1,8 @@
+---
+title: "4 ENUMERACION DE GESTORES DE CONTENIDO"
+category: ["S4VITAR", "fases", "Enumeracion de servicios", "4-ENUMERACION DE GESTORES DE CONTENIDO"]
+---
+
 WE NORMALLY USE WHATWEB TO KNOW WHAT WE'RE DEALING WITH FIRST
 #### WordPress
 **Example with s4vitar's course**

@@ -1,3 +1,8 @@
+---
+title: "Crear Documentos De Forense Despues De Un Indicente"
+category: ["S4VITAR", "hackin first steps", "Crear documentos de forense despues de un indicente"]
+---
+
 ![Pasted image 20250720165058](/VaultSite/wiki-images/Pasted%20image%2020250720165058.png)
 And if we do a `cat` we can see the contents of report.txt
 ![Pasted image 20250720165138](/VaultSite/wiki-images/Pasted%20image%2020250720165138.png)

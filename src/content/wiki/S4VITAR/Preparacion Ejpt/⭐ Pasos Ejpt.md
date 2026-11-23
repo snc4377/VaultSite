@@ -1,3 +1,8 @@
+---
+title: "⭐ Pasos Ejpt"
+category: ["S4VITAR", "Preparacion Ejpt", "⭐ Pasos Ejpt"]
+---
+
 Note title: Untitled
 
 https://github.com/iabdullah215/eJPT-CheatSheet

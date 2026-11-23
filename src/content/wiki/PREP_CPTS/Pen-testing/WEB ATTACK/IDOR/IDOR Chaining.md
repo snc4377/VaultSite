@@ -1,3 +1,8 @@
+---
+title: "IDOR Chaining"
+category: ["PREP_CPTS", "Pen-testing", "WEB ATTACK", "IDOR", "IDOR Chaining"]
+---
+
 Usually, a `GET` request to the API endpoint should return the details of the requested user, so we may try calling it to see if we can retrieve our user's details. We also notice that after the page loads, it fetches the user details with a `GET` request to the same API endpoint:
 ![HTTP GET request to /profile/api.php with headers including Host, User-Agent, and Cookie role=employee](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/134/web_attacks_idor_get_api.jpg)
 

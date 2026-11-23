@@ -1,3 +1,8 @@
+---
+title: "Abuso De Binarios Específicos"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Abuso de binarios específicos"]
+---
+
 Note title: Untitled
 
 In this class, we will analyze how to elevate our user privileges by exploiting two different binaries as illustrative examples.

@@ -1,3 +1,8 @@
+---
+title: "SPLUNK"
+category: ["PREP_CPTS", "Pen-testing", "Attack Common apps", "Net Monitoring tools", "SPLUNK"]
+---
+
 ## Discovery/Footprinting
 
 Splunk is prevalent in internal networks and often runs as root on Linux or SYSTEM on Windows systems. While uncommon, we may encounter Splunk externally facing at times. Let's imagine that we uncover a forgotten instance of Splunk in our Aquatone report that has since automatically converted to the free version, which does not require authentication. Since we have yet to gain a foothold in the internal network, let's focus our attention on Splunk and see if we can turn this access into RCE.

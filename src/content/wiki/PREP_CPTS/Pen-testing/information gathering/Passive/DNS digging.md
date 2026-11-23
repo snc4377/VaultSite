@@ -1,3 +1,8 @@
+---
+title: "DNS Digging"
+category: ["PREP_CPTS", "Pen-testing", "information gathering", "Passive", "DNS digging"]
+---
+
 For the dns reconnaissance we hace a lot od tools for every scenary and this ones are the most popular and versatile in the arsenal of a web recon professional 
 
 |Tool|Key Features|Use Cases|

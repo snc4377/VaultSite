@@ -1,3 +1,8 @@
+---
+title: "Intercepting Requests"
+category: ["PREP_CPTS", "Pen-testing", "Web Proxies", "TypesofTraffic & ALTER", "Intercepting requests"]
+---
+
 Now that we have set up our proxy, we can use it to intercept and manipulate various HTTP requests sent by the web application we are testing. We'll start by learning how to intercept web requests, change them, and then send them through to their intended destination.
 
 ---

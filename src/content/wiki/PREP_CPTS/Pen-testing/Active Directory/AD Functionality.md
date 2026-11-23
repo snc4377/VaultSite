@@ -1,3 +1,8 @@
+---
+title: "AD Functionality"
+category: ["PREP_CPTS", "Pen-testing", "Active Directory", "AD Functionality"]
+---
+
 There are five Flexible Single Master Operation (FSMO) roles. These roles can be defined as follows:
 
 | **Roles**                  | **Description**                                                                                                                                                                                                                                                                                                    |

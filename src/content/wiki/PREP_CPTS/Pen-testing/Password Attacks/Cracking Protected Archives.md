@@ -1,3 +1,8 @@
+---
+title: "Cracking Protected Archives"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "Cracking Protected Archives"]
+---
+
 # Cracking Protected Archives
 
 Besides standalone files, we will often run across `archives` and `compressed files`—such as ZIP files—which are protected with a password.

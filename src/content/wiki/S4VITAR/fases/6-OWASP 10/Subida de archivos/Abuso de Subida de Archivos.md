@@ -1,3 +1,8 @@
+---
+title: "Abuso De Subida De Archivos"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Subida de archivos", "Abuso de Subida de Archivos"]
+---
+
 File upload abuse is a type of attack that occurs when an attacker exploits vulnerabilities in web applications that allow users to **upload files** to the server. This type of attack is commonly known as a "**malicious file upload**" attack.
 
 In a malicious file upload attack, an attacker uploads a malicious file to a web application, which is then stored on the server. For example, if the attacker manages to upload a PHP file and the web server stores it, they could achieve remote command execution and take control of the server.

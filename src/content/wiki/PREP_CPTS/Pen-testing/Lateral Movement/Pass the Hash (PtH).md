@@ -1,3 +1,8 @@
+---
+title: "Pass The Hash (PtH)"
+category: ["PREP_CPTS", "Pen-testing", "Lateral Movement", "Pass the Hash (PtH)"]
+---
+
 A [Pass the Hash (PtH)](https://attack.mitre.org/techniques/T1550/002/) attack is a technique where an attacker uses a password hash instead of the plain text password for authentication. The attacker doesn't need to decrypt the hash to obtain a plaintext password. PtH attacks exploit the authentication protocol, as the password hash remains static for every session until the password is changed.
 
 As discussed in the previous sections, the attacker must have administrative privileges or particular privileges on the target machine to obtain a password hash. Hashes can be obtained in several ways, including:

@@ -1,3 +1,8 @@
+---
+title: "Automatic Modification"
+category: ["PREP_CPTS", "Pen-testing", "Web Proxies", "TypesofTraffic & ALTER", "Automatic Modification"]
+---
+
 We may want to apply certain modifications to all outgoing HTTP requests or all incoming HTTP responses in certain situations. In these cases, we can utilize automatic modifications based on rules we set, so the web proxy tools will automatically apply them.
 
 ---

@@ -1,3 +1,8 @@
+---
+title: "2 Initial Enumeration"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "2 - Initial enumeration"]
+---
+
 We are at the very beginning of our AD-focused penetration test against Inlanefreight. We have done some basic information gathering and gotten a picture of what to expect from the customer via the scoping documents.
 
 ---

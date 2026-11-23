@@ -1,3 +1,8 @@
+---
+title: "ES Kerberos Double Hop"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "4.7 KERBEROS", "ES - Kerberos Double Hop"]
+---
+
 There is a known issue called the "Double Hop" problem that arises when an attacker attempts to use Kerberos authentication across two (or more) hops. The issue refers to how Kerberos tickets are granted for specific resources. Kerberos tickets should not be considered as passwords. They are pieces of data signed by the KDC that indicate which resources an account can access. When we perform Kerberos authentication, we obtain a "ticket" that allows us to access the requested resource (i.e., a single machine). In contrast, when we use a password to authenticate, that NTLM hash is stored in our session and can be used elsewhere without issues.
 
 ---

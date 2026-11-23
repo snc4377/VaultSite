@@ -1,3 +1,8 @@
+---
+title: "Infrastructure"
+category: ["PREP_CPTS", "Pen-testing", "information gathering", "Passive", "Infrastructure"]
+---
+
 In the fast-paced digital world, websites come and go, leaving only fleeting traces of their existence behind. However, thanks to the [Internet Archive's Wayback Machine](https://web.archive.org/), we have a unique opportunity to revisit the past and explore the digital footprints of websites as they once were.
 
 ### What is the Wayback Machine?

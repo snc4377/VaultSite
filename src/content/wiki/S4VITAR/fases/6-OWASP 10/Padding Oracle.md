@@ -1,3 +1,8 @@
+---
+title: "Padding Oracle"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Padding Oracle"]
+---
+
 
 A padding oracle attack (**Padding Oracle Attack**) is a type of attack against encrypted data that allows the attacker to **decrypt** the data's content **without knowing the key**.
 

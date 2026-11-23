@@ -1,3 +1,8 @@
+---
+title: "Ataques De Asignación Masiva (Mass Asignment Attack) Parameter Binding"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Ataques de asignación masiva (Mass-Asignment Attack)  Parameter Binding"]
+---
+
 The mass assignment attack (**Mass Assignment Attack**) is based on manipulating input parameters in an HTTP request to create or modify fields in a data model object within the web application. Instead of adding new parameters, attackers attempt to exploit the functionality of existing parameters to modify fields that should not be user-accessible.
 
 For example, in a user management web application, a registration form may have fields for username, email, and password. However, if the application uses a library or framework that allows mass parameter assignment, an attacker could manipulate the HTTP request to add an additional parameter, such as the user's privilege level. This way, the attacker could register as a high-privilege user simply by adding an extra parameter to the HTTP request.

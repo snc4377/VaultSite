@@ -1,3 +1,8 @@
+---
+title: "3 Google Hacking"
+category: ["S4VITAR", "fases", "Reconocimiento", "3-google hacking"]
+---
+
 
 
 # Untitled

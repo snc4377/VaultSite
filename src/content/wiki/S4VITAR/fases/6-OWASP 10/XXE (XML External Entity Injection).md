@@ -1,3 +1,8 @@
+---
+title: "XXE (XML External Entity Injection)"
+category: ["S4VITAR", "fases", "6-OWASP 10", "XXE (XML External Entity Injection)"]
+---
+
 When we talk about **XML External Entity** (**XXE**) **Injection**, we're referring to a security vulnerability where an attacker can use malicious XML input to access system resources that would normally be unavailable, such as local files or network services. This vulnerability can be exploited in applications that use XML to process input, such as web applications or web services.
 
 An XXE attack typically involves injecting a malicious XML **entity** into an HTTP request, which is processed by the server and can result in the exposure of sensitive information. For example, an attacker could inject an XML entity referencing a file on the server's system and obtain confidential information from that file.

@@ -1,3 +1,8 @@
+---
+title: "Shell Theory"
+category: ["PREP_CPTS", "Pen-testing", "shells", "Shell theory"]
+---
+
 ## Why Get a Shell?
 
 Remember that the shell gives us direct access to the `OS`, `system commands`, and `file system`. So if we gain access, we can start enumerating the system for vectors that may allow us to escalate privileges, pivot, transfer files, and more. If we don't establish a shell session, we are pretty limited on how far we can get on a target machine.

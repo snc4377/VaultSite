@@ -1,3 +1,8 @@
+---
+title: "Funcionamiento Y Creación Manual De Shellcodes"
+category: ["S4VITAR", "fases", "Buffer Overflow", "Funcionamiento y creación manual de Shellcodes"]
+---
+
 # Shellcodes
 
 **Shellcodes** are small, highly optimized programs used to exploit security vulnerabilities and execute malicious code on a target machine. Shellcodes are typically written in **assembly language** to ensure fast and efficient execution.

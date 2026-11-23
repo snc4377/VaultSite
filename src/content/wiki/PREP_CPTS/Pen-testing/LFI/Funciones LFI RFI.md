@@ -1,3 +1,8 @@
+---
+title: "Funciones LFI RFI"
+category: ["PREP_CPTS", "Pen-testing", "LFI", "Funciones LFI RFI"]
+---
+
 The following table shows which functions can execute files and which only read file contents:
 
 |**Function**|**Reads content**|**Executes**|**Remote URL**|

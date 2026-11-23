@@ -1,3 +1,8 @@
+---
+title: "2 Asignación De Espacio Para El Shellcode"
+category: ["S4VITAR", "fases", "Buffer Overflow", "2 - Asignación de espacio para el Shellcode"]
+---
+
 Once the **offset** has been found and the value of the **EIP** register has been overwritten in a buffer overflow, the next step is to identify where in memory the characters entered in the input field are being represented.
 
 After overwriting the value of the EIP register, any additional characters we input into the field will be represented, as seen in Immunity Debugger, at the beginning of the **stack** in the **ESP** (**Extended Stack Pointer**) register. The ESP (Extended Stack Pointer) is a CPU register used to manage the stack in a program. The stack is a temporary memory area used to store values and **return addresses** of functions as they are called in the program.

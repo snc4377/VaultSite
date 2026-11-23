@@ -1,3 +1,8 @@
+---
+title: "Insecure Direct Object Reference (IDORs)"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Insecure Direct Object Reference (IDORs)"]
+---
+
 **Insecure Direct Object References (IDOR)** are a type of security vulnerability that occurs when a web application uses **internal identifiers** (such as numbers or names) to identify and access resources (like files or data) without properly validating the user's authorization to access them.
 
 For example, if a web application uses a numeric identifier to identify a record in a database, an attacker may attempt to guess this identifier and access the records without proper authorization. This can allow attackers to access confidential information, modify data, create unauthorized user accounts, and perform other malicious actions.

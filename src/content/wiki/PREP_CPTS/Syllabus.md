@@ -1,3 +1,8 @@
+---
+title: "Syllabus"
+category: ["PREP_CPTS", "Syllabus"]
+---
+
 |  **`Introduction`**                                                                |
 | ---------------------------------------------------------------------------------- |
 | 1. [Penetration Testing Process](https://academy.hackthebox.com/module/details/90) |

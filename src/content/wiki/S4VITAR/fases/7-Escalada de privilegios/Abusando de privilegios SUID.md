@@ -1,3 +1,8 @@
+---
+title: "Abusando De Privilegios SUID"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Abusando de privilegios SUID"]
+---
+
 It's important to note that for a file to grant root permissions via **SUID**, it doesn't matter who the user is, but rather the **file's physical permissions**. Unlike `sudo -l`, there's no list of names here; if the file has the "key" set, anyone who uses it becomes the owner.
 
 **For example:** We can have two users with no special permissions on the system, but if the `nmap` binary has the SUID bit enabled, **both** will be able to execute it with admin privileges and jump to a root shell. Here, the power lies not with the user, but with the file.

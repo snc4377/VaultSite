@@ -1,3 +1,8 @@
+---
+title: "Proxing Command Line Tools"
+category: ["PREP_CPTS", "Pen-testing", "Web Proxies", "TypesofTraffic & ALTER", "Proxing command line tools"]
+---
+
 An important aspect of using web proxies is enabling the interception of web requests made by command-line tools and thick client applications. This gives us transparency into the web requests made by these applications and allows us to utilize all of the different proxy features we have used with web applications.
 
 To route all web requests made by a specific tool through our web proxy tools, we have to set them up as the tool's proxy (i.e. `http://127.0.0.1:8080`), similarly to what we did with our browsers. Each tool may have a different method for setting its proxy, so we may have to investigate how to do so for each one.

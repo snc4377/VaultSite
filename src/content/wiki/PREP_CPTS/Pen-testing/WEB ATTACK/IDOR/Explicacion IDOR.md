@@ -1,3 +1,8 @@
+---
+title: "Explicacion IDOR"
+category: ["PREP_CPTS", "Pen-testing", "WEB ATTACK", "IDOR", "Explicacion IDOR"]
+---
+
 An **IDOR (Insecure Direct Object Reference)** or _Insecure Direct Object Reference_ occurs when a web application exposes an internal identifier (such as a user ID in the database or a filename) and **does not verify on the server (back-end)** whether the person making the request has actual permission to view or modify that resource.
 
 In short: the application blindly trusts the data sent by the user without verifying if that data belongs to them.

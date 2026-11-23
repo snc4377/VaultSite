@@ -1,3 +1,8 @@
+---
+title: "Prueba Laboratorio Eccpt"
+category: ["S4VITAR", "Pruebas", "Maquinas pruebas", "Prueba laboratorio eccpt"]
+---
+
 
 NOTE  
 For pivoting we use Ligolo-ng which is simpler and more direct, but Ligolo uses a TCP service so in real environments if a company has DPI or a deep inspection firewall it may block the tool. That's when we use chisel or socat since they work over websockets, making it very easy to mask them as normal traffic on port 443.  

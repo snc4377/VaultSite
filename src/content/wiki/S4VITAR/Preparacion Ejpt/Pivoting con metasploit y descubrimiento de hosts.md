@@ -1,3 +1,8 @@
+---
+title: "Pivoting Con Metasploit Y Descubrimiento De Hosts"
+category: ["S4VITAR", "Preparacion Ejpt", "Pivoting con metasploit y descubrimiento de hosts"]
+---
+
 Note title: Untitled
 
 First step upon accessing a machine and seeing it has a new network  

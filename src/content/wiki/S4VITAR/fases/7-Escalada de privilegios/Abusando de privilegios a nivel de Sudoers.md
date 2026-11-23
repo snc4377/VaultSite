@@ -1,3 +1,8 @@
+---
+title: "Abusando De Privilegios A Nivel De Sudoers"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Abusando de privilegios a nivel de Sudoers"]
+---
+
 
 It is worth noting that for a user to have root permissions on a file using `sudo -l`, it must be explicitly configured in the sudoers file. For example, we can have two users with the same permissions, but one can execute nmap with admin privileges while the other cannot.
 

@@ -1,3 +1,8 @@
+---
+title: "BurpSuite"
+category: ["S4VITAR", "fases", "Reconocimiento", "BurpSuite"]
+---
+
 With the Foxy Proxy add-on, we add the proxy 127.0.0.1:8080.
 
 ---

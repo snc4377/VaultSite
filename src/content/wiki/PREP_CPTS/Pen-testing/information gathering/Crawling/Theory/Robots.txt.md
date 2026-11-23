@@ -1,3 +1,8 @@
+---
+title: "Robots.txt"
+category: ["PREP_CPTS", "Pen-testing", "information gathering", "Crawling", "Theory", "Robots.txt"]
+---
+
 Imagine you're a guest at a grand house party. While you're free to mingle and explore, there might be certain rooms marked "Private" that you're expected to avoid. This is akin to how `robots.txt` functions in the world of web crawling. It acts as a virtual "`etiquette guide`" for bots, outlining which areas of a website they are allowed to access and which are off-limits.
 ## What is robots.txt?
 

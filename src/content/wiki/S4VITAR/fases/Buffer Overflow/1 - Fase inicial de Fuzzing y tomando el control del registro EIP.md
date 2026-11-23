@@ -1,3 +1,8 @@
+---
+title: "1 Fase Inicial De Fuzzing Y Tomando El Control Del Registro EIP"
+category: ["S4VITAR", "fases", "Buffer Overflow", "1 - Fase inicial de Fuzzing y tomando el control del registro EIP"]
+---
+
 Note title: Untitled
 
 In the initial phase of exploiting a buffer overflow, one of the first tasks is to determine the limits of the target program. This is done by testing the input of more characters than allowed in various input fields of the program, such as a text string or a file, until it is detected that the application becomes corrupted or crashes.

@@ -1,3 +1,8 @@
+---
+title: "5 PAYLOAD STAGED Y NON STAGED"
+category: ["S4VITAR", "fases", "Enumeracion de servicios", "CONCEPTOS DE ENUMERACION Y EXPLOTACION", "5-PAYLOAD STAGED Y NON-STAGED"]
+---
+
 
 
 

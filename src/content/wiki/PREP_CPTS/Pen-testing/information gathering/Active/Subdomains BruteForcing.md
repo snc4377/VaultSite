@@ -1,3 +1,8 @@
+---
+title: "Subdomains BruteForcing"
+category: ["PREP_CPTS", "Pen-testing", "information gathering", "Active", "Subdomains BruteForcing"]
+---
+
 It is an active and effective subdomain discovery technique that leverages predefined lists of potential subdomain names. This approach systematically tests these names against the target domain to identify valid subdomains. By using carefully crafted wordlists, you can significantly increase the efficiency and effectiveness of your subdomain discovery efforts.
 
 | Tool                                                    | Description                                                                                                                     |

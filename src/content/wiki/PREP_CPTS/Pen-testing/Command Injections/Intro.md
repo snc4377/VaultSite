@@ -1,3 +1,8 @@
+---
+title: "Intro"
+category: ["PREP_CPTS", "Pen-testing", "Command Injections", "Intro"]
+---
+
 There are many types of injections in web applications, depending on the type of web query being executed. The following are some of the most common types of injections:
 
 |Injection|Description|

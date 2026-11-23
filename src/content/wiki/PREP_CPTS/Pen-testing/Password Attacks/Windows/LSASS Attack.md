@@ -1,3 +1,8 @@
+---
+title: "LSASS Attack"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "Windows", "LSASS Attack"]
+---
+
 In addition to acquiring copies of the SAM database to extract and crack password hashes, we will also benefit from targeting the [Local Security Authority Subsystem Service (LSASS)](https://en.wikipedia.org/wiki/Local_Security_Authority_Subsystem_Service).  LSASS is a core Windows process responsible for enforcing security policies, handling user authentication, and storing sensitive credential material in memory.
 
 ![Diagram of Windows authentication process showing interactions between WinLogon.exe, lsass.exe, authentication packages, NTLM, and Kerberos.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/308/img/lsassexe_diagram.png)

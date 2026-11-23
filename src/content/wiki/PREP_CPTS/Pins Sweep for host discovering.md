@@ -1,3 +1,8 @@
+---
+title: "Pins Sweep For Host Discovering"
+category: ["PREP_CPTS", "Pins Sweep for host discovering"]
+---
+
 #### Ping Sweep
 
 `meterpreter > run post/multi/gather/ping_sweep RHOSTS=172.16.5.0/23 [*] Performing ping sweep for IP range 172.16.5.0/23`

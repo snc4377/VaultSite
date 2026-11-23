@@ -1,3 +1,8 @@
+---
+title: "Skill Assesment"
+category: ["PREP_CPTS", "Pen-testing", "WEB ATTACK", "Skill assesment"]
+---
+
 Note title: Untitled
 
 ![Pasted image 20261029194718](/VaultSite/wiki-images/Pasted%20image%2020261029194718.png)

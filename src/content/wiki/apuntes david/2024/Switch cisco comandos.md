@@ -1,3 +1,8 @@
+---
+title: "Switch Cisco Comandos"
+category: ["apuntes david", "2024", "Switch cisco comandos"]
+---
+
 10.2.4 Shortcut and Hotkeys
 
 The IOS CLI provides hotkeys and shortcuts that facilitate configuration, monitoring, and troubleshooting.

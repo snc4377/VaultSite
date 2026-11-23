@@ -1,3 +1,8 @@
+---
+title: "Enumeration Methodology"
+category: ["PREP_CPTS", "Pen-testing", "Footprinting", "Enumeration Methodology"]
+---
+
 ![enum-method33](/VaultSite/wiki-images/enum-method33.png)
 ## Layer No.1: Internet Presence
 

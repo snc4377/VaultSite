@@ -1,3 +1,8 @@
+---
+title: "Enumeracion De Wordpress"
+category: ["S4VITAR", "Preparacion Ejpt", "Enumeracion de Wordpress"]
+---
+
 Important for this exam  
 When a website is using virtual hosting as shown here  
 ![Pasted image 20260401161425](/VaultSite/wiki-images/Pasted%20image%2020260401161425.png)  

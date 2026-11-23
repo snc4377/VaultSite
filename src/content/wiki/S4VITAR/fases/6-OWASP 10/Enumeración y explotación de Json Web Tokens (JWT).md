@@ -1,3 +1,8 @@
+---
+title: "Enumeración Y Explotación De Json Web Tokens (JWT)"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Enumeración y explotación de Json Web Tokens (JWT)"]
+---
+
 **Json Web Tokens** (**JWT**) are a type of token used for **authentication** and **authorization** in web applications. JWT is an open standard (**RFC 7519**) that defines a compact and secure format for reliably transmitting information between parties.
 
 Regarding the enumeration and exploitation phase of a JWT, this occurs when an attacker can gather information about the JWTs used in the application, potentially allowing them to exploit weaknesses in authentication and authorization.

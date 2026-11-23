@@ -1,3 +1,8 @@
+---
+title: "Ataques De Deserialización"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Ataques de Deserialización"]
+---
+
 **Deserialization attacks** are a type of attack that exploits vulnerabilities in the **serialization** and **deserialization** processes of objects in applications that use object-oriented programming (**OOP**).
 
 Serialization is the process of converting an [[object]] into a sequence of **bytes** that can be stored or transmitted over a network. Deserialization is the reverse process, where a byte sequence is converted back into an object. Deserialization attacks occur when an attacker can manipulate the data being deserialized, which can lead to **malicious code execution** on the server.

@@ -1,3 +1,8 @@
+---
+title: "Filtros De Tipo"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Subida de archivos", "Filtros de tipo"]
+---
+
 # Type Filters
 
 ---

@@ -1,3 +1,8 @@
+---
+title: "1 Protocolos"
+category: ["S4VITAR", "hackin first steps", "1- Protocolos"]
+---
+
 
 
 TCP - Guarantees data delivery and that the order matches the transmission sequence  

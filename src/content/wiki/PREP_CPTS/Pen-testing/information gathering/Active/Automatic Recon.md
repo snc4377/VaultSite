@@ -1,3 +1,8 @@
+---
+title: "Automatic Recon"
+category: ["PREP_CPTS", "Pen-testing", "information gathering", "Active", "Automatic Recon"]
+---
+
 While manual reconnaissance can be effective, it can also be time-consuming and prone to human error. Automating web reconnaissance tasks can significantly enhance efficiency and accuracy, allowing you to gather information at scale and identify potential vulnerabilities more rapidly.
 
 ## Why Automate Reconnaissance?

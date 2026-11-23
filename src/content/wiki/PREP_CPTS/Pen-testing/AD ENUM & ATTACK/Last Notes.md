@@ -1,3 +1,8 @@
+---
+title: "Last Notes"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "Last Notes"]
+---
+
 # Beyond this Module
 
 ---

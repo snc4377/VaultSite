@@ -1,3 +1,8 @@
+---
+title: "Cred Hunting"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "Windows", "Cred Hunting"]
+---
+
 # Credential Hunting in Windows
 
 Once we have access to a target Windows machine through the GUI or CLI, incorporating credential hunting into our approach can provide significant advantages. `Credential hunting` is the process of performing detailed searches across the file system and through various applications to discover credentials. To understand this concept, let's place ourselves in a scenario. We have gained access to an IT admin's Windows 10 workstation through RDP.

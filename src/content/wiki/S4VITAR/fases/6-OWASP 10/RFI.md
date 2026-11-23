@@ -1,3 +1,8 @@
+---
+title: "RFI"
+category: ["S4VITAR", "fases", "6-OWASP 10", "RFI"]
+---
+
 The **Remote File Inclusion** (**RFI**) vulnerability is a security flaw that allows an attacker to **include** **remote files** in a vulnerable web application. This can enable the attacker to execute malicious code on the web server and compromise the system.
 
 In an RFI attack, the attacker uses a user input, such as a URL or form field, to include a remote file in the request. If the web application does not properly validate these inputs, it will process the request and return the content of the remote file to the attacker.

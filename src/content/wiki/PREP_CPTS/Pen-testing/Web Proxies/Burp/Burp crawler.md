@@ -1,3 +1,8 @@
+---
+title: "Burp Crawler"
+category: ["PREP_CPTS", "Pen-testing", "Web Proxies", "Burp", "Burp crawler"]
+---
+
 [[Scrapy]] More info for web crawlers for ennum 
 
 An essential feature of web proxy tools is their web scanners. Burp Suite comes with `Burp Scanner`, a powerful scanner for various types of web vulnerabilities, using a `Crawler` for building the website structure, and `Scanner` for passive and active scanning.

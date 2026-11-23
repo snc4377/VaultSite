@@ -1,3 +1,8 @@
+---
+title: "Misconfigurations"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "4.11 Vulnerabilities in AD", "Misconfigurations"]
+---
+
 There are many other attacks and interesting misconfigurations that we may come across during an assessment. A broad understanding of the ins and outs of AD will help us think outside the box and discover issues that others are likely to miss.
 
 ---

@@ -1,3 +1,8 @@
+---
+title: "Ad Administration Lab II"
+category: ["PREP_CPTS", "Pen-testing", "Active Directory", "Ad administration Lab II"]
+---
+
 ## Connection Instructions
 
 For this lab, you will utilize RDP and have access to a non-domain-joined Windows host from which you can perform any actions needed to complete the lab. You will be using an RDP connection, much like in Part one.

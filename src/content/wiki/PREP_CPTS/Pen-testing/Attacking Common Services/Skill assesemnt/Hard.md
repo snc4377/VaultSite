@@ -1,3 +1,8 @@
+---
+title: "Hard"
+category: ["PREP_CPTS", "Pen-testing", "Attacking Common Services", "Skill assesemnt", "Hard"]
+---
+
 ````
 ## Question 1: What file can you retrieve that belongs to the user "simon"?
 

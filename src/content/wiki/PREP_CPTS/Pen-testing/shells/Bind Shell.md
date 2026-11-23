@@ -1,3 +1,8 @@
+---
+title: "Bind Shell"
+category: ["PREP_CPTS", "Pen-testing", "shells", "Bind Shell"]
+---
+
 In many cases, we will be working to establish a shell on a system on a local or remote network. This means we will be looking to use the terminal emulator application on our local attack box to control the remote system through its shell. This is typically done by using a `Bind` &/or `Reverse` shell.
 
 ---

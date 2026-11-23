@@ -1,3 +1,8 @@
+---
+title: "Inyecciones CSS (CSSI)"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Inyecciones CSS (CSSI)"]
+---
+
 **CSS Injections** (**CSSI**) are a type of web vulnerability that allows an attacker to inject malicious CSS code into a webpage. This occurs when a web application trusts untrusted user input and uses it directly in its CSS code without proper validation.
 
 The injected malicious CSS code can alter the page's style and layout, enabling attackers to perform actions such as **identity spoofing** or **stealing sensitive information**.

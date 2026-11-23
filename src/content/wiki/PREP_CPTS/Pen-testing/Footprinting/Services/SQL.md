@@ -1,3 +1,8 @@
+---
+title: "SQL"
+category: ["PREP_CPTS", "Pen-testing", "Footprinting", "Services", "SQL"]
+---
+
 Scanning MySQL Server
         shellsession
 snchh337@htb[/htb]$ sudo nmap 10.129.14.128 -sV -sC -p3306 --script mysql*

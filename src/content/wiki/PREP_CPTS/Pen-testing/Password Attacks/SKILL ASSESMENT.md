@@ -1,3 +1,8 @@
+---
+title: "SKILL ASSESMENT"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "SKILL ASSESMENT"]
+---
+
 ## Initial Access — Username Enumeration & Password Spraying
 
 The attack began with a publicly known employee name:

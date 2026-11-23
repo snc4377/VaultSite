@@ -1,3 +1,8 @@
+---
+title: "CSTI"
+category: ["S4VITAR", "fases", "6-OWASP 10", "CSTI"]
+---
+
 **Client-Side Template Injection (CSTI)** is a security vulnerability where an attacker can inject malicious code into a **client-side template**, which executes in the user's **browser** rather than on the server.
 
 Unlike **Server-Side Template Injection (SSTI)**, where the server-side template runs on the server and is responsible for generating dynamic content, in CSTI, the client-side template executes in the user's browser and is used to generate dynamic content on the client side.

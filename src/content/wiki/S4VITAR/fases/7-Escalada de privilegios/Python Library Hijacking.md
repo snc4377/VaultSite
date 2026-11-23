@@ -1,3 +1,8 @@
+---
+title: "Python Library Hijacking"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Python Library Hijacking"]
+---
+
 When we talk about **Python Library Hijacking**, we are referring to an attack technique that exploits the way Python searches for and loads libraries to inject malicious code into a script. The attack occurs when an attacker creates or modifies a library in a path accessible by the Python script, such that when the script imports it, the malicious version is loaded instead of the legitimate one.
 
 The attack is carried out as follows: the attacker searches for a library used by the script and replaces it with their own malicious version. This library can be a standard Python library or an external library downloaded and installed by the user. The attacker places their malicious version of the library in an accessible path before the legitimate library is found.

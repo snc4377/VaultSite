@@ -1,3 +1,8 @@
+---
+title: "Session Puzzling Session Fixation Session Variable Overloading"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Session Puzzling - Session Fixation -Session Variable Overloading"]
+---
+
 Session Puzzling, Session Fixation, and Session Variable Overloading are different names corresponding to security vulnerabilities that affect **session management** in a web application.
 
 The **Session Fixation** vulnerability occurs when an attacker sets a valid session identifier for a user and then waits for the user to log in. If the user logs in with that session identifier, the attacker could access the user's session and perform malicious actions on their behalf. To achieve this, the attacker may trick the user into clicking a link that includes a valid session identifier or exploit a weakness in the web application to set the session identifier.

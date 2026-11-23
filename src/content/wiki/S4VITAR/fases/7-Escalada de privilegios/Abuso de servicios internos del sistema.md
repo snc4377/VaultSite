@@ -1,3 +1,8 @@
+---
+title: "Abuso De Servicios Internos Del Sistema"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Abuso de servicios internos del sistema"]
+---
+
 **Internal services** are essential components that operate in the background within an operating system, handling critical functions such as network management, printing, software updates, and system monitoring, among others.
 
 However, if these services **are not properly configured** and remain active, they can represent a significant security gap. Attackers could exploit these services to gain unauthorized access to the system and carry out malicious activities.

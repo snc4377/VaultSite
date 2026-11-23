@@ -1,3 +1,8 @@
+---
+title: "⭐ SKILL ASSESSMENT"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "⭐ SKILL ASSESSMENT"]
+---
+
 ## Scenario
 
 Our client Inlanefreight has hired us again to conduct a full-scope internal penetration test. The client aims to find and remediate as many vulnerabilities as possible before undergoing a merger and acquisition process. The new CISO is particularly concerned about more nuanced AD security flaws that may have gone unnoticed during previous penetration tests.

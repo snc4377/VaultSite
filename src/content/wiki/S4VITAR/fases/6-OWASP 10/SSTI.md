@@ -1,3 +1,8 @@
+---
+title: "SSTI"
+category: ["S4VITAR", "fases", "6-OWASP 10", "SSTI"]
+---
+
 Note title: Untitled
 
 Wiki on SSTI 

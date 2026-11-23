@@ -1,3 +1,8 @@
+---
+title: "5 Guia BURPSUITE"
+category: ["S4VITAR", "fases", "Enumeracion de servicios", "CONCEPTOS DE ENUMERACION Y EXPLOTACION", "5-Guia BURPSUITE"]
+---
+
 **Proxy**  
 Check the box in Options > Intercept Server Responses > Intercept responses based on the following rules.  
 In the Proxy section, what we'll see is the first packet we intercept. This tab (Proxy) will serve as our starting point—this is where all responses pass through and where we later decide to forward them. Here, we can also, for example, in the Options section, find another feature that allows us to replace text. For instance, we can change an error code from 200 to 201.  

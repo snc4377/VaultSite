@@ -1,3 +1,8 @@
+---
+title: "FTP aTTACK"
+category: ["PREP_CPTS", "Pen-testing", "Attacking Common Services", "FTP aTTACK"]
+---
+
 The [File Transfer Protocol](https://en.wikipedia.org/wiki/File_Transfer_Protocol) (`FTP`) is a standard network protocol used to transfer files between computers. It also performs directory and files operations, such as changing the working directory, listing files, and renaming and deleting directories or files. By default, FTP listens on port `TCP/21`.
 
 To attack an FTP Server, we can abuse misconfiguration or excessive privileges, exploit known vulnerabilities or discover new vulnerabilities. Therefore, after gaining access to the FTP Service, we need to be aware of the content in the directory so we can search for sensitive or critical information, as we previously discussed. The protocol is designed to trigger downloads and uploads with commands. Thus, files can be transferred between servers and clients. A file management system is available to the user, known by the operating system. Files can be stored in folders, which may be located in other folders. This results in a hierarchical directory structure. Most companies use this service for software or website development processes.

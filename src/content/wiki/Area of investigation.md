@@ -1,3 +1,8 @@
+---
+title: "Area Of Investigation"
+category: ["Area of investigation"]
+---
+
 ## Areas
 
 During this process, our goal is to identify as much information as possible from the following areas:

@@ -1,3 +1,8 @@
+---
+title: "3 (gather Credentials) LLMNR NBT NS Poisoning From Linux"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "3 - (gather credentials) LLMNR NBT-NS Poisoning - from Linux"]
+---
+
 This section and the next will cover a common way to gather credentials and gain an initial foothold during an assessment: a Man-in-the-Middle attack on Link-Local Multicast Name Resolution (LLMNR) and NetBIOS Name Service (NBT-NS) broadcasts. Depending on the network, this attack may provide low-privileged or administrative level password hashes that can be cracked offline or even cleartext credentials. Though not covered in this module, these hashes can also sometimes be used to perform an SMB Relay attack to authenticate to a host or multiple hosts in the domain with administrative privileges without having to crack the password hash offline. Let's dive in!
 
 ---

@@ -1,3 +1,8 @@
+---
+title: "Crackeo De Claves Ssh"
+category: ["S4VITAR", "Preparacion Ejpt", "Crackeo de claves ssh"]
+---
+
 Note title: Untitled
 
 ![Pasted image 20260401163510](/VaultSite/wiki-images/Pasted%20image%2020260401163510.png)

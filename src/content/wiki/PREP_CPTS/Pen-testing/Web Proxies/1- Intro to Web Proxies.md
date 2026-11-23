@@ -1,5 +1,10 @@
+---
+title: "1 Intro To Web Proxies"
+category: ["PREP_CPTS", "Pen-testing", "Web Proxies", "1- Intro to Web Proxies"]
+---
 
-***
+
+---
 
 Today, most modern web and mobile applications work by continuously connecting to back-end servers to send and receive data and then processing this data on the user's device, like their web browsers or mobile phones. With most applications heavily relying on back-end servers to process data, testing and securing the back-end servers is quickly becoming more important.
 

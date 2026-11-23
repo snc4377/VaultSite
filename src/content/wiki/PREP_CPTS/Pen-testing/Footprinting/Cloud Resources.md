@@ -1,3 +1,8 @@
+---
+title: "Cloud Resources"
+category: ["PREP_CPTS", "Pen-testing", "Footprinting", "Cloud Resources"]
+---
+
 # Cloud Security & Reconnaissance
 
 **Tags:** #cloud-security #recon #OSINT #pentesting #misconfiguration

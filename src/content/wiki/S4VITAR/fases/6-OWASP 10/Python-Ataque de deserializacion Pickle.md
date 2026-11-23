@@ -1,3 +1,8 @@
+---
+title: "Python Ataque De Deserializacion Pickle"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Python-Ataque de deserializacion Pickle"]
+---
+
 A **[[Pickle Deserialization]]** attack (**DES-Pickle**) is a type of vulnerability that can occur in Python applications using the Pickle library for object serialization and deserialization.
 
 The vulnerability arises when an attacker can control the Pickle input passed to a deserialization function in the application. If the application code doesn't properly validate the Pickle input, it may allow an attacker to inject malicious code into the deserialized object.

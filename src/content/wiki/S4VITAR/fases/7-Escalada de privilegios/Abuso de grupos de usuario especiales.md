@@ -1,3 +1,8 @@
+---
+title: "Abuso De Grupos De Usuario Especiales"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Abuso de grupos de usuario especiales"]
+---
+
 In the context of Linux, **groups** are used to **organize** users and **assign** **permissions** to access system resources. Users can belong to one or multiple groups, and groups can have different permission levels to access system resources.
 
 There are special groups in Linux, such as ‘**lxd**’ or ‘**docker**’, which are used to allow users to run containers securely and efficiently. However, if a malicious user gains access to one of these groups, they could exploit it to obtain elevated privileges on the system.

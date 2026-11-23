@@ -1,3 +1,8 @@
+---
+title: "Kerberos Double Hop"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "4.7 KERBEROS", "Kerberos Double Hop"]
+---
+
 # Kerberos "Double Hop" Problem
 
 ---

@@ -1,3 +1,8 @@
+---
+title: "Type Jugling"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Type Jugling"]
+---
+
 https://www.php.net/manual/en/types.comparisons.php
 
 A **Type Juggling** attack (or "type switching" in Spanish) is a programming technique used to **manipulate** a variable's **data type** in order to deceive a program and make it perform unintended actions.

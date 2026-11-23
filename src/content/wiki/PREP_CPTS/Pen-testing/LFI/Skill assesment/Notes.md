@@ -1,3 +1,8 @@
+---
+title: "Notes"
+category: ["PREP_CPTS", "Pen-testing", "LFI", "Skill assesment", "Notes"]
+---
+
 Note title: Untitled
 
 https://medium.com/@0xBlk/skills-assessment-file-inclusion-write-up-d3cf6e40adf1

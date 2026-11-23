@@ -1,3 +1,8 @@
+---
+title: "ES Intro To IDOR"
+category: ["PREP_CPTS", "Pen-testing", "WEB ATTACK", "IDOR", "ES - Intro to IDOR"]
+---
+
 
 
 Key Concepts:

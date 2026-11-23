@@ -1,3 +1,8 @@
+---
+title: "Win Credential Manager"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "Windows", "Win Credential Manager"]
+---
+
 ## Windows Vault and Credential Manager
 
 [Credential Manager](https://learn.microsoft.com/en-us/windows-server/security/windows-authentication/credentials-processes-in-windows-authentication#windows-vault-and-credential-manager) is a feature built into Windows since `Server 2008 R2` and `Windows 7`. Thorough documentation on how it works is not publicly available, but essentially, it allows users and applications to securely store credentials relevant to other systems and websites. Credentials are stored in special encrypted folders on the computer under the user and system profiles ([MITRE ATT&CK](https://attack.mitre.org/techniques/T1555/004/)):

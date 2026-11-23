@@ -1,3 +1,8 @@
+---
+title: "LFD (Local File Disclosure)"
+category: ["PREP_CPTS", "Pen-testing", "WEB ATTACK", "XXE", "LFD (Local File Disclosure)"]
+---
+
 When a web application trusts unfiltered XML data from user input, we may be able to reference an external XML DTD document and define new custom XML entities. Suppose we can define new entities and have them displayed on the web page. In that case, we should also be able to define external entities and make them reference a local file, which, when displayed, should show us the content of that file on the back-end server.
 
 Let us see how we can identify potential XXE vulnerabilities and exploit them to read sensitive files from the back-end server.

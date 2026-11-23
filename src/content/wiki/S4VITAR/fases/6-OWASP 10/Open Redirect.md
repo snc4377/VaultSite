@@ -1,3 +1,8 @@
+---
+title: "Open Redirect"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Open Redirect"]
+---
+
 The open redirection vulnerability, also known as **Open Redirect**, is a common web application vulnerability that attackers can exploit to redirect users to malicious websites. This vulnerability occurs when a web application allows attackers to manipulate the URL of a redirect page to redirect the user to a malicious site.
 
 For example, suppose a web application uses a redirect parameter in a URL to direct the user to an external page after authentication. If this URL does not properly validate the redirect parameter and allows attackers to modify it, attackers can redirect the user to a malicious website instead of the legitimate one.

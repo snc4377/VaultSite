@@ -1,3 +1,8 @@
+---
+title: "Web Automatica"
+category: ["HOMELAB", "Hermes Agent", "Web automatica"]
+---
+
 We have created a profile in Hermes Agent named webdev.
 
 ### Brainstorming 

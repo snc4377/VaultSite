@@ -1,3 +1,8 @@
+---
+title: "Explotación Del Kernel"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Explotación del Kernel"]
+---
+
 The **kernel** is the core part of the Linux operating system, responsible for managing system resources such as memory, processes, files, and devices. Due to its critical role in the system, any vulnerability in the kernel can have serious consequences for system security.
 
 In older versions of the Linux kernel, vulnerabilities have been discovered that can be exploited to allow attackers to gain superuser (**root**) access on the system.

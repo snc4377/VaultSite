@@ -1,3 +1,8 @@
+---
+title: "PATH Hijacking"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "PATH Hijacking"]
+---
+
 **PATH Hijacking** is a technique used by attackers to **hijack** **commands** in a Unix/Linux system by manipulating the **PATH**. PATH is an environment variable that defines the search paths for executable files on the system.
 
 In some compiled binaries, some of the internally defined commands may be specified with a relative path instead of an absolute path. This means the binary searches for executable files in the paths specified in PATH, rather than using the absolute path of the executable file.

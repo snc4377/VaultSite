@@ -1,5 +1,10 @@
+---
+title: "NTLM Auth"
+category: ["PREP_CPTS", "Pen-testing", "Active Directory", "NTLM Auth"]
+---
 
-***
+
+---
 
 Aside from Kerberos and LDAP, Active Directory uses several other authentication methods which can be used (and abused) by applications and services in AD. These include LM, NT, NTLMv1, and NTLMv2. LM and NT are hash algorithms used to store password credentials. NTLMv1 and NTLMv2 are authentication protocols built on top of these hashes. NTLMv1 can use either LM or NT hashes, while NTLMv2 exclusively uses NT hashes. Below is a quick comparison between these hashes and protocols, which shows us that, while not perfect by any means, Kerberos is often the authentication protocol of choice wherever possible. It is essential to understand the difference between the hash types and the protocols that use them.
 

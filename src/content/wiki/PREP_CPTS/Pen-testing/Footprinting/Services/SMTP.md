@@ -1,3 +1,8 @@
+---
+title: "SMTP"
+category: ["PREP_CPTS", "Pen-testing", "Footprinting", "Services", "SMTP"]
+---
+
 Each SMTP server can be configured in many ways, as can all other services. However, there are differences because the SMTP server is only responsible for sending and forwarding emails.
 Port 25 or 445 for encrypted smtp with ssl
 #### Default Configuration

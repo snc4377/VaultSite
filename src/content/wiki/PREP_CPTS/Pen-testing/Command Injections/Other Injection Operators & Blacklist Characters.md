@@ -1,3 +1,8 @@
+---
+title: "Other Injection Operators & Blacklist Characters"
+category: ["PREP_CPTS", "Pen-testing", "Command Injections", "Other Injection Operators & Blacklist Characters"]
+---
+
 ## AND Operator
 
 We can start with the `AND` (`&&`) operator, such that our final payload would be (`127.0.0.1 && whoami`), and the final executed command would be the following:

@@ -1,3 +1,8 @@
+---
+title: "M4tasplo1t"
+category: ["PREP_CPTS", "Pen-testing", "shells", "M4tasplo1t"]
+---
+
 [Metasploit](https://www.metasploit.com/) is an automated attack framework developed by `Rapid7` that streamlines the process of exploiting vulnerabilities through the use of pre-built modules that contain easy-to-use options to exploit vulnerabilities and deliver payloads to gain a shell on a vulnerable system. It can make exploiting a vulnerable system so easy that some Cybersecurity training vendors limit how many times it can be used on lab exams. Here at Hack The Box, we encourage experimenting with tools in our lab environments until you have a solid foundational understanding. Most organizations will not limit us on which tools we can or cannot use on an engagement. However, they will expect us to know what we are doing. Therefore, it is our responsibility to seek an understanding as we learn. Not understanding the effects of the tools we use can be destructive in a live penetration test or audit. This is one primary reason we should consistently seek a deeper understanding of the tools, techniques, methodologies, and practices we learn.
 
 In this section, we will interact with the `community edition` of Metasploit on Pwnbox. We will use pre-built `modules` and craft payloads with `MSFVenom`. It is important to note that many established cybersecurity firms utilize the paid edition of Metasploit called `Metasploit Pro` to conduct penetration tests, security audits, and even social engineering campaigns. If you want to explore the differences between the community edition and Metasploit Pro, you can check out this [comparison chart](https://www.rapid7.com/products/metasploit/download/editions/).

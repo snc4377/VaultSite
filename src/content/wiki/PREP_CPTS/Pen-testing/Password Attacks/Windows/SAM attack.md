@@ -1,3 +1,8 @@
+---
+title: "SAM Attack"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "Windows", "SAM attack"]
+---
+
 
 What is SAM? We can see it in the module [[PREP_CPTS/Pen-testing/Password Attacks/Windows/Process of authentication]]
 

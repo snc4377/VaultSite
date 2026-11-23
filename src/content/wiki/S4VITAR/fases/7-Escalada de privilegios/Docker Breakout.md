@@ -1,3 +1,8 @@
+---
+title: "Docker Breakout"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Docker Breakout"]
+---
+
 Note title: Untitled
 
 In today's class, we will explore various techniques to abuse **Docker** with the goal of elevating our user privileges and escaping the container to the host machine. We will examine specific scenarios and discuss the security implications in each case.

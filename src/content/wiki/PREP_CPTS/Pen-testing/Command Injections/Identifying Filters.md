@@ -1,3 +1,8 @@
+---
+title: "Identifying Filters"
+category: ["PREP_CPTS", "Pen-testing", "Command Injections", "Identifying Filters"]
+---
+
 Even if developers attempt to secure the web application against injections, it may still be exploitable if it was not securely coded. Another type of injection mitigation is utilizing blacklisted characters and words on the back-end to detect injection attempts and deny the request if any request contained them. Yet another layer on top of this is utilizing Web Application Firewalls (WAFs), which may have a broader scope and various methods of injection detection and prevent various other attacks like SQL injections or XSS attacks.
 
 This section will look at a few examples of how command injections may be detected and blocked and how we can identify what is being blocked.

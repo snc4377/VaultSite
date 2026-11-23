@@ -1,3 +1,8 @@
+---
+title: "Credential Hunting In Network Shares"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "Credential Hunting in Network Shares"]
+---
+
 Nearly all corporate environments include network shares used by employees to store and share files across teams. While these shared folders are essential, they can unintentionally become a goldmine for attackers, especially when sensitive data like plaintext credentials or configuration files are left behind. In this section, we'll explore how to hunt for credentials across network shares from both Windows and Linux systems using common tools, along with general techniques attackers use to uncover hidden secrets.
 
 #### Common credential patterns

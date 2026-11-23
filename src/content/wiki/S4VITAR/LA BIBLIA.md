@@ -1,3 +1,8 @@
+---
+title: "LA BIBLIA"
+category: ["S4VITAR", "LA BIBLIA"]
+---
+
 https://book.hacktricks.wiki/en/index.html  
 https://github.com/swisskyrepo/PayloadsAllTheThings  
 Dictionary with everything I don't know about cyber. Everything is in here from methodology to techniques, tools **EVERYTHING**  

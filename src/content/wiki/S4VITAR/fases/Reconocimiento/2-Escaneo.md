@@ -1,3 +1,8 @@
+---
+title: "2 Escaneo"
+category: ["S4VITAR", "fases", "Reconocimiento", "2-Escaneo"]
+---
+
 NMAP OPTIMIZATIONS
 
 

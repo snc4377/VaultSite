@@ -1,3 +1,8 @@
+---
+title: "Web Shell Workflow"
+category: ["PREP_CPTS", "Pen-testing", "shells", "WebShells", "Web-Shell Workflow"]
+---
+
 ## Web Exploitation Workflow: From One-Liner to Reverse Shell
 
 ### Phase 1: The Probe (Verification & Stealth)

@@ -1,3 +1,8 @@
+---
+title: "Sshuttle"
+category: ["PREP_CPTS", "Pen-testing", "Pivoting things(use LIGOLO)", "Sshuttle"]
+---
+
 **Purpose:** Automated SSH pivoting with transparent traffic routing **Tool:** sshuttle - Python-based SSH tunnel manager **Key Feature:** Automatic iptables configuration (no proxychains needed) **Protocol:** SSH-only (no TOR/HTTPS proxy support) **Advantage:** Direct tool usage without proxy configuration
 
 ---

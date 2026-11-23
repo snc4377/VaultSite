@@ -1,3 +1,8 @@
+---
+title: "Nessus"
+category: ["PREP_CPTS", "Pen-testing", "Vuln Assessment", "Tools", "Nessus"]
+---
+
 ## Nessus: Professional Vulnerability Scanning Guide
 
 https://docs.tenable.com/nessus/10_5/Content/PDF/Nessus_10_5.pdf

@@ -1,3 +1,8 @@
+---
+title: "Configuration"
+category: ["PREP_CPTS", "Pen-testing", "Web Proxies", "Configuration"]
+---
+
 Now that we have installed and started both tools, we'll learn how to use the most commonly used feature: `Web Proxy`.
 
 We can set up these tools as a proxy for any application, such that all web requests would be routed through them so that we can manually examine what web requests an application is sending and receiving. This will enable us to understand better what the application is doing in the background and allows us to intercept and change these requests or reuse them with various changes to see how the application responds.

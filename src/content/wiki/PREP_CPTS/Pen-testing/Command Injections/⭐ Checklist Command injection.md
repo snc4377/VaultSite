@@ -1,3 +1,8 @@
+---
+title: "⭐ Checklist Command Injection"
+category: ["PREP_CPTS", "Pen-testing", "Command Injections", "⭐ Checklist Command injection"]
+---
+
 ## Phase 1: Detection and Confirmation
 
 ### 1.1 Identify Potential Entry Points

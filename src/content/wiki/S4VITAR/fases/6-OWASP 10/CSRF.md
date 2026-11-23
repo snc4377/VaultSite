@@ -1,3 +1,8 @@
+---
+title: "CSRF"
+category: ["S4VITAR", "fases", "6-OWASP 10", "CSRF"]
+---
+
 **Cross-Site Request Forgery (CSRF)** is a security vulnerability where an attacker **tricks** a legitimate user into performing an unwanted action on a website without their knowledge or consent.
 
 In a CSRF attack, the attacker deceives the victim into clicking a malicious link or visiting a malicious webpage. This malicious page may contain an HTTP request that performs an unwanted action on the victim's website.

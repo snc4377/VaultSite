@@ -1,3 +1,8 @@
+---
+title: "Advanced Command Obfuscation & Tools"
+category: ["PREP_CPTS", "Pen-testing", "Command Injections", "Advanced Command Obfuscation & tools"]
+---
+
 In some cases, we may be dealing with advanced filtering solutions like Web Application Firewalls (WAFs), where basic evasion techniques may not necessarily work. We can use more advanced techniques for such occasions, making the detection of injected commands much less likely.
 
 ---

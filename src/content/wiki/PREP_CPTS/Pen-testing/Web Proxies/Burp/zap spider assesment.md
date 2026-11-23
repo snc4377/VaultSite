@@ -1,3 +1,8 @@
+---
+title: "Zap Spider Assesment"
+category: ["PREP_CPTS", "Pen-testing", "Web Proxies", "Burp", "zap spider assesment"]
+---
+
 ## ZAP Spider
 
 Let's start with `ZAP Spider`, which is similar to Burp's Crawler function. To initiate a Spider scan on any website, we can locate a request in our History tab and select (`Attack > Spider`) from the context menu. Another option is to use the HUD in the preconfigured browser. Once we visit the page or website where we want to start the Spider scan, we can click the second button on the right panel (`Spider Start`), which will prompt us to begin the scan:

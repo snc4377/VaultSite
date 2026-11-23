@@ -1,3 +1,8 @@
+---
+title: "LFI (Local File Inclusion )"
+category: ["S4VITAR", "fases", "6-OWASP 10", "LFI (Local File Inclusion )"]
+---
+
 Note title: Untitled
 
 Mario's Penguin

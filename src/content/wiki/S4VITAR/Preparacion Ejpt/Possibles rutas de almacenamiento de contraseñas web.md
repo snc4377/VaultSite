@@ -1,3 +1,8 @@
+---
+title: "Possibles Rutas De Almacenamiento De Contraseñas Web"
+category: ["S4VITAR", "Preparacion Ejpt", "Possibles rutas de almacenamiento de contraseñas web"]
+---
+
 Note title: Untitled
 
 `/var/www/html/` go to this path and list to see folders or files and search

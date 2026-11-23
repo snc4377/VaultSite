@@ -1,3 +1,8 @@
+---
+title: "Rev4rse"
+category: ["PREP_CPTS", "Pen-testing", "shells", "Rev4rse"]
+---
+
 With a `reverse shell`, the attack box will have a listener running, and the target will need to initiate the connection.
 
 #### Reverse Shell Example

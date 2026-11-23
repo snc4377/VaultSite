@@ -1,3 +1,8 @@
+---
+title: "Ataques De Transferencia De Zona (AXFR Full Zone Transfer)"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Ataques de transferencia de zona (AXFR  Full Zone Transfer)"]
+---
+
 
 
 Zone transfer attacks, also known as **AXFR** attacks, are a type of attack targeting **DNS** servers (**Domain Name System**) that allows attackers to obtain sensitive information about an organization's domains.

@@ -1,3 +1,8 @@
+---
+title: "Detección Y Explotación De Tareas Cron"
+category: ["S4VITAR", "fases", "7-Escalada de privilegios", "Detección y explotación de tareas Cron"]
+---
+
 A **cron** job is a scheduled task on Unix/Linux systems that runs at a specific time or at regular intervals. These tasks are defined in a **crontab** file, which specifies what commands should be executed and when they should be executed.
 
 Detecting and exploiting cron jobs is a technique used by attackers to escalate their privileges on a compromised system. For example, if an attacker detects that a file is being executed by the "root" user through a cron job that runs at regular intervals, and notices that the permissions on the file are misconfigured, they could manipulate the file's content to include malicious instructions. These instructions would then be executed with elevated privileges as the 'root' user, since that is the user executing the file.

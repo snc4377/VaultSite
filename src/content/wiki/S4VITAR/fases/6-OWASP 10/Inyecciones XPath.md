@@ -1,3 +1,8 @@
+---
+title: "Inyecciones XPath"
+category: ["S4VITAR", "fases", "6-OWASP 10", "Inyecciones XPath"]
+---
+
 **XPath** is a query language used in **XML** that allows searching and retrieving specific information from **XML documents**. However, like other programming and query languages, XPath can also have **vulnerabilities** that attackers can exploit to compromise the security of a web application.
 
 **XPath vulnerabilities** are those that take advantage of weaknesses in the implementation of XPath queries in a web application. Below are some common types of XPath vulnerabilities:

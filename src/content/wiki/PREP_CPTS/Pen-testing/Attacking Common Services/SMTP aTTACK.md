@@ -1,3 +1,8 @@
+---
+title: "SMTP aTTACK"
+category: ["PREP_CPTS", "Pen-testing", "Attacking Common Services", "SMTP aTTACK"]
+---
+
 A `mail server` (sometimes also referred to as an email server) is a server that handles and delivers email over a network, usually over the Internet. A mail server can receive emails from a client device and send them to other mail servers. A mail server can also deliver emails to a client device. A client is usually the device where we read our emails (computers, smartphones, etc.).
 
 When we press the `Send` button in our email application (email client), the program establishes a connection to an `SMTP` server on the network or Internet. The name `SMTP` stands for Simple Mail Transfer Protocol, and it is a protocol for delivering emails from clients to servers and from servers to other servers.

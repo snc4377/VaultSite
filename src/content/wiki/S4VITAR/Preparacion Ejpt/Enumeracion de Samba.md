@@ -1,3 +1,8 @@
+---
+title: "Enumeracion De Samba"
+category: ["S4VITAR", "Preparacion Ejpt", "Enumeracion de Samba"]
+---
+
 https://github.com/iabdullah215/eJPT-CheatSheet
 
 **First Tool**  

@@ -1,3 +1,8 @@
+---
+title: "Bypassing Security Filters"
+category: ["PREP_CPTS", "Pen-testing", "WEB ATTACK", "Bypassing Security Filters"]
+---
+
 
 This is commonly found in security filters that detect malicious requests. For example, if a security filter was being used to detect injection vulnerabilities and only checked for injections in `POST` parameters (e.g. `$_POST['parameter']`), it may be possible to bypass it by simply changing the request method to `GET`.
 

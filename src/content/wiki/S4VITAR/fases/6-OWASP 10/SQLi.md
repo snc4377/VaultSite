@@ -1,3 +1,8 @@
+---
+title: "SQLi"
+category: ["S4VITAR", "fases", "6-OWASP 10", "SQLi"]
+---
+
 To perform SQL injection, we have the tool SQLMAP.
 
 However, it's always good to try doing it manually first and then use the tool to learn or understand what the tool is doing at all times.  

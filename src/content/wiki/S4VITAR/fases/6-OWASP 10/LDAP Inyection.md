@@ -1,3 +1,8 @@
+---
+title: "LDAP Inyection"
+category: ["S4VITAR", "fases", "6-OWASP 10", "LDAP Inyection"]
+---
+
 **LDAP** (**Lightweight Directory Access Protocol**) injections are a type of attack that exploits vulnerabilities in web applications interacting with an LDAP server. The LDAP server is a directory used to store user and resource information on a network.
 
 LDAP injection works by inserting malicious LDAP commands into input fields of a web application, which are then sent to the LDAP server for processing. If the web application is not properly designed to handle user input, an attacker can exploit this weakness to perform unauthorized operations on the LDAP server.

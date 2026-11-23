@@ -1,3 +1,8 @@
+---
+title: "⭐ Active Directory (Step By Step) Checklist"
+category: ["PREP_CPTS", "Pen-testing", "AD ENUM & ATTACK", "⭐ Active Directory (Step by Step) checklist"]
+---
+
 Methodology Over Syntax The exact commands provided here are not 100% absolute and will inevitably vary depending on the target environment, the tools available, and specific network configurations. **Do not just memorize syntax; focus on understanding the structure, the logical flow, and the order of the attack.**
 
 ## 📍 Phase 1: Initial Enumeration (Zero Privileges)

@@ -266,6 +266,115 @@ def render_frontmatter(raw: str, translated: dict[str, str]) -> str:
     return "".join(out)
 
 
+def clean_filename_title(stem: str) -> str:
+    """Readable fallback title from a filename stem.
+
+    Filenames are never renamed (Obsidian wikilinks depend on them), so this
+    cleans the stem instead: "buffer-overflow" -> "Buffer Overflow".
+    Acronyms and mixed-case names (NTLM, SQLi, eJPT) are preserved.
+    """
+    text = re.sub(r"[-_]+", " ", stem)
+    words = re.sub(r"\s+", " ", text).strip().split(" ")
+    cleaned: list[str] = []
+    for word in words:
+        if not word:
+            continue
+        if word.isupper() or any(char.isupper() for char in word[1:]):
+            cleaned.append(word)
+        else:
+            cleaned.append(word[:1].upper() + word[1:])
+    return " ".join(cleaned) or stem
+
+
+def category_for(rel: Path) -> list[str]:
+    """Exact Obsidian path, including the filename stem.
+
+    S4VITAR/fases/Buffer Overflow.md ->
+        ["S4VITAR", "fases", "Buffer Overflow"]
+    """
+    return list(rel.with_suffix("").parts)
+
+
+def upsert_frontmatter(text: str, updates: dict[str, str]) -> str:
+    """Insert or replace top-level keys, preserving the rest of the file.
+
+    `updates` maps key -> already-rendered YAML value (without the key).
+    Existing other keys, comments and the body are left untouched.
+    """
+    if not updates:
+        return text
+
+    newline = "\r\n" if "\r\n" in text else "\n"
+    match = FRONTMATTER_RE.match(text)
+    if not match:
+        block = newline.join(f"{key}: {value}" for key, value in updates.items())
+        return f"---{newline}{block}{newline}---{newline}{newline}{text}"
+
+    raw = match.group(1)
+    try:
+        data = yaml.safe_load(raw)
+    except yaml.YAMLError:
+        data = object()
+
+    if not (isinstance(data, dict) or (data is None and not raw.strip())):
+        # A leading `---` that is really content: prepend a valid block.
+        block = newline.join(f"{key}: {value}" for key, value in updates.items())
+        return f"---{newline}{block}{newline}---{newline}{newline}{text}"
+
+    lines = raw.splitlines()
+    for key, value in updates.items():
+        index = next(
+            (i for i, line in enumerate(lines) if re.match(rf"^{re.escape(key)}\s*:", line)),
+            None,
+        )
+        if index is None:
+            lines.append(f"{key}: {value}")
+            continue
+
+        end = index + 1
+        rest = lines[index].split(":", 1)[1].strip()
+        if rest.startswith("[") and rest.count("[") > rest.count("]"):
+            depth = rest.count("[") - rest.count("]")
+            while end < len(lines) and depth > 0:
+                depth += lines[end].count("[") - lines[end].count("]")
+                end += 1
+        elif rest == "" or rest.startswith(("|", ">")):
+            while end < len(lines) and (
+                lines[end].strip() == ""
+                or lines[end].startswith((" ", "\t"))
+                or lines[end].startswith("- ")
+            ):
+                end += 1
+        lines[index:end] = [f"{key}: {value}"]
+
+    new_raw = newline.join(lines)
+    return f"---{newline}{new_raw}{newline}---{newline}{text[match.end():]}"
+
+
+def ensure_wiki_metadata(text: str, rel: Path) -> str:
+    """Ensure the note has a title and the exact folder-derived category."""
+    has_title = False
+    match = FRONTMATTER_RE.match(text)
+    if match:
+        try:
+            data = yaml.safe_load(match.group(1))
+        except yaml.YAMLError:
+            data = None
+        has_title = (
+            isinstance(data, dict)
+            and isinstance(data.get("title"), str)
+            and bool(data["title"].strip())
+        )
+
+    updates: dict[str, str] = {}
+    if not has_title:
+        updates["title"] = json.dumps(
+            clean_filename_title(rel.stem), ensure_ascii=False
+        )
+    updates["category"] = json.dumps(category_for(rel), ensure_ascii=False)
+    return upsert_frontmatter(text, updates)
+
+
 def strip_code(text: str) -> str:
     """Remove fenced/inline code so its identifiers don't skew detection."""
     text = re.sub(r"```.*?```", " ", text, flags=re.S)
@@ -785,7 +894,7 @@ def translate_note(job: Job, client: DeepSeekClient) -> str:
     except ValueError as exc:
         raise LLMError(f"unparseable frontmatter: {exc}") from exc
 
-    title = "Untitled"
+    title = clean_filename_title(job.rel.stem)
     if front:
         title = str(front.get("title") or title)
 
@@ -936,8 +1045,9 @@ def main() -> int:
             elif action == "unchanged":
                 existing = target.read_text(encoding="utf-8")
                 refreshed, image_warnings = images.rewrite(existing, job.rel)
+                refreshed = ensure_wiki_metadata(refreshed, job.rel)
                 if refreshed != existing:
-                    print(f"  images    {job.rel}")
+                    print(f"  refresh   {job.rel}")
             for warning in image_warnings:
                 print(f"    image: {warning}", file=sys.stderr)
         print(
@@ -1002,9 +1112,10 @@ def main() -> int:
     stats = RunStats()
 
     def refresh_existing(target_path: Path, rel: Path, key: str) -> bool:
-        """Rewrite images in an already-translated output without an LLM call."""
+        """Refresh images and generated metadata without an LLM call."""
         existing = target_path.read_text(encoding="utf-8")
         refreshed, image_warnings = images.rewrite(existing, rel)
+        refreshed = ensure_wiki_metadata(refreshed, rel)
         for warning in image_warnings:
             print(f"    image: {warning}", file=sys.stderr)
         if refreshed == existing:
@@ -1012,7 +1123,7 @@ def main() -> int:
         backup_if_present(target_path, backup_root, rel)
         target_path.write_text(refreshed, encoding="utf-8")
         stats.refreshed.append(key)
-        print(f"  images    {key}")
+        print(f"  refresh   {key}")
         return True
 
     for job in jobs:
@@ -1031,6 +1142,7 @@ def main() -> int:
                     continue
                 backup_if_present(target, backup_root, job.rel)
                 text, image_warnings = images.rewrite(job.text, job.rel)
+                text = ensure_wiki_metadata(text, job.rel)
                 for warning in image_warnings:
                     print(f"    image: {warning}", file=sys.stderr)
                 target.write_text(text, encoding="utf-8")
@@ -1056,6 +1168,7 @@ def main() -> int:
             print(f"  translate {key}")
             translated = translate_note(job, client)
             translated, image_warnings = images.rewrite(translated, job.rel)
+            translated = ensure_wiki_metadata(translated, job.rel)
             for warning in image_warnings:
                 print(f"    image: {warning}", file=sys.stderr)
             backup_if_present(target, backup_root, job.rel)
@@ -1085,7 +1198,7 @@ def main() -> int:
 
     print(
         f"\ndone: {len(stats.translated)} translated, {len(stats.copied)} copied, "
-        f"{len(stats.refreshed)} image-refreshed, {len(stats.unchanged)} unchanged, "
+        f"{len(stats.refreshed)} refreshed, {len(stats.unchanged)} unchanged, "
         f"{len(stats.unknown)} unknown, {len(stats.failed)} failed"
     )
     print(

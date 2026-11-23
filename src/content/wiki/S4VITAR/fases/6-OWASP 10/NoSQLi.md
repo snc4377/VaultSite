@@ -1,3 +1,8 @@
+---
+title: "NoSQLi"
+category: ["S4VITAR", "fases", "6-OWASP 10", "NoSQLi"]
+---
+
 **NoSQL injections** are a security vulnerability in web applications that use NoSQL databases like MongoDB, Cassandra, and CouchDB, among others. These injections occur when a web application allows an attacker to send malicious data through a database query, which is then executed by the application without proper validation or sanitization.
 
 NoSQL injection works similarly to SQL injection but focuses on the specific vulnerabilities of NoSQL databases. In a NoSQL injection, the attacker exploits database queries based on **documents** instead of relational tables to send malicious data that can manipulate the database query and access confidential information or perform unauthorized actions.

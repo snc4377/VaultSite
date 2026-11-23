@@ -1,3 +1,8 @@
+---
+title: "Ad Security"
+category: ["PREP_CPTS", "Pen-testing", "Active Directory", "Ad Security"]
+---
+
 As we have progressed through this module, we have looked at the many features and functionalities built into Active Directory. All of which are built around the premise of central management and the ability to share information quickly, at will, to a large userbase. Active Directory can be considered insecure by design because of this. A default Active Directory installation will be missing many hardening measures, settings, and tools that can be used to secure an AD implementation. When we think about cybersecurity, one of the first things that come up is the balance between Confidentiality, Integrity, and Availability, also known as the [CIA Triad](https://www.f5.com/labs/articles/education/what-is-the-cia-triad). Finding this balance is hard, and AD leans heavily toward `Availability` and `Confidentiality` at its core.
 
 #### CIA Triad

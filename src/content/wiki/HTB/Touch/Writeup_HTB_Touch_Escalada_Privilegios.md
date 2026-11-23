@@ -1,3 +1,8 @@
+---
+title: "Writeup HTB Touch Escalada Privilegios"
+category: ["HTB", "Touch", "Writeup_HTB_Touch_Escalada_Privilegios"]
+---
+
 Note title: Untitled
 
 Privilege Escalation on Windows via MySQL (HTB "Touch")

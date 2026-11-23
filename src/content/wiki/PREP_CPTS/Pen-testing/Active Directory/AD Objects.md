@@ -1,3 +1,8 @@
+---
+title: "AD Objects"
+category: ["PREP_CPTS", "Pen-testing", "Active Directory", "AD Objects"]
+---
+
 We will often see the term "objects" when referring to AD. What is an object? An object can be defined as ANY resource present within an Active Directory environment such as OUs, printers, users, domain controllers.
 
 #### AD Objects

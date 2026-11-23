@@ -1,3 +1,8 @@
+---
+title: "Detection"
+category: ["PREP_CPTS", "Pen-testing", "Command Injections", "Detection"]
+---
+
 The process of detecting basic OS Command Injection vulnerabilities is the same process for exploiting such vulnerabilities. We attempt to append our command through various injection methods. If the command output changes from the intended usual result, we have successfully exploited the vulnerability. This may not be true for more advanced command injection vulnerabilities because we may utilize various fuzzing methods or code reviews to identify potential command injection vulnerabilities. We may then gradually build our payload until we achieve command injection. 
 
 ---

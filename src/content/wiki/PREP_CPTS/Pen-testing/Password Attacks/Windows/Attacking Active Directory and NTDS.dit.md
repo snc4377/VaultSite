@@ -1,3 +1,8 @@
+---
+title: "Attacking Active Directory And NTDS.dit"
+category: ["PREP_CPTS", "Pen-testing", "Password Attacks", "Windows", "Attacking Active Directory and NTDS.dit"]
+---
+
 `Active Directory` (`AD`) is a common and critical directory service in modern enterprise networks. AD is something we will repeatedly encounter, so we need to be familiar with various methods we can use to attack and defend these environments. It is safe to conclude that if the organization uses Windows, then AD is used to manage those Windows systems. Attacking AD is such an extensive and significant topic that we have multiple modules covering the subject.
 
 In this section, we will focus primarily on how we can extract credentials through the use of a `dictionary attack` against `AD accounts` and `dumping hashes` from the `NTDS.dit` file.
