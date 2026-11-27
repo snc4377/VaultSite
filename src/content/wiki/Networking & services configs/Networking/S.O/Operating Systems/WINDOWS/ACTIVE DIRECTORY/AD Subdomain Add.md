@@ -1,0 +1,27 @@
+---
+title: "AD Subdomain Add"
+category: ["Networking & services configs", "Networking", "S.O", "Operating Systems", "WINDOWS", "ACTIVE DIRECTORY", "AD Subdomain Add"]
+---
+
+Note title: AD Subdomain Add
+
+We do the same as when creating a domain from scratch, but in this section we need to do the following when promoting it:
+First, we need to set the IP of the primary machine with Active Directory in the DNS:
+![Pasted image 20231109094527](/VaultSite/wiki-images/Pasted%20image%2020231109094527.png)
+
+We'll click "Add" to create a new domain in an existing forest.
+![Pasted image 20231110082242](/VaultSite/wiki-images/Pasted%20image%2020231110082242.png)
+
+Then in "Change", we'll enter the administrator exactly as shown on screen.
+![Pasted image 20231110085048](/VaultSite/wiki-images/Pasted%20image%2020231110085048.png)
+
+Now we set the password and click Next Next Next
+![Pasted image 20231109095354](/VaultSite/wiki-images/Pasted%20image%2020231109095354.png)
+
+If done correctly, we'll see the following:
+![Pasted image 20231110090704](/VaultSite/wiki-images/Pasted%20image%2020231110090704.png)
+
+And to verify we did it right:
+![Pasted image 20231110091426](/VaultSite/wiki-images/Pasted%20image%2020231110091426.png)
+TREE: Tools > ACTIVE DIRECTORY USERS AND GROUPS
+![Pasted image 20231110092347](/VaultSite/wiki-images/Pasted%20image%2020231110092347.png)

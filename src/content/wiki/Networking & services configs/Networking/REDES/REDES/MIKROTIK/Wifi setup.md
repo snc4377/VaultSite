@@ -1,0 +1,32 @@
+---
+title: "Wifi Setup"
+category: ["Networking & services configs", "Networking", "REDES", "REDES", "MIKROTIK", "Wifi setup"]
+---
+
+# Wifi Setup
+
+First, we assign an IP to the wlan interface, then activate the desired interface (in this case wlan2).
+![Pasted image 20231102140655](/VaultSite/wiki-images/Pasted%20image%2020231102140655.png)
+
+We set the apbridge mode and assign the desired SSID.
+![Pasted image 20231102140755](/VaultSite/wiki-images/Pasted%20image%2020231102140755.png)
+
+Next, we create a DHCP server and select DHCP SETUP.
+![Pasted image 20231102141029](/VaultSite/wiki-images/Pasted%20image%2020231102141029.png)
+
+We choose the interface:
+![Pasted image 20231102141045](/VaultSite/wiki-images/Pasted%20image%2020231102141045.png)
+![Pasted image 20231102141059](/VaultSite/wiki-images/Pasted%20image%2020231102141059.png)
+
+The gateway that our DHCP will provide:
+![Pasted image 20231102141122](/VaultSite/wiki-images/Pasted%20image%2020231102141122.png)
+
+We set the IP range we want to distribute:
+![Pasted image 20231102141203](/VaultSite/wiki-images/Pasted%20image%2020231102141203.png)
+
+And the DNS servers:
+![Pasted image 20231102141234](/VaultSite/wiki-images/Pasted%20image%2020231102141234.png)
+
+For maximum speed, I recommend configuring the following:
+
+![Pasted image 20231111204718](/VaultSite/wiki-images/Pasted%20image%2020231111204718.png)

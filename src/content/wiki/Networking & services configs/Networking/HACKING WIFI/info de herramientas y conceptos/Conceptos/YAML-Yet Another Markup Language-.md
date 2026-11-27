@@ -1,0 +1,37 @@
+---
+title: "YAML Yet Another Markup Language"
+category: ["Networking & services configs", "Networking", "HACKING WIFI", "info de herramientas y conceptos", "Conceptos", "YAML-Yet Another Markup Language-"]
+---
+
+Note title: YAML Yet Another Markup Language
+
+https://www.redhat.com/es/topics/automation/what-is-yaml
+YAML is a human-readable data serialization language commonly used for designing configuration files. For some, the acronym YAML stands for "Yet Another Markup Language"; for others, it's a recursive acronym meaning "YAML Ain't Markup Language," emphasizing its use for data rather than documents.
+
+It's a widely used programming language because it's designed to be easy to read and understand. It can also be used alongside other programming languages. Thanks to its flexibility and accessibility, [Ansible®](https://www.redhat.com/es/technologies/management/ansible/compare-awx-vs-ansible-automation-platform) uses it to create automation processes in the form of [Ansible playbooks](https://www.redhat.com/es/topics/automation/what-is-an-ansible-playbook).
+
+## YAML Syntax
+
+YAML files use the .yml or .yaml extension and follow specific syntax rules.
+
+YAML has features derived from Perl, C, XML, HTML, and other programming languages. It's also based on JSON, making JSON files compatible with YAML.
+
+There are no conventional formatting symbols like braces, brackets, closing tags, or quotation marks. Additionally, files in this language are easier to read because they use Python-style indentation to determine structure and indicate the nesting of one code element within another. It's designed to disallow tab characters to maintain portability across all systems, so whitespace (space characters) is used instead.
+
+Comments are marked with a hash or pound symbol (#), and their use is a best practice as they describe the code's intent. YAML doesn't support multi-line comments, so the hash symbol must be used as a suffix on each line.
+
+The most common question among beginners is what the three dashes (---) mean. They indicate the start of a document, while the end is marked with three dots (…).
+
+Here's a very basic example of a YAML file:
+
+#Comment: This is a supermarket list using YAML
+#Note that - character represents the list
+---
+food: 
+  - vegetables: tomatoes #first list item
+  - fruits: #second list item
+      citrics: oranges 
+      tropical: bananas
+      nuts: peanuts
+      sweets: raisins
+      

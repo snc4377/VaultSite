@@ -1,0 +1,15 @@
+---
+title: "THE DUDE"
+category: ["Networking & services configs", "Networking", "REDES", "REDES", "MIKROTIK", "THE DUDE"]
+---
+
+# THE DUDE
+
+The Dude is a free network monitoring tool provided by MikroTik. It allows for centralized monitoring and management of network devices.
+
+Go to the MikroTik website and install this:
+![Pasted image 20231119160656](/VaultSite/wiki-images/Pasted%20image%2020231119160656.png)
+
+![Pasted image 20231119160806](/VaultSite/wiki-images/Pasted%20image%2020231119160806.png)
+![Pasted image 20231119160846](/VaultSite/wiki-images/Pasted%20image%2020231119160846.png)
+![Pasted image 20231119160917](/VaultSite/wiki-images/Pasted%20image%2020231119160917.png)

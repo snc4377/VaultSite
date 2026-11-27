@@ -1,0 +1,52 @@
+---
+title: "AP UNIFI"
+category: ["Networking & services configs", "Networking", "REDES", "REDES", "UNIFI", "AP UNIFI"]
+---
+
+Note title: AP UNIFI
+
+I'm going to configure a UniFi AP. This AP is connected to a trunk port with VLANs 10, 20, 30, and 40. The AP sees all these VLANs.
+To configure it, we install the UniFi Controller software.
+![Pasted image 20240311133159](/VaultSite/wiki-images/Pasted%20image%2020240311133159.png)![Pasted image 20240311133233](/VaultSite/wiki-images/Pasted%20image%2020240311133233.png)
+![Pasted image 20240311133508](/VaultSite/wiki-images/Pasted%20image%2020240311133508.png)
+We choose to manage it in the browser.
+We follow the installation.
+![Pasted image 20240311133733](/VaultSite/wiki-images/Pasted%20image%2020240311133733.png)
+We enter our UI account, if we have internet access
+![Pasted image 20240311134100](/VaultSite/wiki-images/Pasted%20image%2020240311134100.png)
+If we don't have internet, we go to advanced setup.
+![Pasted image 20240311134209](/VaultSite/wiki-images/Pasted%20image%2020240311134209.png)
+A message will appear which we'll skip
+![Pasted image 20240311134314](/VaultSite/wiki-images/Pasted%20image%2020240311134314.png)
+And we'll see this:
+![Pasted image 20240311134344](/VaultSite/wiki-images/Pasted%20image%2020240311134344.png)
+When we connect it to a port, we'll be able to see it.
+![Pasted image 20240311134749](/VaultSite/wiki-images/Pasted%20image%2020240311134749.png)
+Now we adopt it
+![Pasted image 20240311135845](/VaultSite/wiki-images/Pasted%20image%2020240311135845.png)We go to these settings
+![Pasted image 20240311141131](/VaultSite/wiki-images/Pasted%20image%2020240311141131.png)
+We add the networks we want
+![Pasted image 20240311141310](/VaultSite/wiki-images/Pasted%20image%2020240311141310.png)
+We select the bands and password protocol
+![Pasted image 20240311141345](/VaultSite/wiki-images/Pasted%20image%2020240311141345.png)
+![Pasted image 20240311141411](/VaultSite/wiki-images/Pasted%20image%2020240311141411.png)![Pasted image 20240311141457](/VaultSite/wiki-images/Pasted%20image%2020240311141457.png)
+
+Then in networks we can create the VLAN setup.
+![Pasted image 20240311141550](/VaultSite/wiki-images/Pasted%20image%2020240311141550.png)
+![Pasted image 20240311141625](/VaultSite/wiki-images/Pasted%20image%2020240311141625.png)
+![Pasted image 20240311141700](/VaultSite/wiki-images/Pasted%20image%2020240311141700.png)
+![Pasted image 20240311141741](/VaultSite/wiki-images/Pasted%20image%2020240311141741.png)
+![Pasted image 20240311141802](/VaultSite/wiki-images/Pasted%20image%2020240311141802.png)
+Now we assign the networks to the desired WiFi:
+![Pasted image 20240311141846](/VaultSite/wiki-images/Pasted%20image%2020240311141846.png)
+![Pasted image 20240311141952](/VaultSite/wiki-images/Pasted%20image%2020240311141952.png)
+![Pasted image 20240311142050](/VaultSite/wiki-images/Pasted%20image%2020240311142050.png)
+HERE ARE ALL THE WIFIS
+![Pasted image 20240311142104](/VaultSite/wiki-images/Pasted%20image%2020240311142104.png)
+Now this is associated with the router, so anyone connecting to any of these WiFi networks will get an IP from the MikroTik DHCP for example.
+I'VE CHANGED THE DHCP NAME TO IDENTIFY USERS.
+![Pasted image 20240311142245](/VaultSite/wiki-images/Pasted%20image%2020240311142245.png)
+When it turns green, the changes will be OK.
+![Pasted image 20240311142315](/VaultSite/wiki-images/Pasted%20image%2020240311142315.png)
+As we can see, I've connected my phone to the student network and received an IP from that range.![Pasted image 20240311142522](/VaultSite/wiki-images/Pasted%20image%2020240311142522.png)
+![Pasted image 20240311142552](/VaultSite/wiki-images/Pasted%20image%2020240311142552.png)

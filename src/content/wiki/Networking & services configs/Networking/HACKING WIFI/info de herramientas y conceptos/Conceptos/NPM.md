@@ -1,0 +1,22 @@
+---
+title: "NPM"
+category: ["Networking & services configs", "Networking", "HACKING WIFI", "info de herramientas y conceptos", "Conceptos", "NPM"]
+---
+
+Note title: NPM
+
+NPM (**[Node Package Manager](https://www.google.com/search?q=Node+Package+Manager&rlz=1C1UEAD_esES1053ES1053&oq=QUE+ES+NPM&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDI0MDlqMGo3qAIIsAIB&sourceid=chrome&ie=UTF-8&ved=2ahUKEwjC4sPv_NGSAxWeVqQEHUo8KkIQgK4QegQIARAB)**) is the ==default package manager for Node.js==, considered the largest software ecosystem in the world for JavaScript. It functions as a command-line tool and an online repository that allows developers to install, manage, share, and publish reusable libraries (dependencies), simplifying development and avoiding the need to write everything from scratch.
+
+**Key aspects of NPM:**
+
+- **Dependency Manager:** Manages the libraries required for a project, ensuring version compatibility and facilitating collaboration by defining dependencies in a `package.json` file.
+- **Repository (NPM Registry):** A large online registry hosting over a million open-source packages ready for use.
+- **CLI (Command Line Interface):** A tool used in the terminal to install, update, or remove packages, either locally (for a project) or globally (for the system).
+- **Integration with Node.js:** Installs automatically alongside Node.js, serving as the standard tool for development in this environment.
+
+**Main NPM commands:**
+
+- `npm init`: Initializes a new project by creating the `package.json` file.
+- `npm install <package>`: Installs a specific dependency in the project.
+- `npm install -g <package>`: Installs a package globally.
+- `npm update`: Updates the project's packages.

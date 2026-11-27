@@ -1,0 +1,10 @@
+---
+title: "Free Domain Name"
+category: ["Networking & services configs", "Networking", "REDES", "REDES", "MIKROTIK", "Free domain name"]
+---
+
+Note title: Free Domain Name
+
+We go to ip > cloud and activate this
+![Pasted image 20231102143121](/VaultSite/wiki-images/Pasted%20image%2020231102143121.png)
+And automatically gives us the DNS

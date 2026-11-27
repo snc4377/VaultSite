@@ -1,0 +1,14 @@
+---
+title: "Appointment"
+category: ["HTB", "Machines", "Appointment"]
+---
+
+# Appointment
+
+- The most common SQL vulnerability is SQL injection
+- `nmap -sV -T4 -Pn 10.129.12.149` (-sV: provides information about the versions of services on the scanned ports) (-T4 is the scan speed; the higher the number, the faster but easier to detect) (-Pn tells nmap to assume the host is online and skip host detection)
+- We searched the IP in a web browser and found a page
+- Then we had to search for login credentials on this page https://pentestlab.blog/2012/12/24/sql-injection-authentication-bypass-cheat-sheet/ for example
+- We tried with `admin'#` and password `admin` and obtained the flag
+![Pasted image 20240227213248](/VaultSite/wiki-images/Pasted%20image%2020240227213248.png)
+![Pasted image 20240227213159](/VaultSite/wiki-images/Pasted%20image%2020240227213159.png)

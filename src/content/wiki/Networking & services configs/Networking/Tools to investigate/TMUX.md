@@ -1,0 +1,59 @@
+---
+title: "TMUX"
+category: ["Networking & services configs", "Networking", "Tools to investigate", "TMUX"]
+---
+
+# Tmux (Terminal Multiplexer)
+
+## Description
+**Tmux** is a terminal multiplexer that allows you to divide a single terminal screen into multiple panes, organize tasks into separate windows (tabs), and keep processes running in the background. Its main advantage is that processes keep running even if you accidentally close the terminal or disconnect from a remote SSH server.
+
+---
+
+## Ligolo-ng Workflow Example
+To run a server (like Ligolo) and keep it running in the background, follow these steps:
+
+1. **Create and name a new session:**
+   ```bash
+   tmux new -s ligolo
+   ```
+2. **Start your service:** Run the Ligolo server command inside the new tmux window.
+3. **Detach (Send to background):** Press `Ctrl + b`, release, then press `d`. 
+   *(Note: Do NOT use `Ctrl + b` + `x`, as this kills the panel and stops the server).*
+4. **Attach (Return to the session):** Whenever you want to check on it, run:
+   ```bash
+   tmux a -t ligolo
+   ```
+
+---
+
+## Key CLI Commands
+
+
+| Command | Description |
+| :--- | :--- |
+| `tmux new -s <name>` | Create a new session with a specific name |
+| `tmux ls` | List all active tmux sessions |
+| `tmux a -t <name>` | Attach (return) to a specific session |
+| `tmux kill-session -t <name>` | Destroy a specific session and stop its processes |
+
+---
+
+## Keyboard Shortcuts (Inside Tmux)
+*First press **`Ctrl + b`**, release, then press any of the following keys:*
+
+### Pane Management (Split Screen)
+* `%` : Split terminal vertically.
+* `"` : Split terminal horizontally.
+* `Arrow Keys` : Navigate between panes.
+* `z` : Toggle zoom (maximize/minimize) the current pane.
+* `x` : Kill (close) the current pane.
+
+### Window Management (Tabs)
+* `c` : Create a new window.
+* `n` : Go to the next window.
+* `p` : Go to the previous window.
+* `&` : Kill the current window.
+
+### Session Management
+* `d` : Detach from the current session (leaves it running in the background).
