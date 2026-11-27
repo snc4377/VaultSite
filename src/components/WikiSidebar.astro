@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import { noteTitle } from "../utils/note";
 import { buildWikiTree, type WikiFolder } from "../utils/wiki-tree";
 import { withBase } from "../utils/url";
 
@@ -70,15 +69,15 @@ const openFolder = (folder: WikiFolder) =>
         </li>
       ))}
 
-      {node.notes.map((note) => {
-        const active = current === note.id;
+      {node.notes.map((leaf) => {
+        const active = current === leaf.id;
         return (
           <li>
             <a
-              href={withBase(`/wiki/${note.id}`)}
+              href={withBase(`/wiki/${leaf.id}`)}
               class:list={["wiki-note", active && "is-active"]}
               aria-current={active ? "page" : undefined}
-              title={noteTitle(note)}
+              title={leaf.label}
             >
               <svg
                 class="wiki-note-icon"
@@ -92,7 +91,7 @@ const openFolder = (folder: WikiFolder) =>
                 <path d="M4 1.75h5.25L12.5 5v9.25H4z" />
                 <path d="M9.25 1.75V5h3.25" />
               </svg>
-              <span class="min-w-0 truncate">{noteTitle(note)}</span>
+              <span class="min-w-0 truncate">{leaf.label}</span>
             </a>
           </li>
         );

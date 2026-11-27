@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import WikiSidebar from "../../components/WikiSidebar.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { noteDate, noteTitle } from "../../utils/note";
-import { categoryPath } from "../../utils/wiki-tree";
+import { folderPath } from "../../utils/wiki-tree";
 import { withBase } from "../../utils/url";
 
 export async function getStaticPaths() {
@@ -20,7 +20,7 @@ const { Content } = await render(note);
 const title = noteTitle(note);
 const published = noteDate(note);
 const tags = note.data.tags;
-const categories = categoryPath(note);
+const folders = folderPath(note);
 ---
 
 <Layout
@@ -40,10 +40,10 @@ const categories = categoryPath(note);
         <a href={withBase("/wiki")} class="transition-colors hover:text-accent"
           >~/wiki</a
         >
-        {categories.map((category) => (
+        {folders.map((folder) => (
           <span class="contents">
             <span class="text-[#3a3a3a]" aria-hidden="true">/</span>
-            <span>{category}</span>
+            <span>{folder}</span>
           </span>
         ))}
         <span class="text-[#3a3a3a]" aria-hidden="true">/</span>

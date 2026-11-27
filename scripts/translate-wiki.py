@@ -17,9 +17,14 @@ Usage:
     python3 scripts/translate-wiki.py --check            # list languages, no API calls
     python3 scripts/translate-wiki.py --dry-run          # plan, no API calls, no writes
     python3 scripts/translate-wiki.py --dry-run --force  # include existing notes in the plan
+    python3 scripts/translate-wiki.py --dry-run --prune  # plan + list outputs that would be deleted
     python3 scripts/translate-wiki.py                    # translate + write
+    python3 scripts/translate-wiki.py --prune            # translate + delete stale outputs
     python3 scripts/translate-wiki.py --force            # rewrite every existing note
     python3 scripts/translate-wiki.py --only "Some Note.md"
+
+Folders listed in EXCLUDE_FOLDERS are never read, translated, or published,
+and `--prune` removes their previously published copies from DST.
 
 Public image URLs default to /wiki-images/...; pass `--public-base /VaultSite`
 for a GitHub Pages project site served under that base.
@@ -63,6 +68,29 @@ DST = Path("/opt/obsidian-vault-en")
 
 # Obsidian's own config folder: never mirrored into the public site.
 EXCLUDE_DIRS = {".obsidian", ".trash", ".git", ".stfolder", ".stversions"}
+
+# Folders that must never be published. Entries are matched case-insensitively
+# against every path component (so "BD" is excluded at any depth); an entry
+# containing "/" is matched as a vault-relative path and its whole subtree.
+EXCLUDE_FOLDERS = [
+    "BD",
+    "Database",
+    "COMO USAR OBSIDIAN",
+    "Install WordPress",
+    "LINUX bin",
+    "PROXMOX bin",
+]
+
+_EXCLUDED_NAMES = {
+    name.strip().casefold()
+    for name in EXCLUDE_FOLDERS
+    if "/" not in name and "\\" not in name
+}
+_EXCLUDED_PATHS = tuple(
+    Path(name.strip().replace("\\", "/")).as_posix().strip("/").casefold()
+    for name in EXCLUDE_FOLDERS
+    if "/" in name or "\\" in name
+)
 
 # Frontmatter keys whose text is translated. `tags` are deliberately absent:
 # they are identifiers used for filtering and must stay stable.
@@ -554,12 +582,35 @@ class RunStats:
     unknown: list[str] = field(default_factory=list)
 
 
+def is_excluded(rel: Path) -> bool:
+    """True when a vault-relative path must not be mirrored/published.
+
+    Matches hidden components, EXCLUDE_DIRS, and every EXCLUDE_FOLDERS entry
+    either as a path component (case-insensitive) or as a relative subtree.
+    """
+    for part in rel.parts:
+        if part.startswith(".") or part in EXCLUDE_DIRS:
+            return True
+        if part.casefold() in _EXCLUDED_NAMES:
+            return True
+    if _EXCLUDED_PATHS:
+        posix = rel.as_posix().casefold()
+        stem_path = Path(posix).with_suffix("").as_posix()
+        for excluded in _EXCLUDED_PATHS:
+            if (
+                posix == excluded
+                or posix.startswith(f"{excluded}/")
+                or stem_path == excluded
+            ):
+                return True
+    return False
+
+
 def iter_markdown(root: Path) -> list[Path]:
-    """All .md files, skipping hidden directories (Obsidian internals)."""
+    """All publishable .md files, skipping hidden and EXCLUDE_FOLDERS paths."""
     files: list[Path] = []
     for path in sorted(root.rglob("*.md")):
-        parts = path.relative_to(root).parts
-        if any(part.startswith(".") or part in EXCLUDE_DIRS for part in parts):
+        if is_excluded(path.relative_to(root)):
             continue
         if path.is_file():
             files.append(path)
@@ -658,7 +709,7 @@ class ImageHandler:
             if not path.is_file() or path.suffix.lower() not in IMAGE_EXTENSIONS:
                 continue
             rel = path.relative_to(self.src)
-            if any(part.startswith(".") or part in EXCLUDE_DIRS for part in rel.parts):
+            if is_excluded(rel):
                 continue
             index.setdefault(path.name.casefold(), []).append(path)
 
@@ -931,6 +982,47 @@ def backup_if_present(target: Path, backup_root: Path, rel: Path) -> None:
         shutil.copy2(target, dest)
 
 
+def find_stale_outputs(dst: Path, expected: set[str]) -> list[Path]:
+    """Output files under `dst` that no longer map to a publishable source note.
+
+    The tree is scanned instead of trusting the manifest, so notes deleted
+    while the manifest was stale, files under newly EXCLUDE_FOLDERS paths, and
+    stray files are all caught. The manifest and hidden paths are never touched.
+    """
+    stale: list[Path] = []
+    if not dst.is_dir():
+        return stale
+    for path in sorted(dst.rglob("*")):
+        if not path.is_file():
+            continue
+        rel = path.relative_to(dst)
+        if rel.as_posix() == MANIFEST_NAME:
+            continue
+        if any(part.startswith(".") for part in rel.parts):
+            continue
+        if rel.as_posix() not in expected:
+            stale.append(rel)
+    return stale
+
+
+def remove_empty_dirs(root: Path) -> None:
+    """Drop directories emptied by a prune, deepest first; leave hidden ones."""
+    if not root.is_dir():
+        return
+    directories = sorted(
+        (path for path in root.rglob("*") if path.is_dir()),
+        key=lambda path: len(path.parts),
+        reverse=True,
+    )
+    for directory in directories:
+        if any(part.startswith(".") for part in directory.relative_to(root).parts):
+            continue
+        try:
+            directory.rmdir()
+        except OSError:
+            pass
+
+
 def load_manifest(manifest_path: Path) -> dict[str, dict[str, str]]:
     """Per-file cache: {"rel/path.md": {"status": ..., "sha256": ...}}."""
     if manifest_path.is_file():
@@ -961,7 +1053,7 @@ def main() -> int:
     parser.add_argument(
         "--prune",
         action="store_true",
-        help="remove outputs whose source note no longer exists (managed files only)",
+        help="delete outputs in DST whose source note was removed or excluded",
     )
     parser.add_argument(
         "--images-dir",
@@ -985,6 +1077,9 @@ def main() -> int:
         die("source and output vaults must be separate, non-nested directories")
 
     files = iter_markdown(src)
+    # Prune must always compare against the whole publishable vault, never the
+    # `--only` subset, or a filtered run would delete everything else.
+    expected = {path.relative_to(src).as_posix() for path in files}
     if args.only:
         files = [f for f in files if f.relative_to(src).match(args.only)]
     if not files:
@@ -1054,6 +1149,15 @@ def main() -> int:
             f"\nimages: {images.copied} to copy, {images.skipped} already present, "
             f"{len(images.missing)} missing"
         )
+        if args.prune:
+            stale_outputs = find_stale_outputs(dst, expected)
+            for rel in stale_outputs:
+                print(f"  prune     {rel.as_posix()}")
+            print(
+                f"\nprune: {len(stale_outputs)} stale file(s) would be removed"
+                if stale_outputs
+                else "\nprune: nothing to remove"
+            )
         print("dry run: no API calls, no files written")
         return 0
 
@@ -1185,14 +1289,22 @@ def main() -> int:
             print(f"  FAILED    {key}: {exc}", file=sys.stderr)
 
     if args.prune:
-        expected = {str(j.rel) for j in jobs}
-        for stale_key in [k for k in manifest if k not in expected]:
-            stale = dst / stale_key
-            if stale.is_file():
-                backup_if_present(stale, backup_root, Path(stale_key))
-                stale.unlink()
-                print(f"  prune     {stale_key}")
+        stale_outputs = find_stale_outputs(dst, expected)
+        for rel in stale_outputs:
+            target = dst / rel
+            backup_if_present(target, backup_root, rel)
+            target.unlink()
+            manifest.pop(rel.as_posix(), None)
+            print(f"  prune     {rel.as_posix()}")
+        # Tracked entries whose file is already gone must stop being tracked.
+        for stale_key in [key for key in manifest if key not in expected]:
             del manifest[stale_key]
+        remove_empty_dirs(dst)
+        print(
+            f"\npruned: {len(stale_outputs)} stale file(s) removed"
+            if stale_outputs
+            else "\npruned: nothing to remove"
+        )
 
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
