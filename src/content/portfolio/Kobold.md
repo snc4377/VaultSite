@@ -1,0 +1,84 @@
+---
+title: "Kobold"
+category: ["Kobold"]
+---
+
+
+
+Note title: Kobold
+
+![Pasted image 20260506191825](/VaultSite/wiki-images/Pasted%20image%2020260506191825.png)
+
+
+
+![Pasted image 20260506191847](/VaultSite/wiki-images/Pasted%20image%2020260506191847.png)
+
+![Pasted image 20260506191900](/VaultSite/wiki-images/Pasted%20image%2020260506191900.png)
+
+
+![Pasted image 20260506191756](/VaultSite/wiki-images/Pasted%20image%2020260506191756.png)
+![Pasted image 20260506191958](/VaultSite/wiki-images/Pasted%20image%2020260506191958.png)
+
+![Pasted image 20260506192033](/VaultSite/wiki-images/Pasted%20image%2020260506192033.png)
+
+
+![Pasted image 20260506192418](/VaultSite/wiki-images/Pasted%20image%2020260506192418.png)
+https://nvd.nist.gov/vuln/detail/CVE-2026-23744
+![Pasted image 20260506192442](/VaultSite/wiki-images/Pasted%20image%2020260506192442.png)
+
+![Pasted image 20260506193923](/VaultSite/wiki-images/Pasted%20image%2020260506193923.png)
+
+
+![Pasted image 20260506193931](/VaultSite/wiki-images/Pasted%20image%2020260506193931.png)
+
+
+Here we'll list by docker since we've seen an arcane for docker on port 3552
+
+![Pasted image 20260506194943](/VaultSite/wiki-images/Pasted%20image%2020260506194943.png)
+![Pasted image 20260506195028](/VaultSite/wiki-images/Pasted%20image%2020260506195028.png)
+
+
+![Pasted image 20260506195043](/VaultSite/wiki-images/Pasted%20image%2020260506195043.png)
+
+
+
+![Pasted image 20260506195056](/VaultSite/wiki-images/Pasted%20image%2020260506195056.png)
+
+https://nvd.nist.gov/vuln/detail/CVE-2025-64714
+Here we see it's vulnerable to LFI but we need to be able to execute PHP
+
+![Pasted image 20260506195319](/VaultSite/wiki-images/Pasted%20image%2020260506195319.png)
+
+
+
+![Pasted image 20260506195354](/VaultSite/wiki-images/Pasted%20image%2020260506195354.png)
+
+
+![Pasted image 20260506195536](/VaultSite/wiki-images/Pasted%20image%2020260506195536.png)
+
+![Pasted image 20260506195626](/VaultSite/wiki-images/Pasted%20image%2020260506195626.png)
+
+![Pasted image 20260506195643](/VaultSite/wiki-images/Pasted%20image%2020260506195643.png)
+
+
+![Pasted image 20260506195713](/VaultSite/wiki-images/Pasted%20image%2020260506195713.png)
+
+
+And now we'll mount the root filesystem in a container to become root
+
+
+
+![Pasted image 20260506195828](/VaultSite/wiki-images/Pasted%20image%2020260506195828.png)
+
+|Parameter|Meaning|
+|---|---|
+|Container name|`pwned` _(we can enter anything)_|
+|Image|`privatebin/nginx-fpm-alpine:2.0.2`|
+|Domain|`/bin/bash`|
+|User|`0`|
+
+Dump the root 
+![Pasted image 20260506200018](/VaultSite/wiki-images/Pasted%20image%2020260506200018.png)
+
+![Pasted image 20260506200039](/VaultSite/wiki-images/Pasted%20image%2020260506200039.png)
+![Pasted image 20260506200204](/VaultSite/wiki-images/Pasted%20image%2020260506200204.png)

@@ -1,0 +1,51 @@
+---
+title: "Helix Machine"
+category: ["Helix Machine"]
+---
+
+Note title: Helix Machine
+
+![Pasted image 20260511203629](/VaultSite/wiki-images/Pasted%20image%2020260511203629.png)![Pasted image 20260511203640](/VaultSite/wiki-images/Pasted%20image%2020260511203640.png)
+![Pasted image 20260511203655](/VaultSite/wiki-images/Pasted%20image%2020260511203655.png)
+
+Photo of ffuf scanning vhosts to see this subdomain here 
+{}
+
+![Pasted image 20260511203731](/VaultSite/wiki-images/Pasted%20image%2020260511203731.png)
+
+![Pasted image 20260511203812](/VaultSite/wiki-images/Pasted%20image%2020260511203812.png)
+https://nvd.nist.gov/vuln/detail/CVE-2023-34468
+https://github.com/mbadanoiu/CVE-2023-34468/blob/main/Apache%20NiFi%20-%20CVE-2023-34468.pdf
+
+![Pasted image 20260511203944](/VaultSite/wiki-images/Pasted%20image%2020260511203944.png)
+
+![Pasted image 20260511203935](/VaultSite/wiki-images/Pasted%20image%2020260511203935.png)
+
+![Pasted image 20260511203855](/VaultSite/wiki-images/Pasted%20image%2020260511203855.png)
+
+![Pasted image 20260511204010](/VaultSite/wiki-images/Pasted%20image%2020260511204010.png)
+
+![Pasted image 20260511204027](/VaultSite/wiki-images/Pasted%20image%2020260511204027.png)
+![Pasted image 20260511204117](/VaultSite/wiki-images/Pasted%20image%2020260511204117.png)
+![Pasted image 20260511204130](/VaultSite/wiki-images/Pasted%20image%2020260511204130.png)
+
+
+![Pasted image 20260511213358](/VaultSite/wiki-images/Pasted%20image%2020260511213358.png)
+![Pasted image 20260511213723](/VaultSite/wiki-images/Pasted%20image%2020260511213723.png)
+
+![Pasted image 20260511213716](/VaultSite/wiki-images/Pasted%20image%2020260511213716.png)
+![Pasted image 20260512171117](/VaultSite/wiki-images/Pasted%20image%2020260512171117.png)
+![Pasted image 20260512171128](/VaultSite/wiki-images/Pasted%20image%2020260512171128.png)
+![Pasted image 20260512171053](/VaultSite/wiki-images/Pasted%20image%2020260512171053.png)
+
+
+
+![Pasted image 20260512170947](/VaultSite/wiki-images/Pasted%20image%2020260512170947.png)
+
+![Pasted image 20260512171213](/VaultSite/wiki-images/Pasted%20image%2020260512171213.png)
+
+![Pasted image 20260512171024](/VaultSite/wiki-images/Pasted%20image%2020260512171024.png)
+![Pasted image 20260512171004](/VaultSite/wiki-images/Pasted%20image%2020260512171004.png)
+
+
+![Pasted image 20260512170933](/VaultSite/wiki-images/Pasted%20image%2020260512170933.png)

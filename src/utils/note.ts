@@ -1,13 +1,18 @@
-import type { CollectionEntry } from "astro:content";
+/** Structural shape shared by every vault-backed collection. */
+export type NoteLike = {
+  id: string;
+  filePath?: string;
+  data: { title?: string };
+};
 
-type WikiNote = CollectionEntry<"wiki">;
+type DatedNote = NoteLike & { data: { date?: Date } };
 
 /**
  * Prefer the frontmatter title. Hand-written vault notes often have none, so
  * fall back to the original filename (preserving its casing), then to the
  * entry id ("la-biblia" -> "La Biblia") if no file path is available.
  */
-export function noteTitle(note: WikiNote): string {
+export function noteTitle(note: NoteLike): string {
   const title = note.data.title?.trim();
   if (title) return title;
 
@@ -39,12 +44,12 @@ function titleCase(value: string): string {
 }
 
 /** `YYYY-MM-DD` for `<time datetime>`, or null when the note is undated. */
-export function noteDate(note: WikiNote): string | null {
+export function noteDate(note: DatedNote): string | null {
   return note.data.date ? note.data.date.toISOString().slice(0, 10) : null;
 }
 
 /** Newest first; undated notes last, alphabetically, so order stays stable. */
-export function sortNotes(notes: WikiNote[]): WikiNote[] {
+export function sortNotes<T extends DatedNote>(notes: T[]): T[] {
   return [...notes].sort((a, b) => {
     const aDate = a.data.date?.valueOf();
     const bDate = b.data.date?.valueOf();

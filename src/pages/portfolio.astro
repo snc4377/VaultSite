@@ -1,96 +1,191 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { noteTitle, sortNotes } from "../utils/note";
+import { excerpt } from "../utils/excerpt";
+import { withBase } from "../utils/url";
 
-const projects = [
-  {
-    id: "01",
-    year: "2026",
-    name: "htb-writeups/",
-    description: "Retired Hack The Box machines, from first scan to root flag.",
-    tags: ["htb", "linux"],
-  },
-  {
-    id: "02",
-    year: "2026",
-    name: "ctf-toolkit/",
-    description: "Small Python helpers for decoding, parsing and automating CTF chores.",
-    tags: ["python", "cli"],
-  },
-  {
-    id: "03",
-    year: "2025",
-    name: "netlab/",
-    description: "A containerised lab for practising pivoting and AD attacks.",
-    tags: ["docker", "active-directory"],
-  },
-];
+const notes = sortNotes(await getCollection("portfolio"));
+
+const cards = notes.map((note) => ({
+  id: note.id,
+  href: withBase(`/portfolio/${note.id.split("/").map(encodeURIComponent).join("/")}`),
+  title: noteTitle(note),
+  excerpt: excerpt(note.body, 150),
+  tags: note.data.tags.slice(0, 3),
+}));
+
+const total = cards.length;
 ---
 
 <Layout
   title="portfolio"
-  description="Projects, write-ups and tooling — HTB, CTFs and lab environments."
+  description="Hack The Box machine write-ups — enumeration, foothold and privilege escalation, one guide per box."
 >
   <header class="max-w-3xl">
     <p class="font-mono text-[11px] text-dim">// 02 — portfolio</p>
     <h1
       class="mt-3 font-mono text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-tight tracking-tight text-ink"
     >
-      projects <span class="text-dim">&amp;</span> write-ups
+      htb write-ups
     </h1>
     <p class="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-muted">
-      Things I built, broke or documented. Three entries for now — all placeholder
-      copy.
+      Every box I have rooted, from the first scan to the root flag. Enumeration,
+      footholds and privilege escalation — written down so the next attempt is
+      faster.
     </p>
   </header>
 
-  <section class="mt-9 sm:mt-12" aria-label="Projects">
-    <div class="flex items-baseline justify-between gap-4">
-      <h2 class="font-mono text-[0.8125rem] text-ink">
-        <span class="text-accent" aria-hidden="true">$</span> ls ./projects
-      </h2>
-      <span class="font-mono text-[11px] text-dim">3 dirs</span>
-    </div>
+  <section class="mt-9 max-w-3xl" aria-label="Search write-ups">
+    <form data-portfolio-form role="search" novalidate>
+      <label for="portfolio-search" class="sr-only">
+        Filter write-ups by machine name
+      </label>
+      <div class="search-shell">
+        <span class="search-prompt" aria-hidden="true">$ grep&nbsp;"</span>
+        <input
+          id="portfolio-search"
+          data-portfolio-search
+          class="search-field"
+          type="search"
+          name="q"
+          size="12"
+          placeholder="machine name"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          aria-describedby="portfolio-count"
+        />
+        <span class="search-prompt" aria-hidden="true">&quot;</span>
+        <kbd class="search-key" aria-hidden="true">/</kbd>
+      </div>
+    </form>
 
-    <div class="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        projects.map((project) => (
-          <a href="#" class="card group">
-            <div class="flex items-center justify-between border-b border-line-soft px-4 py-2 font-mono text-[10.5px] text-dim">
-              <span>drwxr-xr-x</span>
-              <span>{project.id} · {project.year}</span>
-            </div>
-
-            <div class="flex flex-1 flex-col p-4">
-              <h3 class="card-title">{project.name}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-muted">{project.description}</p>
-
-              <div class="mt-auto flex items-end justify-between gap-3 pt-7">
-                <ul class="flex flex-wrap gap-1.5">
-                  {project.tags.map((tag) => (
-                    <li class="tag">{tag}</li>
-                  ))}
-                </ul>
-                <span class="font-mono text-[11px] text-dim transition-colors group-hover:text-accent">
-                  open →
-                </span>
-              </div>
-            </div>
-          </a>
-        ))
-      }
-    </div>
-
-    <p class="mt-6 font-mono text-[11px] text-dim">
-      // placeholder entries — cards link to # until case studies exist
+    <p
+      id="portfolio-count"
+      data-portfolio-count
+      class="mt-2.5 font-mono text-[11px] text-dim"
+      role="status"
+      aria-live="polite"
+    >
+      {total} write-ups indexed
     </p>
   </section>
 
-  <section class="mt-14">
-    <p class="section-label">readme</p>
-    <p class="mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-muted">
-      Each card is a directory: a short description, a couple of tags and a
-      pointer to the write-up. When real projects land, this grid becomes content
-      collections — no layout change required.
+  <section class="mt-6" aria-label="Write-ups">
+    {
+      total === 0 ? (
+        <p class="panel p-6 font-mono text-xs text-dim">
+          <span class="text-accent" aria-hidden="true">
+            $
+          </span>{" "}
+          ls ./portfolio — no write-ups found. Run the translate pipeline first.
+        </p>
+      ) : (
+        <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" role="list">
+          {cards.map((card, index) => (
+            <li data-card data-title={card.title.toLowerCase()} class="min-w-0">
+              <a href={card.href} class="card h-full">
+                <div class="flex items-center justify-between gap-3 border-b border-line-soft px-4 py-2 font-mono text-[10.5px] text-dim">
+                  <span class="truncate">~/portfolio/{card.id}</span>
+                  <span class="flex-none">{String(index + 1).padStart(2, "0")}</span>
+                </div>
+
+                <div class="flex flex-1 flex-col p-4">
+                  <h2 class="card-title">{card.title}</h2>
+
+                  {card.excerpt && (
+                    <p class="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">
+                      {card.excerpt}
+                    </p>
+                  )}
+
+                  <div class="mt-auto flex items-end justify-between gap-3 pt-6">
+                    <ul class="flex flex-wrap gap-1.5" aria-label="Tags">
+                      {card.tags.map((tag) => (
+                        <li class="tag">{tag}</li>
+                      ))}
+                    </ul>
+                    <span class="card-cta" aria-hidden="true">
+                      [ VER GUÍA ]
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <p
+      data-portfolio-empty
+      hidden
+      class="panel p-6 font-mono text-xs text-dim"
+    >
+      <span class="text-accent" aria-hidden="true">$</span> grep — no machine
+      matches that name. <span class="text-muted">Try a shorter query, or clear
+      the field with Escape.</span>
     </p>
   </section>
+
+  <p class="mt-8 font-mono text-[11px] text-dim">
+    // {total} guides · retired boxes only · search updates as you type
+  </p>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>("[data-portfolio-form]");
+    const input = document.querySelector<HTMLInputElement>("[data-portfolio-search]");
+    const cells = Array.from(document.querySelectorAll<HTMLElement>("[data-card]"));
+    const empty = document.querySelector<HTMLElement>("[data-portfolio-empty]");
+    const status = document.querySelector<HTMLElement>("[data-portfolio-count]");
+    const total = cells.length;
+
+    if (input && status) {
+      const apply = () => {
+        const raw = input.value.trim();
+        const query = raw.toLowerCase();
+        let shown = 0;
+
+        // Keep the field as wide as its content so the closing quote trails the
+        // pattern; `size` is in characters and the bar is monospace.
+        input.size = input.value
+          ? Math.max(input.value.length, 1)
+          : input.placeholder.length;
+
+        for (const cell of cells) {
+          const matches = !query || (cell.dataset.title ?? "").includes(query);
+          cell.hidden = !matches;
+          if (matches) shown += 1;
+        }
+
+        if (empty) empty.hidden = shown > 0;
+        status.textContent = query
+          ? `${shown} of ${total} write-ups match "${raw}"`
+          : `${total} write-ups indexed`;
+      };
+
+      form?.addEventListener("submit", (event) => event.preventDefault());
+      input.addEventListener("input", apply);
+
+      // "/" jumps into the field, Escape clears it — the two keys a terminal
+      // user reaches for before touching the mouse.
+      document.addEventListener("keydown", (event) => {
+        const target = event.target as HTMLElement | null;
+        const typing = target?.closest("input, textarea, select, [contenteditable]");
+
+        if (event.key === "/" && !typing) {
+          event.preventDefault();
+          input.focus();
+          input.select();
+          return;
+        }
+
+        if (event.key === "Escape" && document.activeElement === input && input.value) {
+          input.value = "";
+          apply();
+        }
+      });
+    }
+  </script>
 </Layout>

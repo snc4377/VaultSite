@@ -1,0 +1,83 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import { noteDate, noteTitle } from "../../utils/note";
+import { withBase } from "../../utils/url";
+
+export async function getStaticPaths() {
+  const notes = await getCollection("portfolio");
+  return notes.map((note) => ({ params: { slug: note.id }, props: { note } }));
+}
+
+interface Props {
+  note: CollectionEntry<"portfolio">;
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const title = noteTitle(note);
+const published = noteDate(note);
+const tags = note.data.tags;
+// `category` already excludes the stripped HTB/Machines prefix; the last
+// segment is the note itself, so the rest is the sub-folder breadcrumb.
+const folders = note.data.category.slice(0, -1);
+---
+
+<Layout
+  title={title}
+  description={note.data.description ?? `${title} — an HTB write-up by snc4377.`}
+>
+  <article class="max-w-3xl">
+    <nav
+      class="flex flex-wrap items-center gap-x-1 gap-y-0.5 font-mono text-[11px] text-dim"
+      aria-label="Breadcrumb"
+    >
+      <a href={withBase("/portfolio")} class="transition-colors hover:text-accent"
+        >~/portfolio</a
+      >
+      {folders.map((folder) => (
+        <span class="contents">
+          <span class="text-[#3a3a3a]" aria-hidden="true">/</span>
+          <span>{folder}</span>
+        </span>
+      ))}
+      <span class="text-[#3a3a3a]" aria-hidden="true">/</span>
+      <span class="text-muted">{title}</span>
+    </nav>
+
+    <h1
+      class="mt-3 font-mono text-[clamp(1.4rem,3.2vw,2rem)] font-semibold leading-snug tracking-tight text-ink"
+    >
+      {title}
+    </h1>
+
+    {
+      (published || tags.length > 0) && (
+        <p class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] text-dim">
+          {published && <time datetime={published}>{published}</time>}
+          {published && tags.length > 0 && (
+            <span class="text-[#3a3a3a]" aria-hidden="true">
+              ·
+            </span>
+          )}
+          {tags.length > 0 && (
+            <span>{tags.map((tag) => `#${tag}`).join(" ")}</span>
+          )}
+        </p>
+      )
+    }
+
+    <div class="prose-doc mt-8">
+      <Content />
+    </div>
+
+    <div class="mt-12 flex items-center justify-between gap-4 border-t border-line-soft pt-4">
+      <a
+        href={withBase("/portfolio")}
+        class="font-mono text-xs text-dim transition-colors hover:text-accent"
+        >← cd ..</a
+      >
+      <span class="font-mono text-[11px] text-dim">// htb write-up</span>
+    </div>
+  </article>
+</Layout>

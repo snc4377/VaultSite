@@ -3,7 +3,15 @@
 translate-wiki.py — vault -> Astro translation pipeline.
 
 Reads every .md file under SRC (default /opt/obsidian-vault), detects its
-language, and writes an English copy into DST (default /opt/obsidian-vault-en).
+language, and writes an English copy into one of two output vaults:
+
+  * HTB machine write-ups (any path passing through `HTB/Machines/`) go to
+    PORTFOLIO_DST (default /opt/obsidian-portfolio-en), with that prefix
+    stripped so the site slug is just the machine name.
+  * Everything else goes to DST (default /opt/obsidian-vault-en).
+
+Each output keeps its own `.translate-manifest.json`, and `--prune` cleans
+both, so routing a note between the two never leaves a duplicate behind.
 
   * Spanish  -> translated to professional, technical English via DeepSeek.
   * English  -> copied byte-for-byte (no LLM call).
@@ -22,6 +30,11 @@ Usage:
     python3 scripts/translate-wiki.py --prune            # translate + delete stale outputs
     python3 scripts/translate-wiki.py --force            # rewrite every existing note
     python3 scripts/translate-wiki.py --only "Some Note.md"
+    python3 scripts/translate-wiki.py --dst-portfolio /path/to/portfolio-en
+
+`HTB/Machines/...` notes are published to /opt/obsidian-portfolio-en (prefix
+stripped); every other note goes to /opt/obsidian-vault-en. Each output has its
+own manifest and backup folder, and `--prune` sweeps both.
 
 Folders listed in EXCLUDE_FOLDERS are never read, translated, or published,
 and `--prune` removes their previously published copies from DST.
@@ -65,6 +78,12 @@ except ImportError:  # pragma: no cover - dependency guard
 
 SRC = Path("/opt/obsidian-vault")
 DST = Path("/opt/obsidian-vault-en")
+PORTFOLIO_DST = Path("/opt/obsidian-portfolio-en")
+
+# A note whose vault-relative path passes through this folder chain is an HTB
+# machine write-up. Matched case-insensitively against consecutive components,
+# so `HTB/Machines/Touch/Touch HTB.md` matches too.
+PORTFOLIO_SEGMENTS = ("htb", "machines")
 
 # Obsidian's own config folder: never mirrored into the public site.
 EXCLUDE_DIRS = {".obsidian", ".trash", ".git", ".stfolder", ".stversions"}
@@ -323,6 +342,32 @@ def category_for(rel: Path) -> list[str]:
     return list(rel.with_suffix("").parts)
 
 
+def is_portfolio_note(rel: Path) -> bool:
+    """True when a vault-relative path runs through `HTB/Machines/`."""
+    parts = [part.casefold() for part in rel.parts]
+    width = len(PORTFOLIO_SEGMENTS)
+    return any(
+        tuple(parts[index : index + width]) == PORTFOLIO_SEGMENTS
+        for index in range(len(parts) - width + 1)
+    )
+
+
+def portfolio_rel(rel: Path) -> Path:
+    """Path inside the portfolio output: drop the `HTB/Machines/` prefix.
+
+    The published slug becomes the machine name (`Bizness`), not
+    `HTB/Machines/Bizness`. Sub-folders such as `VulnHub/` are kept.
+    """
+    parts = list(rel.parts)
+    width = len(PORTFOLIO_SEGMENTS)
+    for index in range(len(parts) - width + 1):
+        if tuple(part.casefold() for part in parts[index : index + width]) == (
+            PORTFOLIO_SEGMENTS
+        ):
+            return Path(*parts[index + width :])
+    return rel
+
+
 def upsert_frontmatter(text: str, updates: dict[str, str]) -> str:
     """Insert or replace top-level keys, preserving the rest of the file.
 
@@ -563,13 +608,21 @@ class DeepSeekClient:
 @dataclass
 class Job:
     src: Path
-    rel: Path
+    rel: Path          # vault-relative source path (image lookups, manifest identity)
+    dest: Path         # routed output root (wiki or portfolio)
+    dst_rel: Path      # path inside `dest` (drives the published slug + category)
     text: str
     sha: str
     verdict: LanguageVerdict
     front: dict[str, Any] | None = None
     body: str = ""
     error: str | None = None
+    bucket: str = "wiki"
+
+    @property
+    def label(self) -> str:
+        """Short tag for progress lines: `[portfolio] Bizness.md`."""
+        return f"[{self.bucket}] {self.dst_rel.as_posix()}"
 
 
 @dataclass
@@ -619,6 +672,25 @@ def iter_markdown(root: Path) -> list[Path]:
 
 FENCE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})")
 MAX_CHUNK = 9000
+
+# Obsidian can paste images inline as base64 data URIs. That is payload, not
+# prose: one blob can dwarf the model's context window, so it never leaves the
+# machine. (The image handler already leaves `data:` targets untouched.)
+DATA_URI_IMAGE_RE = re.compile(r"!\[[^\]]*\]\(\s*data:[^)]*\)", re.S)
+
+
+def split_data_uris(text: str) -> list[tuple[bool, str]]:
+    """Split text into [(is_data_uri, chunk)] so blobs bypass the translator."""
+    pieces: list[tuple[bool, str]] = []
+    cursor = 0
+    for match in DATA_URI_IMAGE_RE.finditer(text):
+        if match.start() > cursor:
+            pieces.append((False, text[cursor : match.start()]))
+        pieces.append((True, match.group(0)))
+        cursor = match.end()
+    if cursor < len(text):
+        pieces.append((False, text[cursor:]))
+    return pieces or [(False, text)]
 
 
 def split_fences(body: str) -> list[tuple[bool, str]]:
@@ -913,23 +985,28 @@ class ImageHandler:
         return self._rewrite_body(text, note_rel, warnings), warnings
 
 
+def _translate_prose(client: DeepSeekClient, segment: str, title: str) -> str:
+    """Translate one prose segment, preserving its leading/trailing whitespace."""
+    lead = segment[: len(segment) - len(segment.lstrip())]
+    trail = segment[len(segment.rstrip()) :]
+    core = segment.strip()
+    if not core:
+        return segment
+    translated = "\n\n".join(
+        client.translate_markdown(chunk, title) for chunk in chunk_text(core)
+    )
+    return lead + translated + trail
+
+
 def translate_body(client: DeepSeekClient, body: str, title: str) -> str:
-    """Translate prose only; reassemble with code fences and spacing intact."""
+    """Translate prose only; reassemble with code fences, data URIs and spacing intact."""
     out: list[str] = []
     for is_code, segment in split_fences(body):
         if is_code:
             out.append(segment)
             continue
-        lead = segment[: len(segment) - len(segment.lstrip())]
-        trail = segment[len(segment.rstrip()) :]
-        core = segment.strip()
-        if not core:
-            out.append(segment)
-            continue
-        translated = "\n\n".join(
-            client.translate_markdown(chunk, title) for chunk in chunk_text(core)
-        )
-        out.append(lead + translated + trail)
+        for is_data_uri, piece in split_data_uris(segment):
+            out.append(piece if is_data_uri else _translate_prose(client, piece, title))
     return "".join(out)
 
 
@@ -1039,6 +1116,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Translate the Obsidian vault into English for Astro.")
     parser.add_argument("--src", type=Path, default=SRC, help=f"source vault (default {SRC})")
     parser.add_argument("--dst", type=Path, default=DST, help=f"output vault (default {DST})")
+    parser.add_argument(
+        "--dst-portfolio",
+        type=Path,
+        default=PORTFOLIO_DST,
+        help=f"output vault for HTB/Machines notes (default {PORTFOLIO_DST})",
+    )
     parser.add_argument("--check", action="store_true", help="report languages only; no API calls, no writes")
     parser.add_argument("--dry-run", action="store_true", help="plan the run; no API calls, no writes")
     parser.add_argument("--force", action="store_true", help="retranslate and rewrite every note, ignoring the manifest")
@@ -1070,16 +1153,40 @@ def main() -> int:
 
     src: Path = args.src.resolve()
     dst: Path = args.dst.resolve()
+    portfolio_dst: Path = args.dst_portfolio.resolve()
+    outputs: tuple[Path, ...] = (dst, portfolio_dst)
 
     if not src.is_dir():
         die(f"source vault not found: {src}")
-    if dst == src or src in dst.parents or dst in src.parents:
-        die("source and output vaults must be separate, non-nested directories")
+    for output in outputs:
+        if output == src or src in output.parents or output in src.parents:
+            die(
+                "source and output vaults must be separate, non-nested directories "
+                f"(offending output: {output})"
+            )
+    if (
+        dst == portfolio_dst
+        or dst in portfolio_dst.parents
+        or portfolio_dst in dst.parents
+    ):
+        die("wiki and portfolio output vaults must be separate, non-nested directories")
+
+    def route(rel: Path) -> tuple[Path, Path, str]:
+        """(output root, path inside it, bucket label) for a source note."""
+        if is_portfolio_note(rel):
+            return portfolio_dst, portfolio_rel(rel), "portfolio"
+        return dst, rel, "wiki"
 
     files = iter_markdown(src)
     # Prune must always compare against the whole publishable vault, never the
-    # `--only` subset, or a filtered run would delete everything else.
-    expected = {path.relative_to(src).as_posix() for path in files}
+    # `--only` subset, or a filtered run would delete everything else. Routing
+    # is applied here too, so a note that moved between outputs is stale in
+    # its old tree and expected in its new one.
+    expected: dict[Path, set[str]] = {output: set() for output in outputs}
+    for path in files:
+        out, routed_rel, _ = route(path.relative_to(src))
+        expected[out].add(routed_rel.as_posix())
+
     if args.only:
         files = [f for f in files if f.relative_to(src).match(args.only)]
     if not files:
@@ -1089,29 +1196,36 @@ def main() -> int:
     for path in files:
         raw = path.read_bytes()
         text = raw.decode("utf-8-sig", errors="replace")
+        rel = path.relative_to(src)
+        out, routed_rel, bucket = route(rel)
         verdict = detect_language(text, path)
         jobs.append(
             Job(
                 src=path,
-                rel=path.relative_to(src),
+                rel=rel,
+                dest=out,
+                dst_rel=routed_rel,
                 text=text,
                 sha=hashlib.sha256(raw).hexdigest(),
                 verdict=verdict,
+                bucket=bucket,
             )
         )
 
     counts = {"es": 0, "en": 0, "unknown": 0}
     for job in jobs:
         counts[job.verdict.language] += 1
+    portfolio_notes = sum(1 for job in jobs if job.bucket == "portfolio")
 
-    print(f"source: {src}")
-    print(f"output: {dst}")
-    print(f"notes:  {len(jobs)}  ({counts['es']} es, {counts['en']} en, {counts['unknown']} unknown)\n")
+    print(f"source:    {src}")
+    print(f"wiki:      {dst}  ({len(jobs) - portfolio_notes} notes)")
+    print(f"portfolio: {portfolio_dst}  ({portfolio_notes} notes)")
+    print(f"notes:     {len(jobs)}  ({counts['es']} es, {counts['en']} en, {counts['unknown']} unknown)\n")
 
     if args.check:
         for job in jobs:
             tag = {"es": "ES", "en": "EN", "unknown": "??"}[job.verdict.language]
-            print(f"  [{tag}] {job.rel}  ({job.verdict.reason})")
+            print(f"  [{tag}] {job.label}  ({job.verdict.reason})")
         return 0
 
     images_dir: Path = args.images_dir.expanduser().resolve()
@@ -1123,26 +1237,33 @@ def main() -> int:
             f"images:  {images_dir}"
             f"{'' if images_dir.is_dir() else ' (will be created)'}\n"
         )
-        manifest = {} if args.force else load_manifest(dst / MANIFEST_NAME)
+        manifests = (
+            {output: {} for output in outputs}
+            if args.force
+            else {output: load_manifest(output / MANIFEST_NAME) for output in outputs}
+        )
         for job in jobs:
-            target = dst / job.rel
-            cached = manifest.get(str(job.rel)) or {}
+            target = job.dest / job.dst_rel
+            cached = manifests[job.dest].get(job.dst_rel.as_posix()) or {}
             fresh = cached.get("sha256") == job.sha and target.exists()
             action = "unchanged" if fresh else {
                 "es": "translate",
                 "en": "copy",
                 "unknown": "skip",
             }[job.verdict.language]
-            print(f"  {action:<9} {job.rel}")
+            legacy = dst / job.rel
+            if action in {"translate", "copy"} and job.dest != dst and legacy.is_file():
+                action = "migrate"
+            print(f"  {action:<9} {job.label}")
             image_warnings: list[str] = []
             if action in {"translate", "copy"}:
                 _, image_warnings = images.rewrite(job.text, job.rel)
             elif action == "unchanged":
                 existing = target.read_text(encoding="utf-8")
                 refreshed, image_warnings = images.rewrite(existing, job.rel)
-                refreshed = ensure_wiki_metadata(refreshed, job.rel)
+                refreshed = ensure_wiki_metadata(refreshed, job.dst_rel)
                 if refreshed != existing:
-                    print(f"  refresh   {job.rel}")
+                    print(f"  refresh   {job.label}")
             for warning in image_warnings:
                 print(f"    image: {warning}", file=sys.stderr)
         print(
@@ -1150,12 +1271,15 @@ def main() -> int:
             f"{len(images.missing)} missing"
         )
         if args.prune:
-            stale_outputs = find_stale_outputs(dst, expected)
-            for rel in stale_outputs:
-                print(f"  prune     {rel.as_posix()}")
+            total_stale = 0
+            for output in outputs:
+                stale_outputs = find_stale_outputs(output, expected[output])
+                total_stale += len(stale_outputs)
+                for rel in stale_outputs:
+                    print(f"  prune     [{output.name}] {rel.as_posix()}")
             print(
-                f"\nprune: {len(stale_outputs)} stale file(s) would be removed"
-                if stale_outputs
+                f"\nprune: {total_stale} stale file(s) would be removed"
+                if total_stale
                 else "\nprune: nothing to remove"
             )
         print("dry run: no API calls, no files written")
@@ -1173,21 +1297,26 @@ def main() -> int:
                 f"(or add it to {HERMES_ENVS[0]}), or run with --check/--dry-run."
             )
 
-    manifest_path = dst / MANIFEST_NAME
-    manifest = {} if args.force else load_manifest(manifest_path)
+    manifests: dict[Path, dict[str, dict[str, str]]] = (
+        {output: {} for output in outputs}
+        if args.force
+        else {output: load_manifest(output / MANIFEST_NAME) for output in outputs}
+    )
 
-    # Backups live beside the published vault, never inside it: anything under
-    # the glob base would be picked up as a wiki note.
-    backup_root = dst.parent / f"{dst.name}-backups"
+    # Backups live beside each published vault, never inside it: anything under
+    # the glob base would be picked up as a note.
+    backup_roots = {output: output.parent / f"{output.name}-backups" for output in outputs}
+    make_dirs = (*outputs, *backup_roots.values())
 
-    for directory in (dst, backup_root):
+    for directory in make_dirs:
         try:
             directory.mkdir(parents=True, exist_ok=True)
         except PermissionError:
+            joined = " ".join(str(path) for path in make_dirs)
             die(
                 f"cannot create {directory} — /opt is root-owned. Run:\n"
-                f"  sudo mkdir -p {dst} {backup_root}\n"
-                f"  sudo chown -R \"$(id -u):$(id -g)\" {dst} {backup_root}"
+                f"  sudo mkdir -p {joined}\n"
+                f"  sudo chown -R \"$(id -u):$(id -g)\" {joined}"
             )
         if not os.access(directory, os.W_OK):
             die(f"directory is not writable: {directory}")
@@ -1215,67 +1344,95 @@ def main() -> int:
 
     stats = RunStats()
 
-    def refresh_existing(target_path: Path, rel: Path, key: str) -> bool:
+    def refresh_existing(
+        target_path: Path,
+        job: Job,
+        manifest: dict[str, dict[str, str]],
+        key: str,
+    ) -> bool:
         """Refresh images and generated metadata without an LLM call."""
         existing = target_path.read_text(encoding="utf-8")
-        refreshed, image_warnings = images.rewrite(existing, rel)
-        refreshed = ensure_wiki_metadata(refreshed, rel)
+        refreshed, image_warnings = images.rewrite(existing, job.rel)
+        refreshed = ensure_wiki_metadata(refreshed, job.dst_rel)
         for warning in image_warnings:
             print(f"    image: {warning}", file=sys.stderr)
         if refreshed == existing:
             return False
-        backup_if_present(target_path, backup_root, rel)
+        backup_if_present(target_path, backup_roots[job.dest], job.dst_rel)
         target_path.write_text(refreshed, encoding="utf-8")
         stats.refreshed.append(key)
-        print(f"  refresh   {key}")
+        print(f"  refresh   {job.label}")
         return True
 
-    for job in jobs:
-        target = dst / job.rel
+    def migrate_output(job: Job) -> None:
+        """Carry a copy published under the pre-routing path to its new one.
+
+        HTB notes used to land inside the wiki vault. Moving the existing file
+        (and its manifest entry) keeps the cache warm, so re-routing does not
+        pay for an LLM retranslation. A hash mismatch is simply replaced by the
+        normal pipeline below.
+        """
+        if job.dest == dst:
+            return
+        legacy = dst / job.rel
+        target = job.dest / job.dst_rel
+        if not legacy.is_file() or target.exists():
+            return
         target.parent.mkdir(parents=True, exist_ok=True)
-        key = str(job.rel)
+        shutil.copy2(legacy, target)
+        entry = manifests[dst].get(job.rel.as_posix())
+        if isinstance(entry, dict) and entry.get("sha256") == job.sha:
+            manifests[job.dest][job.dst_rel.as_posix()] = entry
+
+    for job in jobs:
+        migrate_output(job)
+        target = job.dest / job.dst_rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        manifest = manifests[job.dest]
+        backup_root = backup_roots[job.dest]
+        key = job.dst_rel.as_posix()
         cached = manifest.get(key) or {}
         fresh = bool(cached.get("sha256") == job.sha and target.exists())
 
         try:
             if job.verdict.language == "en":
                 if fresh and cached.get("status") == "copied":
-                    if not refresh_existing(target, job.rel, key):
+                    if not refresh_existing(target, job, manifest, key):
                         stats.unchanged.append(key)
-                        print(f"  unchanged {key}")
+                        print(f"  unchanged {job.label}")
                     continue
-                backup_if_present(target, backup_root, job.rel)
+                backup_if_present(target, backup_root, job.dst_rel)
                 text, image_warnings = images.rewrite(job.text, job.rel)
-                text = ensure_wiki_metadata(text, job.rel)
+                text = ensure_wiki_metadata(text, job.dst_rel)
                 for warning in image_warnings:
                     print(f"    image: {warning}", file=sys.stderr)
                 target.write_text(text, encoding="utf-8")
                 manifest[key] = {"status": "copied", "sha256": job.sha}
                 stats.copied.append(key)
-                print(f"  copy      {key}")
+                print(f"  copy      {job.label}")
                 continue
 
             if job.verdict.language == "unknown":
                 manifest[key] = {"status": "unknown", "sha256": job.sha}
                 stats.unknown.append(key)
-                print(f"  SKIP      {key}  ({job.verdict.reason})", file=sys.stderr)
+                print(f"  SKIP      {job.label}  ({job.verdict.reason})", file=sys.stderr)
                 continue
 
             # Spanish: skip only when the source hash is unchanged.
             if fresh and cached.get("status") == "translated":
-                if not refresh_existing(target, job.rel, key):
+                if not refresh_existing(target, job, manifest, key):
                     stats.unchanged.append(key)
-                    print(f"  unchanged {key}")
+                    print(f"  unchanged {job.label}")
                 continue
 
             assert client is not None
-            print(f"  translate {key}")
+            print(f"  translate {job.label}")
             translated = translate_note(job, client)
             translated, image_warnings = images.rewrite(translated, job.rel)
-            translated = ensure_wiki_metadata(translated, job.rel)
+            translated = ensure_wiki_metadata(translated, job.dst_rel)
             for warning in image_warnings:
                 print(f"    image: {warning}", file=sys.stderr)
-            backup_if_present(target, backup_root, job.rel)
+            backup_if_present(target, backup_root, job.dst_rel)
             target.write_text(translated, encoding="utf-8")
             manifest[key] = {
                 "status": "translated",
@@ -1286,27 +1443,36 @@ def main() -> int:
         except LLMError as exc:
             job.error = str(exc)
             stats.failed.append(key)
-            print(f"  FAILED    {key}: {exc}", file=sys.stderr)
+            print(f"  FAILED    {job.label}: {exc}", file=sys.stderr)
 
     if args.prune:
-        stale_outputs = find_stale_outputs(dst, expected)
-        for rel in stale_outputs:
-            target = dst / rel
-            backup_if_present(target, backup_root, rel)
-            target.unlink()
-            manifest.pop(rel.as_posix(), None)
-            print(f"  prune     {rel.as_posix()}")
-        # Tracked entries whose file is already gone must stop being tracked.
-        for stale_key in [key for key in manifest if key not in expected]:
-            del manifest[stale_key]
-        remove_empty_dirs(dst)
+        pruned = 0
+        for output in outputs:
+            manifest = manifests[output]
+            expected_here = expected[output]
+            stale_outputs = find_stale_outputs(output, expected_here)
+            for rel in stale_outputs:
+                target = output / rel
+                backup_if_present(target, backup_roots[output], rel)
+                target.unlink()
+                manifest.pop(rel.as_posix(), None)
+                print(f"  prune     [{output.name}] {rel.as_posix()}")
+            # Tracked entries whose file is already gone must stop being tracked.
+            for stale_key in [key for key in manifest if key not in expected_here]:
+                del manifest[stale_key]
+            remove_empty_dirs(output)
+            pruned += len(stale_outputs)
         print(
-            f"\npruned: {len(stale_outputs)} stale file(s) removed"
-            if stale_outputs
+            f"\npruned: {pruned} stale file(s) removed"
+            if pruned
             else "\npruned: nothing to remove"
         )
 
-    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    for output in outputs:
+        (output / MANIFEST_NAME).write_text(
+            json.dumps(manifests[output], indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
 
     print(
         f"\ndone: {len(stats.translated)} translated, {len(stats.copied)} copied, "
